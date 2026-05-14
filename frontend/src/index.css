@@ -1,0 +1,82 @@
+:root {
+  --bg: #f8faf8;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --border: #000000;
+  --input-bg: #ffffff;
+}
+
+.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --border: #334155;
+  --input-bg: #1e293b;
+}
+
+.bg-page { background: var(--bg); }
+.bg-surface { background: var(--card); }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .neo-shadow {
+    box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.15);
+  }
+  .neo-shadow-primary {
+    box-shadow: 3px 3px 0px 0px rgba(0,110,47,0.3);
+  }
+  .neo-shadow-secondary {
+    box-shadow: 3px 3px 0px 0px rgba(157,67,0,0.3);
+  }
+  .neo-btn {
+    @apply font-bold rounded-full border-2 border-black px-6 py-3 transition-all duration-200;
+    box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.15);
+  }
+  .neo-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px 0px rgba(0,0,0,0.15);
+  }
+  .neo-btn-primary {
+    @apply neo-btn bg-primary-600 text-white border-black;
+  }
+  .neo-btn-secondary {
+    @apply neo-btn bg-secondary-600 text-white border-black;
+  }
+  .neo-card {
+    background: var(--card);
+    @apply rounded-2xl border-2 border-black p-4;
+    box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.1);
+  }
+  .dark .neo-card {
+    border-color: var(--border);
+  }
+  .neo-input {
+    @apply w-full rounded-xl border-2 px-4 py-3 text-sm font-medium;
+    background: var(--input-bg);
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .neo-input:focus {
+    @apply outline-none border-primary-500;
+    box-shadow: 0 0 0 3px rgba(0,222,72,0.15);
+  }
+}
+
+.dark body {
+  background: var(--bg);
+}
+
+.custom-glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}

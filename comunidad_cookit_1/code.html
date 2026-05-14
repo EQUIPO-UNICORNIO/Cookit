@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comunidad Cookit - Social Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "surface-container-high": "#e6e8ea",
+                "on-tertiary-container": "#4f3e00",
+                "on-tertiary-fixed": "#231b00",
+                "on-secondary-fixed-variant": "#783200",
+                "primary": "#006e2f",
+                "inverse-primary": "#4ae176",
+                "surface-tint": "#006e2f",
+                "surface-container-low": "#f2f4f6",
+                "tertiary-fixed-dim": "#eec200",
+                "tertiary": "#735c00",
+                "outline": "#6d7b6c",
+                "error": "#ba1a1a",
+                "surface-container-highest": "#e0e3e5",
+                "on-tertiary": "#ffffff",
+                "on-primary": "#ffffff",
+                "background": "#f7f9fb",
+                "primary-fixed-dim": "#4ae176",
+                "on-surface": "#191c1e",
+                "tertiary-container": "#cfa800",
+                "surface": "#f7f9fb",
+                "secondary": "#9d4300",
+                "on-secondary-container": "#5c2400",
+                "on-primary-fixed": "#002109",
+                "on-secondary-fixed": "#341100",
+                "primary-container": "#22c55e",
+                "on-error": "#ffffff",
+                "outline-variant": "#bccbb9",
+                "on-secondary": "#ffffff",
+                "on-primary-container": "#004b1e",
+                "surface-container": "#eceef0",
+                "surface-bright": "#f7f9fb",
+                "surface-variant": "#e0e3e5",
+                "primary-fixed": "#6bff8f",
+                "inverse-on-surface": "#eff1f3",
+                "on-tertiary-fixed-variant": "#574500",
+                "on-background": "#191c1e",
+                "secondary-fixed": "#ffdbca",
+                "tertiary-fixed": "#ffe083",
+                "surface-dim": "#d8dadc",
+                "on-primary-fixed-variant": "#005321",
+                "inverse-surface": "#2d3133",
+                "on-error-container": "#93000a",
+                "secondary-fixed-dim": "#ffb690",
+                "secondary-container": "#fd761a",
+                "on-surface-variant": "#3d4a3d",
+                "error-container": "#ffdad6",
+                "surface-container-lowest": "#ffffff"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "lg": "40px",
+                "sm": "12px",
+                "xs": "4px",
+                "md": "24px",
+                "xl": "64px",
+                "gutter": "16px",
+                "base": "8px",
+                "margin": "20px"
+              },
+              "fontFamily": {
+                "headline-md": ["Plus Jakarta Sans"],
+                "label-bold": ["Plus Jakarta Sans"],
+                "label-sm": ["Plus Jakarta Sans"],
+                "headline-lg": ["Plus Jakarta Sans"],
+                "body-md": ["Plus Jakarta Sans"],
+                "body-lg": ["Plus Jakarta Sans"],
+                "display-lg": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-hover:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px 0px rgba(30, 41, 59, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-zinc-950 border-b-2 border-zinc-800 dark:border-zinc-700 shadow-[4px_4px_0px_0px_rgba(34,197,94,0.1)]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500 dark:text-green-400" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="text-2xl font-black tracking-tight text-green-500 dark:text-green-400 font-['Plus_Jakarta_Sans']">Cookit</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-zinc-500 hover:bg-zinc-100 p-2 rounded-full transition-colors" data-icon="search">search</button>
+<div class="w-10 h-10 rounded-full border-2 border-zinc-800 overflow-hidden bg-surface-container">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a friendly young chef wearing a white jacket, set against a soft-focus kitchen background. The lighting is bright and airy, following a modern lifestyle aesthetic with natural daylight. The color palette is clean with neutral tones and fresh greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVVQC0zh7xYabR7Yyt2EkInQeYhjFp8TsjtI-Rugd8XEDdnv9HcNolX4NfVRd0VXohIYKdoH81l7EgTmjiYgQm1CMejoYTsx_gs17RoJZ5jEBNyHvqODV7vrOyd4XSky8KYN0vEJ1Wn9yIbDNZ6jDNYz715yyBuRzeyTbb5uFi5L4VnHg_y6QW6mEHCzuPddqwthGUgOu6biJikeTayu-V5HuVdMQPz84pLD255NCbJQHgNN8eL7RSvahQkQ3S_F_6zPjs1t0-L6Dh"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-margin max-w-4xl mx-auto">
+<!-- Title & Categories -->
+<section class="mb-md">
+<h2 class="font-headline-lg text-headline-lg mb-sm">Comunidad Cookit</h2>
+<div class="flex gap-sm overflow-x-auto pb-xs scrollbar-hide">
+<span class="px-md py-xs bg-primary-container text-on-primary-container rounded-full font-label-bold text-label-bold whitespace-nowrap">Explore</span>
+<span class="px-md py-xs bg-surface-container text-on-surface-variant rounded-full font-label-bold text-label-bold whitespace-nowrap">Trending</span>
+<span class="px-md py-xs bg-surface-container text-on-surface-variant rounded-full font-label-bold text-label-bold whitespace-nowrap">Healthy</span>
+<span class="px-md py-xs bg-surface-container text-on-surface-variant rounded-full font-label-bold text-label-bold whitespace-nowrap">Under 30 mins</span>
+</div>
+</section>
+<!-- Social Feed Bento/Asymmetric Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Post 1: Large Featured -->
+<article class="bg-surface-container-lowest border-2 border-zinc-800 rounded-xl overflow-hidden neo-shadow flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A vibrant and colorful Mediterranean salad bowl filled with fresh kale, chickpeas, cherry tomatoes, and sliced avocado. The scene is shot from a high angle on a white marble countertop under bright, natural morning light. The colors are punchy and energetic, highlighting the freshness of the ingredients in a modern food photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDqO8HNmjhKOKmpKhKLiXgRsd9A6_r30xW5He9KX26opfSBHrjkFTvXYEYGOe2We5EjoXWY1B3uA4ey7X27c_-se7Yty2svJT3q-yu8KFZkN9Zd7ZgfVOAcik-_Dewu40Yf7pZROu0JBNtCUOjK8b6-elqeWLo8BdsK12V6gNXd5R0rL6d08OxgLMkVpE9_Yc4M1AZmyGMIW4UZTmR_ZX_iN5jGixpKz4U1dyE4JvzKetu6XuMVRfmOd_lB7A5mkW6--KgKiFySq27"/>
+<div class="absolute top-sm right-sm px-sm py-xs bg-white/90 backdrop-blur-sm border-2 border-zinc-800 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="timer">timer</span>
+<span class="text-label-sm font-label-sm">15 min</span>
+</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="A close-up portrait of a smiling woman with a warm expression, wearing a casual linen shirt. The lighting is soft and diffused, creating a friendly and approachable mood. The background is a minimalist, airy domestic setting with hints of indoor plants, emphasizing a wellness-focused lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY2V9tGg-zIuaLaHq29YdIIs1T2U0fnP1sMvjyOSubEc7gK_LdaSLHbMIQWGU4FlqcIAbam9Cz_pi-GrIgW0yfJ9Jm4SsP9adgrKE6yyD8TDsTAyVcvlKgEaUqKhllBDFlsNrIlNMiMXtW_G6aWUhDM1osDN-2n54luMYV5BSMsNbekjHQe9yEtO3bq-wSWepJ693rjbzbYmiOJNxGs8Um76fg9dT14R7Bsozrnj2fjuNdJgYokdmrBQ-2B7T5pcEBjnHGYgrt2NNc"/>
+</div>
+<span class="font-label-bold text-label-bold">Elena R.</span>
+</div>
+<button class="flex items-center gap-1 text-zinc-500 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="favorite" data-weight="fill" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="text-label-sm font-label-sm">1.2k</span>
+</button>
+</div>
+<p class="text-body-md font-body-md text-zinc-700 leading-relaxed">
+                        Made this with leftover kale! Added some crispy chickpeas for extra crunch. 🥗 #ZeroWasteCooking
+                    </p>
+<div class="pt-sm border-t border-zinc-100 flex gap-sm">
+<button class="flex-1 min-h-[48px] bg-primary text-on-primary rounded-full border-2 border-zinc-800 font-label-bold text-label-bold neo-shadow-sm neo-shadow-hover flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+                            Save Recipe
+                        </button>
+<button class="w-12 h-12 bg-white border-2 border-zinc-800 rounded-full flex items-center justify-center neo-shadow-sm neo-shadow-hover">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Post 2: Compact -->
+<article class="bg-surface-container-lowest border-2 border-zinc-800 rounded-xl overflow-hidden neo-shadow flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A gourmet salmon fillet served on a bed of roasted asparagus and quinoa, drizzled with a vibrant lemon herb sauce. The presentation is modern and clean, set on a dark textured plate that makes the bright pink of the salmon and the greens of the vegetables pop. High-key lighting emphasizes textures and freshness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNrnI18OtQR8Vk-wG6aQpBj3Mh6cPqQMbhWb1kKMaFfG3DPEAVG1pYzT0RykvN3VfuuMKEEJW5o4zlRr8RPY0A80hovbb838HO1hFMjWM8eh4ult3JB0SvgJLfFm0fUFTZpYQe0Cp5r8d2yMZ_FQW4riVmSb3qhYBhFw7AjMTqvgAOnIsUU19BFHo2QjyhUcohAONSYjsTVyrIOWuSjSygxmVqYYbGRIGzt6C-Z_xnEnEYKpE8gsao6VYv5BYhusitynkaEycPt3O-"/>
+</div>
+<div class="p-sm space-y-xs">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="A portrait of a creative professional man with a friendly smile, wearing a stylish apron in a bright, modern kitchen studio. The aesthetic is energetic and contemporary, with soft shadows and a high-contrast color palette of warm woods and cool greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEYNv-qMJApBsW-0XRHXedWZKdUsjXjiOY9v6clJYhn-wjJ5l4GA-1m0WM_aXZWw0STFHpwegXJuWJA4VRFR-y8lwxulNpt6EjEQ9LuSMrNfdLT-UvU4Ach-iS6KreB591jHGuLzSnw-0CTAD3jchIx5SZxq4W6BRGwZNyIOAt7VH6l7n1Bk-teJX4TmikjBQkAXt-AHLE-Fu2PDjd2KG_pkVFdHIdmK9zRjETdrbObjKX4Q1DWsujS2HVu3kEd5AdSDx_tQL-Q-4V"/>
+</div>
+<span class="font-label-bold text-label-bold">Marc K.</span>
+</div>
+<p class="text-label-sm font-body-md text-zinc-600 line-clamp-2">
+                        Sunday meal prep done! This salmon is life-changing. 🐟
+                    </p>
+<div class="flex justify-between items-center pt-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="bolt">bolt</span>
+<span class="text-[10px] uppercase font-bold text-secondary">Beginner</span>
+</div>
+<button class="text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Post 3: Compact -->
+<article class="bg-surface-container-lowest border-2 border-zinc-800 rounded-xl overflow-hidden neo-shadow flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A top-down view of a colorful smoothie bowl topped with sliced dragon fruit, blueberries, and edible flowers. The background is a bright, airy white table with soft morning shadows. The aesthetic is incredibly fresh, wellness-oriented, and playful, featuring a vibrant palette of purples, pinks, and greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhneHWN7UuWOKpUP2xPsvcC-mQWHs0Ifkn4yQR0OSVk9co5dSbzAC0HhD1Y_Nn32XvXyABRB8OqqAzsbqHHyaGuv8IL_4frAKsm1sY05jaqUlZQAlcj915uTFrusOsYql0w1kIqiM1lic76-OyzLnfrjp41b3bjnPs_J4QrSTmS1V0Sme8L5peQUxF9dLaDrEHZh0IzC_tOOsAeHAdbsoky0RsNddeTBrFLaVzBSDOEAnX02nSVQye9nQ4i4rZQqUE1OZzErnFwUxt"/>
+</div>
+<div class="p-sm space-y-xs">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="A portrait of a cheerful young woman with curly hair, set in a bright outdoor garden. The lighting is sunny and warm, reflecting an energetic and healthy lifestyle. The background is lush with green foliage, complementing the natural and encouraging brand personality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcfmmC6AQw4FOYQ9jnqVsnsKRRtq36a7FIhFzokZSk_iIlANaAdV_g45_uHtmE9p0IEGcwEdtUBc8JFG9djD0h0MLjdoVJvospmt1RxoxId7hxvqgPIsArjqap9leUf8S3n5xgOZB-88pjXQWvzbSlV6-QjBEAYz-RVFHD80zxVU96aYFxNt28RbSXQgLp93__RNbIM6ma94blxfvb1xocBmV4s3ruGKtAV2rJKsPmKqgZqD4N9lPd41oMFFxriEm7DYFmuJNu3Oeb"/>
+</div>
+<span class="font-label-bold text-label-bold">Sasha J.</span>
+</div>
+<p class="text-label-sm font-body-md text-zinc-600 line-clamp-2">
+                        Fueling up for a long day. Dragonfruit bowls are my current obsession! 🌸
+                    </p>
+<div class="flex justify-between items-center pt-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="eco">eco</span>
+<span class="text-[10px] uppercase font-bold text-primary">Vegan</span>
+</div>
+<button class="text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Chef's Note Callout -->
+<div class="md:col-span-2">
+<div class="bg-secondary/10 border-2 border-dashed border-secondary rounded-xl p-md flex items-start gap-md">
+<div class="bg-secondary-container p-2 rounded-lg text-white">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] text-secondary mb-xs">Chef's Community Tip</h4>
+<p class="text-body-md text-zinc-700">
+                            "If your kale is a bit too tough for salads, try massaging it with a little olive oil and lemon juice for 2 minutes. It breaks down the fibers and makes it super tender!" — <span class="font-bold">Elena R.</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Post 4: Tall/Staggered -->
+<article class="bg-surface-container-lowest border-2 border-zinc-800 rounded-xl overflow-hidden neo-shadow flex flex-col md:row-start-2 md:col-start-2">
+<div class="relative h-80 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A slice of artisanal sourdough pizza being pulled away, showing long strings of melted mozzarella cheese. The pizza is topped with fresh basil and heirloom tomatoes. The style is rustic but clean, with a focus on rich textures and high-contrast lighting that highlights the golden-brown crust." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNm4lyqbYFN2zec9Ge5hScIc2NAta2I4o4cuT_msisZTpDZrT-1rL07Du1T1HvVJPugbaagXuFQv7Yi0SvqLrXVjcvUawOtKsBypX0PzRE-p9Ok50VE9Zkbx2S163A4hG0CtxRtox035-5fppKsYL9QViaiFdFkAU2U9LaQ7ICZnQ9zYzmBdmadsykkEINiYQHUAp3sETTLTR8udon7ds9CGWom5S4YLgEOVmzYRNbMZ-gEjEHNGppl1czoRZf99tmoUZ0q9qXzVpy"/>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="A portrait of a smiling man with a beard, wearing a denim jacket, set against a bright white background. The lighting is high-key and professional, creating a clean and modern look. The overall mood is confident and inviting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxCpBp0RzlsY2pfIw38I0b-EjFWblewfIgqwVwFYCImE4x4tV_Ejqr6rVDG1kCvBMP9EYxYyo0QpOfY3f0fFHCJwuygpkbq2HxUMtYtuCkx1ittpY6dnfcx6FyBMtgG1QvyVEBfRclst9ihtpF3QoHg77eIdtqplXhNK81X19_p1uqW1bEvM1cRlQDQiYhrmXy8tmfjz6mr1OBrUvAKks_47rBWcjzbyLdIbp3-xThXtIzX-fppKJPjygRMKCeSY-srTrSHgikT8nQ"/>
+</div>
+<span class="font-label-bold text-label-bold">Diego L.</span>
+</div>
+<p class="text-body-md font-body-md text-zinc-700">
+                        First attempt at homemade sourdough pizza! The crust is actually crunchy. 🍕✨
+                    </p>
+<button class="w-full min-h-[48px] bg-white border-2 border-zinc-800 text-secondary rounded-full font-label-bold text-label-bold neo-shadow-sm neo-shadow-hover flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                        Get Recipe
+                    </button>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-white dark:bg-zinc-900 px-4 py-3 pb-safe border-t-2 border-zinc-800 dark:border-zinc-700 shadow-[0_-4px_8px_rgba(34,197,94,0.05)]">
+<div class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Pantry</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="shutter_speed">shutter_speed</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Scan</span>
+</div>
+<!-- Recipes (Active) -->
+<div class="flex flex-col items-center justify-center text-green-500 dark:text-green-400 bg-green-50 dark:bg-green-950/30 rounded-lg py-1 px-3 border-2 border-zinc-800 dark:border-zinc-700 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Recipes</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Profile</span>
+</div>
+</nav>
+</body></html>

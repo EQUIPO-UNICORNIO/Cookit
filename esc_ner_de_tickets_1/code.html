@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .viewfinder-corner {
+            width: 40px;
+            height: 40px;
+            border-color: #22c55e;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-container": "#4f3e00",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-secondary-fixed-variant": "#783200",
+                        "primary": "#006e2f",
+                        "inverse-primary": "#4ae176",
+                        "surface-tint": "#006e2f",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary-fixed-dim": "#eec200",
+                        "tertiary": "#735c00",
+                        "outline": "#6d7b6c",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-surface": "#191c1e",
+                        "tertiary-container": "#cfa800",
+                        "surface": "#f7f9fb",
+                        "secondary": "#9d4300",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary-fixed": "#002109",
+                        "on-secondary-fixed": "#341100",
+                        "primary-container": "#22c55e",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#bccbb9",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#004b1e",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#6bff8f",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#ffdbca",
+                        "tertiary-fixed": "#ffe083",
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed-variant": "#005321",
+                        "inverse-surface": "#2d3133",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb690",
+                        "secondary-container": "#fd761a",
+                        "on-surface-variant": "#3d4a3d",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "margin": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-zinc-950 border-b-2 border-zinc-800 dark:border-zinc-700 shadow-[4px_4px_0px_0px_rgba(34,197,94,0.1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500 dark:text-green-400" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="text-2xl font-black tracking-tight text-green-500 dark:text-green-400 font-['Plus_Jakarta_Sans']">Cookit</h1>
+</div>
+<div class="h-10 w-10 rounded-full border-2 border-zinc-800 overflow-hidden bg-surface-container">
+<img alt="User profile photo" class="w-full h-full object-cover" data-alt="A professional studio portrait of a friendly young chef with a warm smile, wearing a clean white uniform. The background is a soft, blurred kitchen setting with warm, ambient lighting. The overall style is clean and high-key, matching a modern light-mode interface with professional photography quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtQJUyR3gwh4qmvJ6QRmSYJC0RPJxuBV_fr9i_mVW8CQkBCqCYNBj1vtelPywCHS8hpnFJXuqLt4BpEI-3uCmJmPy7LzBClDhUWGxlNx8Raw3JZPi4Q49ZcdGcRf-SOfgbeZXka1Ni3jNKTsaRIHvf5Z39Dxxy_spIDChHz-6du_O1g_x3wipvUYvJzRocEYoGxVglHzRAULv44HTQNtV8I9rVyIr64bueaw72p9fusMJ0CP4YIO0LUxiDWV3Ov695pAkK7yHw5Noi"/>
+</div>
+</header>
+<!-- Main Viewfinder Content -->
+<main class="flex-grow relative flex flex-col pt-16 pb-24">
+<!-- Camera Background Simulation -->
+<div class="absolute inset-0 z-0">
+<img alt="Supermarket receipt on counter" class="w-full h-full object-cover" data-alt="A top-down, high-detail view of a long grocery receipt resting on a dark, rustic wooden kitchen counter. The receipt is crisp white with clear black text listing various fresh vegetables and poultry. Soft, natural sunlight filters from the side, creating gentle highlights and realistic textures. The style is modern and clean, emphasizing a practical cooking environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFs_rH4wBA_yP_f8T7bnEwZXywdir1dz_UZ95XU3sydy_WY21xbdkwCZ6z0Gv45KUCtu3Ax0isCLLUjDHReyZIjwkwPqW17msdOaCWb7dZYDDJTYj7bjvzYnwjhJoAX1gYQxCTJFMzrkrxxhGo0PVrR0BeUngNszeo9tV7T8ODQF8vwaUgcAH-PLRHcqlrMTe26JDPN0aT9lMfhzM2eFN9UoITiw5xnCDK66NWNm_IM-ger1WKX_LY_zOde6GIbMDzmjiCW04N6u7Y"/>
+<!-- Dark Overlay -->
+<div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+</div>
+<!-- Scanning Interface Overlay -->
+<div class="relative z-10 flex-grow flex flex-col items-center justify-center p-gutter">
+<!-- Header for Scanning -->
+<div class="absolute top-6 left-0 w-full px-6 flex justify-between items-center">
+<div class="bg-white px-4 py-2 rounded-xl border-2 border-zinc-800 shadow-[4px_4px_0px_0px_rgba(30,41,59,1)]">
+<h2 class="font-headline-md text-headline-md text-on-surface">Escáner Inteligente</h2>
+</div>
+<div class="flex gap-2">
+<button class="w-12 h-12 flex items-center justify-center bg-white rounded-full border-2 border-zinc-800 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:translate-y-0.5 active:translate-x-0.5 transition-all">
+<span class="material-symbols-outlined" data-icon="flash_on">flash_on</span>
+</button>
+</div>
+</div>
+<!-- Viewfinder -->
+<div class="relative w-full max-w-sm aspect-[3/4] flex items-center justify-center">
+<!-- Corners -->
+<div class="absolute top-0 left-0 viewfinder-corner border-t-4 border-l-4 rounded-tl-xl"></div>
+<div class="absolute top-0 right-0 viewfinder-corner border-t-4 border-r-4 rounded-tr-xl"></div>
+<div class="absolute bottom-0 left-0 viewfinder-corner border-b-4 border-l-4 rounded-bl-xl"></div>
+<div class="absolute bottom-0 right-0 viewfinder-corner border-b-4 border-r-4 rounded-br-xl"></div>
+<!-- Scanning Line -->
+<div class="absolute top-0 left-4 right-4 h-1 bg-primary-container/80 shadow-[0_0_15px_#22c55e] rounded-full animate-pulse opacity-70"></div>
+<!-- Processing Badge -->
+<div class="bg-white/95 backdrop-blur px-6 py-3 rounded-full border-2 border-zinc-800 flex items-center gap-3 shadow-[4px_4px_0px_0px_rgba(34,197,94,0.2)]">
+<div class="w-2 h-2 rounded-full bg-secondary animate-ping"></div>
+<span class="font-label-bold text-label-bold text-on-surface">Analizando productos...</span>
+</div>
+</div>
+<!-- Detected Items Modal (Bottom Sheet Style) -->
+<div class="absolute bottom-4 left-4 right-4 max-w-lg mx-auto bg-white rounded-xl border-2 border-zinc-800 shadow-[8px_8px_0px_0px_rgba(30,41,59,1)] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Productos Detectados</h3>
+<p class="text-sm text-zinc-500 font-label-sm">4 elementos encontrados</p>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full border-2 border-zinc-800 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] font-label-bold text-label-bold active:scale-95 transition-all">
+                        CONFIRMAR
+                    </button>
+</div>
+<!-- List of Items -->
+<div class="grid grid-cols-1 gap-2">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border-2 border-transparent hover:border-zinc-800 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-600" data-icon="eco">eco</span>
+<span class="font-label-bold text-on-surface">Spinach - 500g</span>
+</div>
+<span class="material-symbols-outlined text-zinc-400" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border-2 border-transparent hover:border-zinc-800 transition-all cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-orange-600" data-icon="restaurant">restaurant</span>
+<span class="font-label-bold text-on-surface">Chicken - 1kg</span>
+</div>
+<span class="material-symbols-outlined text-zinc-400" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Chef's Note Style Tip -->
+<div class="p-3 bg-secondary-container/10 border-2 border-dashed border-secondary-container rounded-lg flex gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="lightbulb">lightbulb</span>
+<p class="text-sm text-on-secondary-container font-medium">
+<span class="font-bold">Pro tip:</span> Parece que tienes los ingredientes para una Ensalada César fresca.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-white dark:bg-zinc-900 px-4 py-3 pb-safe border-t-2 border-zinc-800 dark:border-zinc-700 shadow-[0_-4px_8px_rgba(34,197,94,0.05)]">
+<!-- Pantry -->
+<button class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined text-2xl" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Pantry</span>
+</button>
+<!-- Scan (ACTIVE) -->
+<button class="flex flex-col items-center justify-center text-green-500 dark:text-green-400 bg-green-50 dark:bg-green-950/30 rounded-lg py-1 px-3 border-2 border-zinc-800 dark:border-zinc-700 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 duration-150">
+<span class="material-symbols-outlined text-2xl" data-icon="shutter_speed">shutter_speed</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Scan</span>
+</button>
+<!-- Recipes -->
+<button class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined text-2xl" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Recipes</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined text-2xl" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Profile</span>
+</button>
+</nav>
+</body></html>

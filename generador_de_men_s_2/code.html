@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#6d7b6c",
+                        "surface-container-highest": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "primary": "#006e2f",
+                        "on-primary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "tertiary-fixed": "#ffe083",
+                        "tertiary-fixed-dim": "#eec200",
+                        "primary-container": "#22c55e",
+                        "inverse-on-surface": "#eff1f3",
+                        "inverse-surface": "#2d3133",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-primary-fixed-variant": "#005321",
+                        "on-secondary-fixed": "#341100",
+                        "secondary-container": "#fd761a",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-dim": "#d8dadc",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#9d4300",
+                        "tertiary-container": "#cfa800",
+                        "on-tertiary-fixed": "#231b00",
+                        "surface-tint": "#006e2f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#4f3e00",
+                        "primary-fixed": "#6bff8f",
+                        "surface": "#f7f9fb",
+                        "secondary-fixed-dim": "#ffb690",
+                        "surface-container": "#eceef0",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#bccbb9",
+                        "on-surface-variant": "#3d4a3d",
+                        "secondary-fixed": "#ffdbca",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#4ae176",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#004b1e",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#783200",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary-fixed": "#002109",
+                        "on-surface": "#191c1e",
+                        "tertiary": "#735c00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "margin": "20px",
+                        "sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px #1E293B;
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px #1E293B;
+        }
+        .neo-shadow-green {
+            box-shadow: 4px 4px 8px 0px rgba(34, 197, 94, 0.15);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white border-b-2 border-slate-900 shadow-[0px_4px_0px_0px_rgba(30,41,59,1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-600 text-2xl">restaurant_menu</span>
+<h1 class="text-2xl font-black italic text-slate-900 tracking-tighter">Cookit</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-slate-900 overflow-hidden active:translate-y-0.5 transition-transform">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A close-up high-quality portrait of a friendly professional chef smiling, wearing a clean white coat against a soft-focus kitchen background. The lighting is warm and inviting, consistent with a clean, modern light-mode interface. The image has a crisp, vibrant aesthetic with a focus on healthy living." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUO9Qy07eM7VT_W8E4cd4cgWFTZkkz5OW9xLmgyQMV0DgdDSl4ea9FFU8W8vZJ7PVVtjHIebjnNn3Dllcx4KAGmM6ImU5nq4fSO2l4Mx7nELDpyCCMexjjBTYAoAR_uon2HhFcbVA0sdaOY0_wP5fxuaUomp6LF4-J2NGUZp3I07FLe1X9waDLXJ2x8C0qKmQEAFyRjKJMwqQREE1TOwwHnoQylTF9RfqtriXf3fNQ7wN92loyBscLGDidNEdjVISWh6_V7iSxt4_5"/>
+</div>
+</header>
+<main class="pt-24 px-margin max-w-2xl mx-auto space-y-md">
+<!-- Welcome Section -->
+<section class="space-y-sm">
+<h2 class="font-display-lg text-display-lg text-slate-900">¿Qué cocinamos hoy?</h2>
+<p class="font-body-md text-body-md text-slate-500">Genera tu menú ideal basado en lo que tienes.</p>
+</section>
+<!-- Toggle Section -->
+<section class="bg-surface-container-lowest p-gutter rounded-xl border-2 border-slate-900 neo-shadow flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">hourglass_bottom</span>
+<span class="font-label-bold text-label-bold uppercase">Priorizar caducidad</span>
+</div>
+<button class="relative inline-flex h-8 w-14 items-center rounded-full bg-primary-container border-2 border-slate-900">
+<span class="translate-x-7 inline-block h-5 w-5 transform rounded-full bg-white border-2 border-slate-900 transition-transform"></span>
+</button>
+</section>
+<!-- Chef's Note Callout -->
+<section class="p-gutter rounded-xl border-2 border-dashed border-secondary bg-secondary-container/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-secondary">tips_and_updates</span>
+<div class="space-y-xs">
+<span class="font-label-bold text-label-bold text-secondary uppercase">Chef's Note</span>
+<p class="font-body-md text-body-md">Optimiza tu compra: Tienes pollo y espinacas que alcanzan su fecha límite mañana.</p>
+</div>
+</div>
+</section>
+<!-- Recipe Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Recipe Card 1 -->
+<article class="bg-white rounded-xl border-2 border-slate-900 overflow-hidden neo-shadow-green flex flex-col transition-all active:scale-[0.98]">
+<div class="relative h-64 w-full">
+<img class="w-full h-full object-cover" data-alt="A high-angle, gourmet photograph of a vibrant Mediterranean chicken salad with fresh spinach, cherry tomatoes, and feta cheese. The lighting is bright and natural, creating a fresh and energetic mood. The style is clean and professional, using a soft neo-brutalist aesthetic with high contrast and vivid natural colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeW6NSsv8twTYZgkmbtWWdvryr1oO-VIj6mFJpM2YaoUvcG2rPR7zNIBsiRWIVaYH2YYDdvQzL7HO5f2AcRqj4iYOkGxesCyGrqmWdo8xXfpRpzPRBmXM6P_wDhHuvYonEMkbdwhvSsJl-K6kbCTTXrA9pGWL3z8rzpWr_S_wV9ANnw-N6RkgIlDUR0yoKHVB1lsZ50DGSRUFDMKWM8Ay4NnxCMfnlcRZTw3vkba0b7O4mOj9mp8L_CJg1cSaEZuDER6NyI54q6Gu4"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-slate-900">Fácil</span>
+<span class="bg-white text-slate-900 px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-slate-900">15 min</span>
+</div>
+</div>
+<div class="p-gutter space-y-sm">
+<div class="flex items-center gap-2 text-secondary font-label-bold text-label-sm uppercase">
+<span class="material-symbols-outlined text-sm">notification_important</span>
+                        Usa tu pollo que caduca mañana
+                    </div>
+<h3 class="font-headline-md text-headline-md text-slate-900">Ensalada de Pollo y Espinacas Baby</h3>
+<div class="flex gap-2 flex-wrap">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-label-sm font-label-sm">Pollo</span>
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-label-sm font-label-sm">Saludable</span>
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-label-sm font-label-sm">Express</span>
+</div>
+<button class="w-full mt-4 h-14 bg-primary text-white border-2 border-slate-900 rounded-full font-label-bold uppercase tracking-widest neo-shadow active:translate-y-1 active:shadow-none transition-all">
+                        Ver Receta
+                    </button>
+</div>
+</article>
+<!-- Recipe Card 2 -->
+<article class="bg-white rounded-xl border-2 border-slate-900 overflow-hidden neo-shadow-green flex flex-col transition-all active:scale-[0.98]">
+<div class="relative h-64 w-full">
+<img class="w-full h-full object-cover" data-alt="A professional food photograph of a steaming plate of al dente pasta with a rich basil pesto sauce and toasted pine nuts. The scene is bright and airy, with a focus on fresh green textures and clean lines. The mood is sophisticated yet approachable, following a modern lifestyle aesthetic with high-key lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKUU7Q2LSNCyOAbiWD1hb3b3kLDVXMKUtE94401dJNWtv-fmwFvOT6fbTQsJWexLRgWDTkOA_C9rot5pvGcvsWs_bqcmDvq-HUI_5vpAqsbjvwNPqIelKflsKs9wE0T7qUrOUAsDZ2y7oHFK_qwlwOyxonkS8OE6eDNuOhfLlkg5y8bseCYofHvFdXKeTZXwwiiGYL_w1LnSK_RKSmuV7T1QbClzD6sWsCxdDSW1iicN_iSTCEdoXzgB-ibR2uHdFMEWvinJY4fdV7"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-slate-900">Medio</span>
+<span class="bg-white text-slate-900 px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-slate-900">25 min</span>
+</div>
+</div>
+<div class="p-gutter space-y-sm">
+<div class="flex items-center gap-2 text-primary font-label-bold text-label-sm uppercase">
+<span class="material-symbols-outlined text-sm">eco</span>
+                        Favorito de la semana
+                    </div>
+<h3 class="font-headline-md text-headline-md text-slate-900">Pasta al Pesto con Piñones</h3>
+<div class="flex gap-2 flex-wrap">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-label-sm font-label-sm">Pasta</span>
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-label-sm font-label-sm">Vegetariano</span>
+</div>
+<button class="w-full mt-4 h-14 bg-white text-secondary border-2 border-secondary rounded-full font-label-bold uppercase tracking-widest neo-shadow active:translate-y-1 active:shadow-none transition-all">
+                        Ver Receta
+                    </button>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-white border-t-2 border-slate-900 shadow-[0px_-4px_8px_0px_rgba(34,197,94,0.1)]">
+<div class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:text-green-600 active:scale-95 transition-all">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Pantry</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:text-green-600 active:scale-95 transition-all">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-green-500 text-white rounded-lg border-2 border-slate-900 px-4 py-1 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">blender</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Recipes</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:text-green-600 active:scale-95 transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Profile</span>
+</div>
+</nav>
+<!-- FAB (Floating Action Button) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-secondary-container text-white border-2 border-slate-900 rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_#1E293B] active:translate-y-1 active:shadow-none transition-all z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

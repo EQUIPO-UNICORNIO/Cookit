@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cookit Community</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#eff1f3",
+                        "surface": "#f7f9fb",
+                        "surface-container-low": "#f2f4f6",
+                        "on-background": "#191c1e",
+                        "tertiary-fixed-dim": "#eec200",
+                        "on-surface-variant": "#3d4a3d",
+                        "outline": "#6d7b6c",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed": "#ffe083",
+                        "tertiary-container": "#cfa800",
+                        "primary-container": "#22c55e",
+                        "on-secondary-fixed-variant": "#783200",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb690",
+                        "outline-variant": "#bccbb9",
+                        "tertiary": "#735c00",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d8dadc",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-fixed": "#6bff8f",
+                        "on-primary-fixed": "#002109",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eceef0",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "primary": "#006e2f",
+                        "on-surface": "#191c1e",
+                        "secondary-fixed": "#ffdbca",
+                        "on-primary-fixed-variant": "#005321",
+                        "on-secondary-container": "#5c2400",
+                        "secondary-container": "#fd761a",
+                        "surface-tint": "#006e2f",
+                        "background": "#f7f9fb",
+                        "secondary": "#9d4300",
+                        "on-secondary-fixed": "#341100",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-primary-container": "#004b1e",
+                        "inverse-primary": "#4ae176",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-container": "#4f3e00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "xl": "64px",
+                        "base": "8px",
+                        "lg": "40px",
+                        "xs": "4px",
+                        "sm": "12px",
+                        "margin": "20px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px #1E293B;
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px #1E293B;
+        }
+        .neo-border {
+            border: 2px solid #1E293B;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-900 border-b-2 border-slate-900 dark:border-slate-100 shadow-[0px_4px_0px_0px_rgba(30,41,59,1)]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-600 dark:text-green-500 text-2xl">restaurant_menu</span>
+<h1 class="text-2xl font-black italic text-slate-900 dark:text-white tracking-tighter">Cookit</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full border-2 border-slate-900 overflow-hidden neo-shadow-sm">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A professional studio portrait of a friendly young man with short dark hair and a warm smile, set against a soft, bright neutral background. The lighting is high-key and clean, mirroring the modern light-mode aesthetic of a lifestyle wellness app. The image features high contrast and vibrant natural skin tones, fitting into a clean and energetic UI design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7wiC6N7V2JMwqwl6y-wi3AItS56ehsEDSNMvqtsSMNVk1ad8GdsLTV7gopbx_9w6_csUUtb-B-6BTzDrR2GiBuBE1WheQXEAwN2NYYqqzgHxMNv1DCtfKw0zDkFRmOgsd_zmlMy9At3AzvYG0vXEGZnV2RhPZNUaVbdq3OnJIyip_gXHB0K88LCEq5PhLoiATI-hpBIhLEApTUAbX7pbSFeVmzGkVD3pO1m5fxGkkUVt0ls6xQqPIoT9zRLXAQ_7xbhMcaX2vLtlq"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-gutter max-w-2xl mx-auto">
+<!-- Community Header -->
+<section class="mb-lg">
+<h2 class="font-display-lg text-display-lg text-slate-900 mb-xs">Friends' Kitchens</h2>
+<p class="text-body-lg text-outline">See what's cooking in the community today.</p>
+</section>
+<!-- Search Bar -->
+<div class="mb-md group">
+<div class="relative flex items-center bg-white neo-border rounded-xl px-4 py-3 neo-shadow group-focus-within:translate-y-1 transition-all">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full font-label-bold text-slate-900 placeholder-outline-variant" placeholder="Search creators or dishes..." type="text"/>
+</div>
+</div>
+<!-- Featured Creators Stories -->
+<section class="mb-lg overflow-x-auto">
+<div class="flex gap-md pb-4">
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-dashed border-secondary-container">
+<div class="w-full h-full rounded-full bg-primary-container flex items-center justify-center text-white neo-border">
+<span class="material-symbols-outlined">add</span>
+</div>
+</div>
+<span class="font-label-sm text-slate-900">Your Snap</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-primary-container">
+<img class="w-full h-full rounded-full object-cover neo-border" data-alt="A vibrant and clear close-up portrait of a young woman with curly hair, smiling joyfully. The scene is brightly lit with warm, natural sunlight, creating a cheerful and energetic atmosphere that aligns with the brand's vibrant green and orange palette. Professional photography style with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTbpGpxTCzIYp4kKxM-LVF6wah9lgTFRPz52u2bEaES4iYVWtptYdkU-sL6q7Ptc6mWrxvPvuKnU4KKat57sQXaWFeZYjMqTVaW8oPV4FUuZEaEQkeyddUeBoJ8HpWmrIFDyFa37M1FXsjrxBku-xyT3Xc8exjEowd2nnnM0eETe7KVestiAbA707hBJnCsR6JeN_7Dl-2bITWzQ-xZIu6U2cMo7haaRfv684d1CPsdvfjdynYcEWe55dYPGRPWmEyAYMijmMqOojY"/>
+</div>
+<span class="font-label-sm text-slate-900">Elena S.</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-primary-container">
+<img class="w-full h-full rounded-full object-cover neo-border" data-alt="A focused and energetic portrait of a middle-aged man with a neat beard, looking directly into the camera with confidence. The lighting is bright and modern, set against a clean studio background that emphasizes the neo-brutalist structure of the app. The colors are crisp and saturated, highlighting the user's authentic personality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk0mjrFfkP5vUn5h4grIIwbr5A9b3IoVPZzn42zojlwWaX3bqXHy5wu5wpCjwBxO7rnonUyTI90msxRjzzYCD6F0N3shxQsylL9Qgl6d3xnFhSgh26DcV02BsuQu47rzL4llEslQysUON8nSIuygd7WpJ896j_nL5O48udHsZnQg0pzqZsPC4a1AWxUIrYH5RjySOoYty8B1_qn2KmqfBA29XsTdqN1LWW4WE1JG7h1RgNPabI8l1xQHccTNdYYQ56rJxqFk10FJGA"/>
+</div>
+<span class="font-label-sm text-slate-900">Marcus K.</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-primary-container">
+<img class="w-full h-full rounded-full object-cover neo-border" data-alt="A brightly lit, cheerful portrait of a young woman with a vibrant personality, laughing slightly. The image is captured in a high-key lighting environment that makes the colors pop. The aesthetic is clean and modern, perfectly complementing the brand's focus on wellness and energetic cooking lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5y15XhUWmBAGXIi-mkwm8o2onFPW6oM9pPpmSQXyBbZUCla3u2wPnEXTrKpnxxsNAbi3rAqeoT-rpOVRZgVQ43H_kt_aZB0eS2ugVk9KIoyzGBLj5YJYAZ8pFOvteE3u5sgeNJbICFAAzJpoHX5ZmIU_sdzNGfWtS2rYYN_w7MejmxEnTOyyoWDq6oeQIwbnAcVKfuz9msro7aCkUat1aCWM4VW7akUeZXf5RMKGiLzLLfsqSYcOyXrbLeSMSLbw938xjKEFWwa1a"/>
+</div>
+<span class="font-label-sm text-slate-900">Sarah J.</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-shrink-0">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-primary-container">
+<img class="w-full h-full rounded-full object-cover neo-border" data-alt="A crisp, high-quality portrait of a young man with glasses, looking thoughtful and friendly. The scene is illuminated by soft, natural light coming from the side, creating a modern and approachable look. The background is a minimalist, light-colored kitchen, tying back to the theme of cooking and community." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDlp6Zliv4nOyNAQbiBgUWb3SWTNhc5Zji2HMj-00m1dkXzOUszbApStn6T4AhxMf6MLLHrQ4a4XX2FLgVHz2FtYGw6slAZkifADfoesF_BxMOo_AAk4o0wJDo49QqzQm34pDgEi4Q4RzdfXJd8D0HtCKWGMRkJm895vdVGC0j4Amna7s_KFQRv73LkT7U6p2Xp1Pd_dfiqA1UmqupfTGkq89QgSeR5drivxHABClQnSYgSk0azmER2OlEiGbfGRONuTuFII6wxy0J"/>
+</div>
+<span class="font-label-sm text-slate-900">Leo V.</span>
+</div>
+</div>
+</section>
+<!-- Feed List -->
+<section class="space-y-lg">
+<!-- Feed Post 1 -->
+<article class="bg-white neo-border rounded-[16px] overflow-hidden neo-shadow group">
+<div class="p-md flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full neo-border overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up avatar of a smiling young woman with dark wavy hair." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTXOWHWU7oUMn0gvm9tmNM8b7PTl31URwXQPUj_Em1i_imXqKkeEljKYgxa8v7b5gAsNJM7YFh5mBAGpEjR6oGnmNzltHqpjZNOSGHUmmrVEfPNyLTBkabPKJnn8fWOEGCUsfqZeZoMp-lVPTb1s6UE2juDM1DDRMwpOmwfvRQoqqaJhNzF8kGuinbjhHXHOGfYzLLiUbZiF0owmTKiSkeYSEiV8uWkczsXDDI1nml1IlOcB9RdpKSLyZKa97c7KtJAz_pXH-dxbR4"/>
+</div>
+<div>
+<h3 class="font-label-bold text-slate-900">Elena S.</h3>
+<p class="text-label-sm text-outline">2 hours ago</p>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-slate-900">more_horiz</span>
+</button>
+</div>
+<div class="px-md">
+<div class="rounded-xl overflow-hidden neo-border relative h-64">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant, high-contrast photograph of a delicious Pesto Pasta dish served in a wide ceramic bowl. The pasta is coated in a rich, emerald-green basil pesto, topped with bright red cherry tomatoes and sprinkled with parmesan cheese. The lighting is bright and natural, coming from a large window, creating a fresh and appetizing look that embodies the Cookit brand's energetic and healthy persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9uEoLizpmXHU1rnG1sYEP6ejiem6IygHn5qp0cwurkmtajWHY_qW8nzCat_xaVPMc2C-MM63I2pAKziZWlORr6UOVIuZz-_LRZEUTqFM8iBgnugvokSTq-4_QruH8BfW4X2-aS6Wl0KDXH7Ddouf7obty1ltfGcnbuGgLlZ1WaTOda3TqedVpi_UewZ1Hr47awa8VqWZ8RWmwXHT9sPmcf2Tll43TlgXSVcP4iuIU-A4jvYuXACjztbRm1J5UW0CIfIK-nhQWzpZh"/>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest neo-border neo-shadow-sm">Dinner</span>
+</div>
+</div>
+</div>
+<div class="p-md">
+<h4 class="font-headline-md text-headline-md text-slate-900 mb-xs">Pesto Pasta from my Pantry!</h4>
+<p class="text-body-md text-on-surface-variant mb-md">Quick weeknight win using only what I had left in the cupboard. So creamy! 🌿</p>
+<!-- Pantry Tags -->
+<div class="flex flex-wrap gap-2 mb-md">
+<div class="flex items-center gap-1 bg-primary-fixed-dim/20 text-on-primary-container px-3 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+<span class="font-label-sm">Pesto</span>
+</div>
+<div class="flex items-center gap-1 bg-primary-fixed-dim/20 text-on-primary-container px-3 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+<span class="font-label-sm">Pasta</span>
+</div>
+</div>
+<hr class="border-slate-100 mb-md"/>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 group/btn">
+<span class="material-symbols-outlined text-error group-hover/btn:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="font-label-bold text-slate-900">124</span>
+</button>
+<button class="flex items-center gap-1 group/btn">
+<span class="material-symbols-outlined text-outline group-hover/btn:scale-110 transition-transform">chat_bubble</span>
+<span class="font-label-bold text-slate-900">18</span>
+</button>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-bold neo-border neo-shadow-sm flex items-center gap-2 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+                            Save Recipe
+                        </button>
+</div>
+</div>
+</article>
+<!-- Chef's Note Callout -->
+<div class="bg-secondary-container/10 border-2 border-dashed border-secondary rounded-xl p-md flex gap-4 items-start">
+<div class="bg-secondary text-on-secondary w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 neo-shadow-sm">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div>
+<h5 class="font-label-bold text-secondary">Chef's Community Tip</h5>
+<p class="text-body-md text-on-secondary-container">Sharing your Pantry-only recipes helps others unlock ingredients they didn't know could work together!</p>
+</div>
+</div>
+<!-- Feed Post 2 -->
+<article class="bg-white neo-border rounded-[16px] overflow-hidden neo-shadow group">
+<div class="p-md flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full neo-border overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Avatar of a middle-aged man with a beard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLKih7iHMm77UKPwayGKQXRMhKc91D4WDrOC8sao82vrYEu-uUwpS6Dz0gOS4Lc3pW_sIo49upF9rCGiHSMyINiOR-z8nQKuZge5cSyO9AduEmkfqobJ8F17eo9E95cVneumtsJ7AYHQHo91zzm1ZD-TcjvuzjXT5rhS2yeYSWe-wYrBYYFwz5LfXXzGRvYDKKvWFmHQmzom3dLMJ6k508iVV2iI4XBO7VC1nFVYFXr7pIbgp-9rg-DCQfYeWVOPT8SXyXPEKP6KJL"/>
+</div>
+<div>
+<h3 class="font-label-bold text-slate-900">Marcus K.</h3>
+<p class="text-label-sm text-outline">5 hours ago</p>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-slate-900">more_horiz</span>
+</button>
+</div>
+<div class="px-md">
+<div class="rounded-xl overflow-hidden neo-border relative h-64">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant and colorful Mediterranean Buddha bowl filled with fresh ingredients: chickpeas, quinoa, diced cucumbers, bright orange carrots, and a dollop of creamy hummus in the center. The dish is presented on a rustic dark stone table that contrasts sharply with the vivid colors of the vegetables. The lighting is crisp and detailed, showcasing the fresh textures of the food, perfectly aligned with the energetic wellness brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdw4hMxV7WUh4I5kYT_VzgREo9ii2UVKO5KQlzpxt1j-dB1T21CbtvP9Szgrx2OV34eRMPs85jqEcdV4sUG5ezobywO03crRIwcJSDImj4xVkJE8pLWrBFUXJ9qp4-a8CcOng9Lfpg6s7yGhViTJHvjwVRYMgNF7li0olJOTWhMLzWRlopVoJdF0IizKH-9dTSpS3Dss9x278t24i96ivn6blase6EgfHchDSjUKfXqcvIKFTUW-6ScKkktrzdsfPDbK7Cs4JSyx9O"/>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-secondary-container text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest neo-border neo-shadow-sm">Healthy</span>
+</div>
+</div>
+</div>
+<div class="p-md">
+<h4 class="font-headline-md text-headline-md text-slate-900 mb-xs">Rainbow Buddha Bowl</h4>
+<p class="text-body-md text-on-surface-variant mb-md">Cleaned out the crisper drawer for this one. Health is wealth! 🥗</p>
+<!-- Pantry Tags -->
+<div class="flex flex-wrap gap-2 mb-md">
+<div class="flex items-center gap-1 bg-primary-fixed-dim/20 text-on-primary-container px-3 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+<span class="font-label-sm">Quinoa</span>
+</div>
+<div class="flex items-center gap-1 bg-primary-fixed-dim/20 text-on-primary-container px-3 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+<span class="font-label-sm">Chickpeas</span>
+</div>
+<div class="flex items-center gap-1 bg-primary-fixed-dim/20 text-on-primary-container px-3 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+<span class="font-label-sm">Carrots</span>
+</div>
+</div>
+<hr class="border-slate-100 mb-md"/>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 group/btn">
+<span class="material-symbols-outlined text-outline group-hover/btn:scale-110 transition-transform">favorite</span>
+<span class="font-label-bold text-slate-900">89</span>
+</button>
+<button class="flex items-center gap-1 group/btn">
+<span class="material-symbols-outlined text-outline group-hover/btn:scale-110 transition-transform">chat_bubble</span>
+<span class="font-label-bold text-slate-900">4</span>
+</button>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-bold neo-border neo-shadow-sm flex items-center gap-2 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+                            Save Recipe
+                        </button>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- FAB (Contextual) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center neo-border shadow-[0px_8px_0px_0px_rgba(30,41,59,1)] active:translate-y-1 active:shadow-[0px_4px_0px_0px_rgba(30,41,59,1)] transition-all z-40">
+<span class="material-symbols-outlined text-3xl">add_a_photo</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-white dark:bg-slate-900 border-t-2 border-slate-900 dark:border-slate-100 shadow-[0px_-4px_8px_0px_rgba(34,197,94,0.1)]">
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1 hover:text-green-600 dark:hover:text-green-400 active:scale-95 transition-all duration-150">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Pantry</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1 hover:text-green-600 dark:hover:text-green-400 active:scale-95 transition-all duration-150">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-green-500 text-white rounded-lg border-2 border-slate-900 px-4 py-1 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 transition-all duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">blender</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Recipes</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1 hover:text-green-600 dark:hover:text-green-400 active:scale-95 transition-all duration-150">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Profile</span>
+</div>
+</nav>
+</body></html>

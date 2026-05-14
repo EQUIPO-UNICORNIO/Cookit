@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "surface-bright": "#31394d",
+                        "primary-container": "#22c55e",
+                        "on-tertiary": "#00344d",
+                        "primary-fixed": "#6bff8f",
+                        "on-tertiary-container": "#004564",
+                        "secondary-fixed": "#ffdbca",
+                        "secondary-container": "#ec6a06",
+                        "surface-container-high": "#222a3d",
+                        "inverse-primary": "#006e2f",
+                        "surface-container-lowest": "#060e20",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-container": "#004b1e",
+                        "on-secondary": "#552100",
+                        "inverse-surface": "#dae2fd",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-error": "#690005",
+                        "on-primary-fixed": "#002109",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#36b6fb",
+                        "surface-tint": "#4ae176",
+                        "on-secondary-container": "#4a1c00",
+                        "tertiary-fixed": "#c9e6ff",
+                        "on-surface": "#dae2fd",
+                        "surface-variant": "#2d3449",
+                        "on-primary": "#003915",
+                        "primary": "#4be277",
+                        "outline": "#869585",
+                        "surface-container": "#171f33",
+                        "tertiary": "#8bcfff",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#2d3449",
+                        "inverse-on-surface": "#283044",
+                        "on-background": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-secondary-fixed-variant": "#783200",
+                        "outline-variant": "#3d4a3d",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#0b1326",
+                        "background": "#0b1326",
+                        "secondary": "#ffb690",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-primary-fixed-variant": "#005321",
+                        "surface": "#0b1326",
+                        "on-surface-variant": "#bccbb9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "48px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .viewfinder-corner {
+            width: 40px;
+            height: 40px;
+            border-color: #4be277;
+            position: absolute;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface selection:bg-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-container-low border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="text-2xl font-black italic text-on-surface tracking-tighter">Cookit</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden active:scale-95 transition-transform">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional and friendly headshot of a young chef with a warm smile, set against a clean, minimalist kitchen background. The lighting is soft and natural, emphasizing a modern and approachable brand aesthetic. The color palette is composed of soft whites and subtle greens, aligning with a high-end wellness application style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF3PPsJTWY_CU1mqZA5V1bk8767myda7NkWumlgO1yDTvxsBiMqJjnVGtxD4tjN1wcXAkXKrETW0ldX5OKwgGGiJH5Jh00V76ulNTwenlT6Yvi8xY3ia4uWit7MoIGdOqRHceEP6q5MalQm2hWd0UzIQItMRuN9jlhNbWpEH9e_75CKnWYyINM-YwE7z5xqoauZz9N0NcG4BV_5-kHUCZplYaEw4LZD-9P9p9bz0NfLGq4A1P2KRY2dOdeyyvjfIVh24Te4Mm7KeuN"/>
+</div>
+</header>
+<main class="pt-16 pb-40 min-h-screen">
+<!-- Viewfinder Section -->
+<section class="relative w-full aspect-[3/4] md:aspect-video bg-black overflow-hidden">
+<img alt="Camera View" class="w-full h-full object-cover opacity-50" data-alt="A first-person perspective of a smartphone camera viewfinder pointing at a grocery receipt and fresh vegetables on a white marble kitchen counter. The scene is bright and airy with high-key lighting, featuring vibrant green herbs and ripe red tomatoes. The visual style is crisp and modern, emphasizing a seamless integration of technology and fresh cooking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQA51V8PtFzJy7wQu8paMvXdnWviDUjulRc6U0a73XLFny3o0deCQ-Ytt329meFHFSdgZxASpR-EqBPwVETkejnKKhbLuWF8cwvxTfIMnv1uktHJkXKk-6aTA9CknGbpLHb7oVCZA2x4h_Djo555ptbNxT3V_Pla3d5B3Ie-JLe2KFr0I15rh5pG0kaGy-jTcJ77d5Rzql8YWqsCz_RI_Z9kqAnWQBA1xdfVbiFCl9wYjyR6-QRGWJIbQ1GqZJoW3IqtSTkr21UEcR"/>
+<!-- Viewfinder Overlay -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-64 h-80 border-2 border-dashed border-white/20 rounded-xl relative">
+<div class="viewfinder-corner top-0 left-0 border-t-4 border-l-4 rounded-tl-xl"></div>
+<div class="viewfinder-corner top-0 right-0 border-t-4 border-r-4 rounded-tr-xl"></div>
+<div class="viewfinder-corner bottom-0 left-0 border-b-4 border-l-4 rounded-bl-xl"></div>
+<div class="viewfinder-corner bottom-0 right-0 border-b-4 border-r-4 rounded-br-xl"></div>
+<!-- Scanning Animation Line -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-primary shadow-[0_0_15px_rgba(75,226,119,1)]"></div>
+</div>
+</div>
+<!-- Scan Button -->
+<div class="absolute bottom-10 left-0 w-full flex justify-center px-margin">
+<button class="bg-primary text-on-primary font-h3 px-8 py-4 rounded-full shadow-[0px_8px_24px_rgba(0,0,0,0.4)] flex items-center gap-3 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span>Escanear Ticket</span>
+</button>
+</div>
+</section>
+<!-- Slide-up Panel -->
+<section class="px-margin -mt-6 relative z-10">
+<div class="bg-surface-container-high border border-outline-variant rounded-3xl p-6 shadow-xl">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-h3 text-on-surface">Productos detectados</h2>
+<span class="bg-secondary-container text-on-secondary-container text-label-md px-3 py-1 rounded-full">3 ÍTEMS</span>
+</div>
+<!-- Bento Grid for Scanned Products -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="set_meal">set_meal</span>
+</div>
+<span class="font-label-md text-on-surface">Pollo</span>
+<span class="text-label-sm text-on-surface-variant">500g</span>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="rice_bowl">rice_bowl</span>
+</div>
+<span class="font-label-md text-on-surface">Arroz</span>
+<span class="text-label-sm text-on-surface-variant">1kg</span>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-error/10 rounded-full flex items-center justify-center text-error group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="nutrition">nutrition</span>
+</div>
+<span class="font-label-md text-on-surface">Tomates</span>
+<span class="text-label-sm text-on-surface-variant">3 uds</span>
+</div>
+<!-- Add Manual -->
+<div class="bg-surface-container border border-dashed border-outline p-4 rounded-2xl flex flex-col items-center justify-center gap-2 opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="add_circle">add_circle</span>
+<span class="font-label-md text-on-surface-variant">Añadir</span>
+</div>
+</div>
+<!-- Chef's Note Callout -->
+<div class="mb-8 p-4 bg-tertiary-container/20 border border-tertiary-container rounded-2xl flex gap-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="lightbulb">lightbulb</span>
+<div>
+<p class="font-label-md text-tertiary">Tip de Chef</p>
+<p class="text-label-sm text-on-surface-variant">¡Parece que tienes los ingredientes para un Risotto de Pollo! Confirma los productos para guardarlos en tu despensa.</p>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-h3 py-5 rounded-2xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                Confirmar y Guardar
+            </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-container border-t border-outline-variant">
+<!-- Pantry -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Pantry</span>
+</a>
+<!-- Scan (Active) -->
+<a class="flex flex-col items-center justify-center text-primary px-4 py-1 active:scale-95 transition-all duration-150" href="#">
+<div class="bg-primary/20 p-2 rounded-xl mb-0.5">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-widest">Scan</span>
+</a>
+<!-- Recipes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="blender">blender</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Recipes</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+</body></html>

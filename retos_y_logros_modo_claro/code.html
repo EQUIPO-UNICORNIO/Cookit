@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#eff1f3",
+                    "surface": "#f7f9fb",
+                    "surface-container-low": "#f2f4f6",
+                    "on-background": "#191c1e",
+                    "tertiary-fixed-dim": "#eec200",
+                    "on-surface-variant": "#3d4a3d",
+                    "outline": "#6d7b6c",
+                    "inverse-surface": "#2d3133",
+                    "tertiary-fixed": "#ffe083",
+                    "tertiary-fixed": "#ffe083",
+                    "tertiary-container": "#cfa800",
+                    "primary-container": "#22c55e",
+                    "on-secondary-fixed-variant": "#783200",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#ffb690",
+                    "outline-variant": "#bccbb9",
+                    "tertiary": "#735c00",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d8dadc",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "primary-fixed": "#6bff8f",
+                    "on-primary-fixed": "#002109",
+                    "on-tertiary-fixed": "#231b00",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eceef0",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "on-error-container": "#93000a",
+                    "primary": "#006e2f",
+                    "on-surface": "#191c1e",
+                    "secondary-fixed": "#ffdbca",
+                    "on-primary-fixed-variant": "#005321",
+                    "on-secondary-container": "#5c2400",
+                    "secondary-container": "#fd761a",
+                    "surface-tint": "#006e2f",
+                    "background": "#f7f9fb",
+                    "secondary": "#9d4300",
+                    "on-secondary-fixed": "#341100",
+                    "primary-fixed-dim": "#4ae176",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-primary-container": "#004b1e",
+                    "inverse-primary": "#4ae176",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-tertiary-container": "#4f3e00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "xl": "64px",
+                    "base": "8px",
+                    "lg": "40px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "margin": "20px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-bold": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-lg {
+            box-shadow: 8px 8px 0px 0px rgba(30, 41, 59, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-900 border-b-2 border-slate-900 dark:border-slate-100 shadow-[0px_4px_0px_0px_rgba(30,41,59,1)]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-600 dark:text-green-500" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="text-2xl font-black italic text-slate-900 dark:text-white tracking-tighter">Cookit</span>
+</div>
+<div class="flex items-center">
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-slate-900" data-alt="A professional studio portrait of a friendly young chef wearing a clean white apron. The lighting is bright and high-key, emphasizing a clean and modern culinary lifestyle. The background is a soft, minimalist kitchen environment with natural light pouring in. The overall mood is approachable, confident, and wellness-focused, fitting a premium digital cooking application aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFuieO2ORd3jvwXUK-PkliB9D1QblzpO8cn54zqgSVzMmU165WCxfu9XFsKif3ooL47BpRoIKH670c8am8LERUuk2tJDJPiVOyroN1I3McRse08edreGMW1Z8vWymrOFJHgEffRQXOpBuj533jwPMJnU0DgbHHWtV3SqtPI-PZAOvGC2UBFouKYxBaXzvFrOInmFBDPZKTTaqEILyOxbFTuMgSWnwQDk4kSbv9c7f3FXNWI-MG6SZGINUeW-pt28epSdboWGjVTUc9"/>
+</div>
+</header>
+<main class="pt-24 pb-28 px-margin max-w-2xl mx-auto space-y-lg">
+<!-- User Level Hero -->
+<section class="bg-white border-2 border-slate-900 rounded-xl p-md neo-shadow">
+<div class="flex items-center justify-between mb-sm">
+<div>
+<h2 class="font-headline-md text-headline-md text-slate-900">Nivel 5</h2>
+<p class="font-label-bold text-label-bold text-secondary uppercase">Rookie Chef</p>
+</div>
+<div class="bg-primary-fixed text-on-primary-fixed px-sm py-xs rounded-full border-2 border-slate-900 font-bold">
+                    1,250 XP
+                </div>
+</div>
+<div class="relative w-full h-6 bg-surface-container border-2 border-slate-900 rounded-full overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-secondary-container transition-all duration-500" style="width: 65%;"></div>
+</div>
+<div class="flex justify-between mt-xs font-label-sm text-label-sm text-outline">
+<span>650 XP para Nivel 6</span>
+<span>Pro: 1,900 XP</span>
+</div>
+</section>
+<!-- Retos Semanales -->
+<section class="space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-slate-900">Retos Semanales</h3>
+<span class="font-label-bold text-label-bold text-primary">Ver todos</span>
+</div>
+<div class="grid grid-cols-1 gap-md">
+<!-- Challenge 1 -->
+<div class="bg-white border-2 border-slate-900 rounded-xl p-md flex gap-md neo-shadow hover:translate-y-0.5 transition-transform">
+<div class="flex-shrink-0 w-16 h-16 bg-primary-container/10 rounded-lg border-2 border-slate-900 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="recycling">recycling</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-label-bold text-body-lg text-slate-900">Zero Waste Hero</h4>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded border border-slate-900 text-[10px] font-bold">+500 XP</span>
+</div>
+<p class="text-label-sm text-outline mb-sm">Usa ingredientes próximos a vencer en 3 recetas.</p>
+<div class="w-full h-3 bg-slate-100 border border-slate-900 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 85%;"></div>
+</div>
+<p class="text-right text-[10px] font-black text-slate-900 mt-1 uppercase tracking-widest">85% Completado</p>
+</div>
+</div>
+<!-- Challenge 2 -->
+<div class="bg-white border-2 border-slate-900 rounded-xl p-md flex gap-md neo-shadow hover:translate-y-0.5 transition-transform">
+<div class="flex-shrink-0 w-16 h-16 bg-secondary-fixed/30 rounded-lg border-2 border-slate-900 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="explore">explore</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-label-bold text-body-lg text-slate-900">Chef Explorer</h4>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded border border-slate-900 text-[10px] font-bold">+300 XP</span>
+</div>
+<p class="text-label-sm text-outline mb-sm">Cocina una receta de una cultura que nunca hayas probado.</p>
+<div class="w-full h-3 bg-slate-100 border border-slate-900 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 20%;"></div>
+</div>
+<p class="text-right text-[10px] font-black text-slate-900 mt-1 uppercase tracking-widest">20% Completado</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Medallas Recientes (Bento Style) -->
+<section class="space-y-md">
+<h3 class="font-headline-md text-headline-md text-slate-900">Medallas Recientes</h3>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-sm">
+<div class="bg-white border-2 border-slate-900 p-sm rounded-xl text-center neo-shadow-sm flex flex-col items-center gap-2">
+<div class="w-12 h-12 bg-yellow-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+<span class="material-symbols-outlined text-white" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<span class="font-label-sm text-[10px] leading-tight">Primer Plato</span>
+</div>
+<div class="bg-white border-2 border-slate-900 p-sm rounded-xl text-center neo-shadow-sm flex flex-col items-center gap-2">
+<div class="w-12 h-12 bg-blue-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+<span class="material-symbols-outlined text-white" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<span class="font-label-sm text-[10px] leading-tight">Racha de 7 Días</span>
+</div>
+<div class="bg-white border-2 border-slate-900 p-sm rounded-xl text-center neo-shadow-sm flex flex-col items-center gap-2">
+<div class="w-12 h-12 bg-green-400 rounded-full border-2 border-slate-900 flex items-center justify-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+<span class="material-symbols-outlined text-white" data-icon="eco" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<span class="font-label-sm text-[10px] leading-tight">Veggie Lover</span>
+</div>
+<div class="bg-white border-2 border-slate-900 p-sm rounded-xl text-center neo-shadow-sm flex flex-col items-center gap-2 opacity-40">
+<div class="w-12 h-12 bg-slate-300 rounded-full border-2 border-slate-900 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500" data-icon="lock">lock</span>
+</div>
+<span class="font-label-sm text-[10px] leading-tight">Bloqueado</span>
+</div>
+</div>
+</section>
+<!-- Ranking de Amigos -->
+<section class="space-y-md">
+<h3 class="font-headline-md text-headline-md text-slate-900">Ranking de Amigos</h3>
+<div class="bg-white border-2 border-slate-900 rounded-xl overflow-hidden neo-shadow">
+<!-- User Rank (Active) -->
+<div class="flex items-center gap-md p-md bg-primary-container/10 border-b-2 border-slate-900">
+<span class="font-display-lg text-2xl text-slate-900 italic">4.</span>
+<img alt="Me" class="w-10 h-10 rounded-full border-2 border-slate-900" data-alt="Close-up avatar of a user with a friendly expression. The visual style is crisp and modern, featuring vibrant greens and clean whites from the Cookit design system. Soft studio lighting highlights the user's features, creating a warm and engaging personality for a gamified social experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA20LRdmCBYt3cp4EfJmWV0Z0_Mx_nCWLHzQMgA0dNi8XJb0Ph4pRDBC07v8AuWJgzzqtXImSJCeJ1yQPS1QJbmjR9Emlq3TR9E7FA0_0q6l9HqjF1Zh3HxtoaY7k-z3EFBW1hM1pUwW88CPwjwKSEM7irqnHv2icaHErZKjeC8K1xC7mnQEMK7KZJdiGjw-RfkShiQyMR3vDBHKzdqDDeu19MjVdVmWD8qUfn9VZVEEgRZIImXo1fvxx621UHJf9cw3CpMv02Jfk1L"/>
+<div class="flex-grow">
+<p class="font-label-bold text-slate-900">Tú (Rookie Chef)</p>
+<p class="text-xs text-outline">1,250 XP</p>
+</div>
+<span class="material-symbols-outlined text-green-600" data-icon="trending_up">trending_up</span>
+</div>
+<!-- Other Friends -->
+<div class="flex items-center gap-md p-md border-b-2 border-slate-100">
+<span class="font-display-lg text-2xl text-slate-400 italic">1.</span>
+<img alt="Friend" class="w-10 h-10 rounded-full border-2 border-slate-900" data-alt="Portrait of a female friend with a joyful smile. The lighting is sunny and optimistic, reflecting a playful and energetic brand vibe. The image uses a high-contrast style with bold details, fitting perfectly into a modern neo-brutalist user interface. Bright, saturated colors complement the app's primary green and orange palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtlbhI1ZvyIJG8nedSEY3ygWstT0CaBYD9idcGOr5vcdazfX7ccm5VdvUbP7mMXFcGyA95ihd8a1M7VKbpp4upt2HOFweeskKcIYJPAhS7RPIhYliNWyn5gXjFeNLxOCyLDApYsskYn86FjByGv5MfcEoShYv4NtHEMtI79z8WEmyPRrtmj5dfOIQwl7JilzKs1x4xR9Xgh-ipY-mZOCPiHAEwg9JhczV9KJaFqgbyfdbI1AWpz0qYfvD0bzdhXQ_CZJ1yLVIF2wkt"/>
+<div class="flex-grow">
+<p class="font-label-bold text-slate-900">Elena M.</p>
+<p class="text-xs text-outline">2,840 XP</p>
+</div>
+<span class="material-symbols-outlined text-yellow-500" data-icon="emoji_events" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+</div>
+<div class="flex items-center gap-md p-md border-b-2 border-slate-100">
+<span class="font-display-lg text-2xl text-slate-400 italic">2.</span>
+<img alt="Friend" class="w-10 h-10 rounded-full border-2 border-slate-900" data-alt="Close-up portrait of a male user with stylish glasses, looking motivated. The background is a clean, minimalist kitchen set in bright morning light. The visual language is structured yet friendly, following the soft neo-brutalist aesthetic with clean edges and vibrant energy. The lighting is natural and high-contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1JsWd1wQ54_0_8LeyPXe6h-aEwPEJjLm2wUqhhE4iYyBwOc6AcpYDWjpujJzWdEfqmUiTcYivn5nROmXwUSRZV62CxzJyvdQO-dwmZs9vZSKozwO7aMkf_zH27Cz1ssgA44PHvr88jqLGWPWhtp764CLEdLbVdfyKycFCH5ydUsAu10PIZt9sUC5Gc48z-Bkj8PaKrvppdxK93hvEw2ozbs1_b0C4aMyhBsvmonwCziFp136LzlwbZu8KnjGANL35zdLtljuThzdc"/>
+<div class="flex-grow">
+<p class="font-label-bold text-slate-900">Pablo Chef</p>
+<p class="text-xs text-outline">2,100 XP</p>
+</div>
+<span class="text-xs text-outline">#2</span>
+</div>
+</div>
+</section>
+<!-- Chef's Note Callout -->
+<div class="bg-secondary-container/10 border-2 border-dashed border-secondary rounded-xl p-md">
+<div class="flex items-center gap-2 mb-sm text-secondary">
+<span class="material-symbols-outlined" data-icon="tips_and_updates">tips_and_updates</span>
+<span class="font-label-bold uppercase tracking-wider">Chef's Note</span>
+</div>
+<p class="text-body-md text-slate-700">¡Casi llegas al nivel 6! Completa el reto 'Zero Waste Hero' hoy y desbloquearás la medalla exclusiva de 'Master Sostenible'.</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-white dark:bg-slate-900 border-t-2 border-slate-900 dark:border-slate-100">
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1 hover:text-green-600 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Pantry</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1 hover:text-green-600 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Scan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 px-4 py-1 hover:text-green-600 active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="blender">blender</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Recipes</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-green-500 text-white rounded-lg border-2 border-slate-900 px-4 py-1 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#ffdbca",
+                        "secondary": "#9d4300",
+                        "on-secondary-fixed": "#341100",
+                        "error": "#ba1a1a",
+                        "surface-container": "#eceef0",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#4ae176",
+                        "on-secondary-container": "#5c2400",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed": "#002109",
+                        "secondary-container": "#fd761a",
+                        "surface-tint": "#006e2f",
+                        "tertiary-fixed": "#ffe083",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary": "#735c00",
+                        "on-tertiary-fixed": "#231b00",
+                        "surface-bright": "#f7f9fb",
+                        "on-surface-variant": "#3d4a3d",
+                        "on-primary-fixed-variant": "#005321",
+                        "on-primary-container": "#004b1e",
+                        "surface-dim": "#d8dadc",
+                        "background": "#f7f9fb",
+                        "primary": "#006e2f",
+                        "on-surface": "#191c1e",
+                        "primary-container": "#22c55e",
+                        "tertiary-container": "#cfa800",
+                        "primary-fixed-dim": "#4ae176",
+                        "tertiary-fixed-dim": "#eec200",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#4f3e00",
+                        "outline": "#6d7b6c",
+                        "primary-fixed": "#6bff8f",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e6e8ea",
+                        "outline-variant": "#bccbb9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#783200",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "64px",
+                        "md": "24px",
+                        "margin": "20px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px rgba(30, 41, 59, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-zinc-950 border-b-2 border-zinc-800 dark:border-zinc-700 shadow-[4px_4px_0px_0px_rgba(34,197,94,0.1)]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500 text-2xl">restaurant_menu</span>
+<h1 class="text-2xl font-black tracking-tight text-green-500 dark:text-green-400 font-['Plus_Jakarta_Sans']">Cookit</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+<span class="material-symbols-outlined text-zinc-500">search</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-zinc-800 overflow-hidden">
+<img alt="Avatar" data-alt="A professional studio portrait of a young chef smiling warmly, wearing a clean white kitchen apron. The lighting is soft and natural, emphasizing a bright and welcoming atmosphere. The background is a blurred modern kitchen with hints of fresh herbs and copper cookware, maintaining a light-mode aesthetic with vibrant green accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAnTUXxavSxR62NJYKePof0N9yK6C2MBlUySR9gRBODJqzgEC3hr-01wyWhQoqVDy9xne61E4_--VOBYZNBfVseBlY39y1ZdRwtd9dzjK7L-xEzGstR8RXq37TyKPSG-1YfJv1rLqD--4lyYHiRbgH0XowaVj5QeQt195l-O9I4iwq0a01JiIczGaTCfXO6RpPOVNFi0_nNJibGQplhp82RdDSKIo8gFAxUMbwQBnoF6nLKnhl7MKG-de4YuIaS9TWiEDvkgm3ZuKi"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- Header Section -->
+<section class="mb-8">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary">info</span>
+<span class="font-label-bold text-label-bold text-secondary uppercase">Asistente de Sustitución</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-zinc-900 mb-2">¿No tienes Chalotas?</h2>
+<p class="font-body-md text-body-md text-zinc-600">No te preocupes, ¡la cocina se trata de improvisar! Aquí tienes las mejores alternativas para tu receta.</p>
+</section>
+<!-- Target Ingredient Card -->
+<div class="mb-10 p-6 bg-white border-2 border-zinc-800 rounded-xl neo-shadow flex items-center gap-6">
+<div class="w-24 h-24 bg-surface-container rounded-lg overflow-hidden border-2 border-zinc-800 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A high-quality close-up photograph of fresh shallots with golden-brown papery skin and vibrant purple flesh visible where peeled. The ingredients are placed on a clean, white marble countertop under bright, even daylight. The style is minimalist and fresh, emphasizing natural textures and the soft green and earthy tones of the Zest and Zinc theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUW9p981J6CCfYjbJGdfWFMyRfuQwLR0RfCj8I2F1O-jv4kv6KWwJtamQSaQHVYZFOyHCd9zsVAbZI53hqVGzdz-ck22iUKHmDuJnyZqmTTMO1hW2IzGB9NfYQFpT340sqw6FEEzDXvnp2qbYGXxkpJb66hs_Dne7tj0JKvwQqkFzr9UsXdS3QUlpJiGG793vzzeaEWwbJ3c4TgGUNQJ53pD_4uD3Cdl3OjfwHwvtW_OIfxk1lwN_TBrmhU90pj7WtQdDrriI13oMg"/>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-zinc-900">Chalotas</h3>
+<p class="font-body-md text-body-md text-zinc-500">Sabor delicado, dulce y ligeramente picante.</p>
+</div>
+</div>
+<!-- Substitutions Bento Grid -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Option 1: Red Onion -->
+<div class="group p-6 bg-white border-2 border-zinc-800 rounded-xl neo-shadow hover:-translate-y-1 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4 items-center">
+<div class="w-16 h-16 bg-secondary-fixed rounded-lg border-2 border-zinc-800 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up of a fresh red onion, sliced to reveal its beautiful concentric purple and white rings. The lighting is crisp and bright, highlighting the moisture on the surface. The background is a clean, neutral gray-green consistent with the neo-brutalism design system, conveying a sense of fresh, healthy ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6mE4mRUKn8892XKoVNN8tItilovzljylNHyUDwX5OcowMIdgo12L352wkxkr04d_zfyYc-2QeIIcvJbYkUof8sRxxcAT-WzzsX_laHQi7jCZwl23CmntViHajRCFIljqqaQM1vmcn9NYpHdoVw-RLNE-ojK672dUROpr-PPw3z6H4AO-hpgqKow7B_gVuK2QfIX9aUQ8IEEwHTkml7BteSHJE51ngeGfxIXPckvlndtU99k16B5CCUdNJ9HMWV_Tnp9_mh9TI1G36"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-zinc-900">Cebolla Morada</h4>
+<div class="flex gap-2 mt-1">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">EN TU DESPENSA</span>
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded-full">SIMILAR AL 90%</span>
+</div>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md text-zinc-600 mb-6 italic">"Es la opción más cercana. Usa un poco menos de la cantidad indicada si la vas a usar cruda."</p>
+<div class="flex justify-between items-center">
+<div class="text-zinc-500 text-sm font-medium">Equivalencia: 1:1</div>
+<button class="h-14 px-8 rounded-full bg-primary border-2 border-zinc-800 text-white font-bold neo-shadow-sm active:translate-y-0.5 active:translate-x-0.5 transition-all flex items-center gap-2">
+                        Usar esta <span class="material-symbols-outlined text-sm">check_circle</span>
+</button>
+</div>
+</div>
+<!-- Option 2: Chives -->
+<div class="group p-6 bg-white border-2 border-zinc-800 rounded-xl neo-shadow hover:-translate-y-1 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4 items-center">
+<div class="w-16 h-16 bg-primary-fixed-dim/20 rounded-lg border-2 border-zinc-800 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A bundle of fresh green chives tied with a simple rustic twine, resting on a light wood cutting board. The scene is illuminated by soft morning light, creating gentle shadows. The palette features vibrant greens and soft neutrals, perfectly matching the energetic and wellness-focused vibe of the Cookit brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxlBkrrdWFEy9KnvNWwt_UtbxfkniR0XNrTADKKk1btlumzxiy_QJfSS2j5AfhHdUAkKvPpf6rDdmIW25VwhS5f139JztQb46JQip3GNFI8GW6G6VPIKiaxrmJfXwEjPdMH9Q_oCtfBiCbo1RvrclVm1CUTBVpCx5ivG9guVBrWg6m5dckpZiz_zNkH7ypPL97VA-7tfOsTcDyvtv3b7w-_rQIi8pCvS0Zfjd1-NX2GJLSPASMBmtbuM8h6fcw-eAw4-1wHNeGo-8w"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-zinc-900">Cebollino</h4>
+<div class="flex gap-2 mt-1">
+<span class="bg-tertiary/10 text-tertiary text-[10px] font-bold px-2 py-0.5 rounded-full">MEJOR PARA DECORAR</span>
+</div>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md text-zinc-600 mb-6 italic">"Ideal si buscas ese toque herbal suave de la chalota sin la textura crujiente."</p>
+<div class="flex justify-between items-center">
+<div class="text-zinc-500 text-sm font-medium">Equivalencia: 2 cdas : 1 chalota</div>
+<button class="h-14 px-8 rounded-full bg-white border-2 border-secondary text-secondary font-bold neo-shadow-sm active:translate-y-0.5 active:translate-x-0.5 transition-all flex items-center gap-2 hover:bg-secondary-fixed/30">
+                        Usar esta <span class="material-symbols-outlined text-sm">check_circle</span>
+</button>
+</div>
+</div>
+<!-- Chef's Note Callout -->
+<div class="p-6 bg-secondary/10 border-2 border-dashed border-secondary rounded-xl">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<h5 class="font-label-bold text-label-bold text-secondary uppercase">Consejo del Chef</h5>
+</div>
+<p class="font-body-md text-body-md text-zinc-800">Si usas cebolla normal, puedes remojarla en agua fría con un chorrito de vinagre durante 10 minutos para suavizar su sabor y que se parezca más a una chalota.</p>
+</div>
+</div>
+</main>
+<!-- Navigation Shell (Bottom) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-white dark:bg-zinc-900 px-4 py-3 pb-safe border-t-2 border-zinc-800 dark:border-zinc-700 shadow-[0_-4px_8px_rgba(34,197,94,0.05)]">
+<div class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Pantry</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined">shutter_speed</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center text-green-500 dark:text-green-400 bg-green-50 dark:bg-green-950/30 rounded-lg py-1 px-3 border-2 border-zinc-800 dark:border-zinc-700 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Recipes</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Profile</span>
+</div>
+</nav>
+</body></html>

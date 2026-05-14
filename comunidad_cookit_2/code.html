@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b1326;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#dae2fd",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#060e20",
+                    "secondary-fixed-dim": "#ffb690",
+                    "secondary-container": "#ec6a06",
+                    "on-surface-variant": "#bccbb9",
+                    "on-primary-fixed-variant": "#005321",
+                    "tertiary-fixed": "#c9e6ff",
+                    "surface-dim": "#0b1326",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "primary-fixed": "#6bff8f",
+                    "inverse-on-surface": "#283044",
+                    "secondary-fixed": "#ffdbca",
+                    "on-background": "#dae2fd",
+                    "primary-container": "#22c55e",
+                    "on-error": "#690005",
+                    "outline-variant": "#3d4a3d",
+                    "on-secondary": "#552100",
+                    "surface-variant": "#2d3449",
+                    "on-primary-container": "#004b1e",
+                    "surface-container": "#171f33",
+                    "surface-bright": "#31394d",
+                    "on-surface": "#dae2fd",
+                    "primary-fixed-dim": "#4ae176",
+                    "on-secondary-fixed": "#341100",
+                    "tertiary-container": "#36b6fb",
+                    "surface": "#0b1326",
+                    "secondary": "#ffb690",
+                    "on-secondary-container": "#4a1c00",
+                    "on-primary-fixed": "#002109",
+                    "on-tertiary": "#00344d",
+                    "surface-container-highest": "#2d3449",
+                    "on-primary": "#003915",
+                    "background": "#0b1326",
+                    "tertiary-fixed-dim": "#89ceff",
+                    "tertiary": "#8bcfff",
+                    "outline": "#869585",
+                    "surface-container-low": "#131b2e",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed": "#001e2f",
+                    "on-secondary-fixed-variant": "#783200",
+                    "surface-container-high": "#222a3d",
+                    "on-tertiary-container": "#004564",
+                    "inverse-primary": "#006e2f",
+                    "surface-tint": "#4ae176",
+                    "primary": "#4be277"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "md": "16px",
+                    "unit": "4px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "margin": "32px",
+                    "xl": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "label-md": ["Plus Jakarta Sans"],
+                    "h3": ["Plus Jakarta Sans"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "h1": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "h2": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "h3": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<nav class="bg-slate-900/80 backdrop-blur-md dark:bg-slate-950/80 docked full-width top-0 sticky z-50 border-b border-white/10 flex justify-between items-center w-full px-6 py-4">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-green-500 dark:text-green-400" data-icon="restaurant">restaurant</span>
+<span class="text-2xl font-black text-green-500 dark:text-green-400 italic font-['Plus_Jakarta_Sans'] tracking-tight">Cookit</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-slate-400 dark:text-slate-500 hover:bg-slate-800/50 transition-colors p-2 rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional close-up headshot of a young man with a friendly expression, set against a soft-focus studio background. The lighting is crisp and modern, matching a premium dark-mode app aesthetic. He has short hair and subtle lighting highlights that emphasize a high-quality, tech-focused profile image style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGlveih432ZU6TXygyTWoKkM1jyucE8VTNErF8mt3EF-FL_tCXjDspDSSs0yh6mE0_g7l06PKjiowh5tiQb5mvHtNVxBuvs4VQr-E2LGPc9g6HSS9T3E7iCWkr64GyPdpTmDFJ0ORZXSNrlk7OlO1qFdRWAmp8oR2dJ-GelfVcdYhWOv36uYD-_zjGoYenJsFabbsFzHbspZk-Y35ThOLdBH5Jrk0ZE0dOneOP7h1vcLZi3b7FEHnuXbi-kglwsDTrWPL_Gg1hHalF"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="max-w-screen-md mx-auto px-md py-lg">
+<!-- Header Section -->
+<header class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-background mb-xs">Community</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">See what's cooking in kitchens around the world.</p>
+</header>
+<!-- Feed Container -->
+<div class="space-y-xl">
+<!-- Post 1 -->
+<article class="bg-surface-container rounded-xl border border-white/5 overflow-hidden shadow-none">
+<!-- User Info -->
+<div class="p-md flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<img alt="Elena S." class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a cheerful woman with long dark hair, smiling warmly. She is in a brightly lit kitchen environment that feels modern and high-end. The visual style is crisp and professional, using soft bokeh to highlight her friendly expression, fitting perfectly into a premium lifestyle social media feed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwKlkaDDt9dUTbRzRvnzZqKFHTl74git7iHwSxPrRQ-WAJgQ2aliJk1A0VdupokyE6rYfTtA6zR_m1AclpmrSS1S-210DJG55OiyxPsmcOAEejYkmWYHRzPtBL7cwExjRJ1eKCDUwAB8GN3z9HU_LoH6nsMTCtvX3teeLvyxHu8z3KLNKFygTiW6Fb-Xxulh4hEW2aD0u2hmbsZMHs0nG1LF6xh1jDu-uyb6hbahATXd0MPyJQdkBV-tiqpWELDBqlI1S5XwEKR5mu"/>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Elena S.</h3>
+<p class="text-[12px] text-slate-500">2 hours ago</p>
+</div>
+</div>
+<button class="text-slate-400"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</div>
+<!-- Post Image -->
+<div class="relative aspect-square w-full">
+<img alt="Pesto Pasta" class="w-full h-full object-cover" data-alt="A gourmet presentation of creamy pesto pasta in a shallow dark ceramic bowl, topped with fresh basil leaves, toasted pine nuts, and a dusting of parmesan. The lighting is dramatic and moody with a sharp focus on the textures of the food. The background is a dark stone countertop that reinforces a premium, high-contrast culinary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUzAROdbejgpLgPxpqRs0PUBNUtZ7NoBM75eyAaBV-DL3YaUugLa2OBG5KkI8uot6Xl5y59bjZEnL2C9ohcBinn570YGA9eCF7g5IS-HW5q74RatDwZ5be0KyWyMoHxKzQcUvq34FcV2gPddGhXB6W_AcONBuWAjb7bNxnFWDSwAOWT0p5jbHrYh9SxPHxgzRkTXPJ2fGWebbcBDFtF7TQctDJ5bVuupGvFsBZn0IEhRPpWsIj2chuUzXEl3iR_NhTti4oolOzin4w"/>
+</div>
+<!-- Post Content -->
+<div class="p-md space-y-md">
+<div>
+<h2 class="font-h3 text-h3 text-primary mb-xs">My version of Pesto Pasta</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Finally mastered the balance of basil and toasted pine nuts. The key was using fresh garlic from my local market!</p>
+</div>
+<!-- Tags / Ingredients -->
+<div class="flex flex-wrap gap-sm">
+<span class="bg-primary/10 text-primary-fixed-dim px-sm py-1 rounded-lg text-label-sm flex items-center gap-1 border border-primary/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="inventory_2">inventory_2</span> Basil
+                        </span>
+<span class="bg-primary/10 text-primary-fixed-dim px-sm py-1 rounded-lg text-label-sm flex items-center gap-1 border border-primary/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="inventory_2">inventory_2</span> Pine Nuts
+                        </span>
+<span class="bg-primary/10 text-primary-fixed-dim px-sm py-1 rounded-lg text-label-sm flex items-center gap-1 border border-primary/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="inventory_2">inventory_2</span> Parmesan
+                        </span>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between pt-sm border-t border-white/5">
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs text-on-surface font-label-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-error" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                1.2k
+                            </button>
+<button class="flex items-center gap-xs text-on-surface font-label-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                                48
+                            </button>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-md px-md py-sm rounded-lg flex items-center gap-sm active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[20px]" data-icon="bookmark">bookmark</span>
+                            Save Recipe
+                        </button>
+</div>
+</div>
+</article>
+<!-- Post 2 (Asymmetric Layout Hint) -->
+<article class="bg-surface-container rounded-xl border border-white/5 overflow-hidden shadow-none">
+<div class="p-md flex items-center gap-sm">
+<img alt="Marcus K." class="w-10 h-10 rounded-full object-cover" data-alt="A cinematic portrait of a male chef in a dark kitchen environment. He is wearing a clean black apron and looking thoughtfully at the camera. The lighting is moody and low-key, with strong highlights defining his features and creating a high-end, professional atmosphere consistent with a dark-themed premium food application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtw0wCkX9aydIP1_BKCw7uWnYrLa3OzGg5KbDSh-o6J7MWtXCzDcL5Rl7fIdurYaK5ghTddwzkaYMGhl1QMUHz2R7bppGip1-ACT2UIjlyiSYaARW7qa91xZbJmTXyFuuetktsa3tOsFlcDjCQD5JmmjcrNIH_5-t-JbvEIChzG2QhjuTF6m23Kb6tb59bj80jGW59RR_e0DUF2pSCot43NE9UV4wDTzBjCsgg5L1FXPySFkSbailrFw-dBaSHSBfQ1AIYiLNAAyou"/>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Marcus K.</h3>
+<p class="text-[12px] text-slate-500">5 hours ago</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-xs px-xs">
+<div class="aspect-[4/5] bg-slate-800 rounded-sm overflow-hidden">
+<img alt="Salad Bowl" class="w-full h-full object-cover" data-alt="A vibrant and colorful Buddha bowl filled with fresh greens, roasted chickpeas, sliced avocado, and shredded carrots. The shot is taken from a top-down angle on a dark wooden table. The lighting is bright but soft, emphasizing the natural colors of the vegetables against the dark backdrop for a high-contrast look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgqe477gi0e4W90EAxLglbWND-75TGt-k5OPgpBPYQRTqostWELLR7hlOw64MKLhhcFsK0dDgrPAqDfhs_ZwTip9Hg9cqAKQRl2DNm1l7wr598KpoHIDvegxD210cYtr0qztimwelIuio-mL0V6ca_UdKY1_Sl9WCDTwpRJ7yMraCQ7xUvdtv_ttSEpnLQOPZd1EEuyzOaCKcBeoHspcd2DYv8zJqZ9kyvpxH-Pmc1Hx4W85afHZeJIAAJROJ8Z5eoruRDLi6e31A6"/>
+</div>
+<div class="grid grid-rows-2 gap-xs">
+<div class="aspect-square bg-slate-800 rounded-sm overflow-hidden">
+<img alt="Ingredient Prep" class="w-full h-full object-cover" data-alt="A detailed macro shot of freshly chopped kale and vibrant cherry tomatoes on a dark slate cutting board. Water droplets are visible on the leaves, signifying freshness. The lighting is crisp and cool-toned, aligning with a tech-focused, modern dark mode design system that values precision and high-quality photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnxwS-QBlDFynZhQLXTskRUtlAscwiicCXlw5XIw6V043qOkaqVkX-RVQIGcQJkFNQkAd4U85L7Dk2J2zLyQ0ETNiTzv72fkEHSsUdWB9o11Tb9vgo-uIsc8DoIDf_qULIWzrBGoDwa7v6ujRBUJLyGrwWZxSIBA3PlV9o2CvMxvrqHZU09E2E4Ka7v69aHjeAO93n5E8KFxb67dH8_N_CxgP2i--pBO7zAslj5DNt2gQ5kqoyZpyXdSmswBNw-5uT8kORUHuAlCma"/>
+</div>
+<div class="aspect-square bg-slate-800 rounded-sm overflow-hidden">
+<img alt="Final Drizzle" class="w-full h-full object-cover" data-alt="A close-up shot of olive oil being drizzled over a fresh salad. The golden liquid catches the light, creating a sparkling effect. The background is dark and out of focus, making the motion and the clarity of the oil the central subject. The overall aesthetic is energetic and sophisticated, evoking professional culinary skill." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKdw-PVkLTGdTcnAxvuseQi72BYkudwHiqJ0CEssChW7yWg03Rb0EckLwIAzEGvJvIft2Z8tSeXim9fNRYzhoM_a1rf2AlQGzdWEOJMPggHZlAUAsk2bVmsFf6eUxelbQqRn8icunqCpDVAw96f2Em5FwTYKuKaVfFfVtj-dbnjcS_iEnmhNTFyXjPSMpeku9kCdN0iFvZ57h3DPFZL7mkbyNv3NI3H-TR2_Qd37sF0fkujafhzR8el6UEvQlziB0NgVp2rpetCIVc"/>
+</div>
+</div>
+</div>
+<div class="p-md space-y-md">
+<div>
+<h2 class="font-h3 text-h3 text-primary mb-xs">Spicy Chickpea Power Bowl</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">The perfect meal prep for a busy week. Used up the last of my spinach and tahini from the pantry!</p>
+</div>
+<div class="flex flex-wrap gap-sm">
+<span class="bg-primary/10 text-primary-fixed-dim px-sm py-1 rounded-lg text-label-sm flex items-center gap-1 border border-primary/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="inventory_2">inventory_2</span> Chickpeas
+                        </span>
+<span class="bg-primary/10 text-primary-fixed-dim px-sm py-1 rounded-lg text-label-sm flex items-center gap-1 border border-primary/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="inventory_2">inventory_2</span> Avocado
+                        </span>
+</div>
+<div class="flex items-center justify-between pt-sm border-t border-white/5">
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs text-on-surface font-label-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+                                856
+                            </button>
+<button class="flex items-center gap-xs text-on-surface font-label-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                                12
+                            </button>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-md px-md py-sm rounded-lg flex items-center gap-sm active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[20px]" data-icon="bookmark">bookmark</span>
+                            Save Recipe
+                        </button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<footer class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 z-50">
+<a class="flex flex-col items-center justify-center text-green-500 dark:text-green-400 bg-green-500/10 rounded-xl px-3 py-1 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dynamic_feed" style="font-variation-settings: 'FILL' 1;">dynamic_feed</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest mt-1">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-green-400 dark:hover:text-green-300 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest mt-1">Pantry</span>
+</a>
+<div class="relative -top-6">
+<button class="bg-primary-container text-on-primary-container w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform border-4 border-background">
+<span class="material-symbols-outlined text-3xl" data-icon="qr_code_scanner">qr_code_scanner</span>
+</button>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-['Plus_Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest text-slate-500">Scan</span>
+</div>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-green-400 dark:hover:text-green-300 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="emoji_events">emoji_events</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest mt-1">Awards</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-green-400 dark:hover:text-green-300 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold uppercase tracking-widest mt-1">Profile</span>
+</a>
+</footer>
+</body></html>

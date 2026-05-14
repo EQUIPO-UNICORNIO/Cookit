@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-container": "#4f3e00",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-secondary-fixed-variant": "#783200",
+                        "primary": "#006e2f",
+                        "inverse-primary": "#4ae176",
+                        "surface-tint": "#006e2f",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary-fixed-dim": "#eec200",
+                        "tertiary": "#735c00",
+                        "outline": "#6d7b6c",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-surface": "#191c1e",
+                        "tertiary-container": "#cfa800",
+                        "surface": "#f7f9fb",
+                        "secondary": "#9d4300",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary-fixed": "#002109",
+                        "on-secondary-fixed": "#341100",
+                        "primary-container": "#22c55e",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#bccbb9",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#004b1e",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#6bff8f",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#ffdbca",
+                        "tertiary-fixed": "#ffe083",
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed-variant": "#005321",
+                        "inverse-surface": "#2d3133",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb690",
+                        "secondary-container": "#fd761a",
+                        "on-surface-variant": "#3d4a3d",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "margin": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "label-bold": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "500" }],
+                        "display-lg": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7f9fb;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .neo-shadow-green {
+            box-shadow: 4px 4px 0px 0px rgba(34, 197, 94, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white dark:bg-zinc-950 border-b-2 border-zinc-800 dark:border-zinc-700 shadow-[4px_4px_0px_0px_rgba(34,197,94,0.1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500 dark:text-green-400" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="text-2xl font-black tracking-tight text-green-500 dark:text-green-400 font-headline-lg">Cookit</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-zinc-900 dark:text-zinc-50 font-bold font-['Plus_Jakarta_Sans']">Retos y Logros</span>
+<div class="w-10 h-10 rounded-full border-2 border-zinc-800 overflow-hidden bg-surface-container-high">
+<img alt="Profile" data-alt="A professional headshot of a smiling chef in a clean kitchen environment. The lighting is bright and high-key, emphasizing a friendly and approachable mood. The background is a blurred modern kitchen with light wood and white marble accents, maintaining the soft neo-brutalism aesthetic with clean lines and a vibrant, healthy atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJm5Or6HIBLmEE1IynvJ-QioV-I-6gw0k5U1p1uOf9O8jiMWPRycKveMaFRjKmN2LziYspzgDsXVsF7h_boKWQPJOzRLUfGie6gvPlrB_2s-3nUdzAG3KHxcQBwJV1yNzDZOG72QGor2cECzdPx1_DQWRag8VhwxOMg9Jd7sujcD7pRcrK1fzLDfVTpwN00xkCqvYb0orn0RXAyTi6Y_FTWZMMD-sVtRYg-UA-EamBy2-ugI7NscPK7cmZH4Z3ZolMKHLFEJgmHjgZ"/>
+</div>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-5xl mx-auto">
+<!-- Progress Header Section -->
+<section class="mb-10 bg-white border-2 border-zinc-800 rounded-xl p-8 neo-shadow">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div>
+<span class="inline-block px-4 py-1 bg-secondary-container text-on-secondary-container font-label-bold rounded-full mb-3">LEVEL 5</span>
+<h2 class="font-display-lg text-display-lg text-on-surface mb-2">Rookie Chef</h2>
+<p class="font-body-md text-on-surface-variant">¡Estás a solo 250 XP de convertirte en Sous Chef!</p>
+</div>
+<div class="flex-1 max-w-md">
+<div class="flex justify-between mb-2">
+<span class="font-label-bold text-primary">1,250 XP</span>
+<span class="font-label-bold text-outline">1,500 XP</span>
+</div>
+<div class="h-6 w-full bg-surface-container-high rounded-full border-2 border-zinc-800 overflow-hidden">
+<div class="h-full bg-secondary-container border-r-2 border-zinc-800" style="width: 83%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Badges & Weekly Challenge -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Featured Weekly Challenge -->
+<div class="md:col-span-8 bg-primary-container/10 border-2 border-zinc-800 rounded-xl p-6 neo-shadow relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary-container/20 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="font-headline-md text-headline-md text-on-primary-container">Reto de la Semana</h3>
+</div>
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-6 neo-shadow-sm flex flex-col sm:flex-row gap-6">
+<div class="w-full sm:w-40 h-40 rounded-lg overflow-hidden border-2 border-zinc-800 flex-shrink-0">
+<img alt="Zero Waste" data-alt="A vibrant, flat-lay photograph of various fresh green vegetables and glass jars filled with grains, symbolizing a zero-waste lifestyle. The lighting is crisp and natural, highlighting textures of kale, broccoli, and clear glass. The composition is modern and structured, following the soft neo-brutalism style with high contrast and a refreshing green palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPEqY0YCb-Z47nZCHFOnigtsRqhGFVdn3uSlWbMhLN4GTOHLZ2JXUMjMk0NcOOgdBiF-jho1xRpzzw6jbttuKsaYqPpaOR956kC6VvVN0-Vj7IY03zJEEPA-R9JIxiEcBJpMk37VZ05ZaqQeiY73Slgs6bHdVcegAkSgVcOJ_SpnT_o4D2GtvQXow1NV-4mHQW00CRvHSHxQE9XF-B5Gygs-_0u05V5VH1vTBtbyO_he9x3tOTBealyf1WjHGpP6FrFppgNYQV3eqP"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<h4 class="font-headline-md text-primary mb-2">Zero Waste Hero</h4>
+<p class="font-body-md text-on-surface-variant mb-4">Cocina 3 recetas usando ingredientes 'olvidados' en tu despensa esta semana.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-tertiary"></div>
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-secondary"></div>
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-primary"></div>
+</div>
+<span class="font-label-sm text-outline">+124 chefs participando</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats/Daily Streak -->
+<div class="md:col-span-4 bg-tertiary-container border-2 border-zinc-800 rounded-xl p-6 neo-shadow flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-6xl text-on-tertiary-container mb-2" data-icon="local_fire_department" data-weight="fill">local_fire_department</span>
+<h3 class="font-display-lg text-5xl text-on-tertiary-container mb-1">12</h3>
+<p class="font-label-bold text-on-tertiary-container uppercase tracking-widest">Días de Racha</p>
+<div class="mt-6 w-full flex justify-between px-2">
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-white flex items-center justify-center font-label-bold">L</div>
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-white flex items-center justify-center font-label-bold">M</div>
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-white flex items-center justify-center font-label-bold">X</div>
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-on-tertiary-container text-white flex items-center justify-center font-label-bold">J</div>
+<div class="w-8 h-8 rounded-full border-2 border-zinc-800 bg-surface/50 border-dashed flex items-center justify-center font-label-bold">V</div>
+</div>
+</div>
+<!-- Badges Section -->
+<div class="md:col-span-12">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="military_tech">military_tech</span>
+                    Insignias Ganadas
+                </h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+<!-- Badge 1 -->
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-4 neo-shadow-sm flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-primary-fixed border-2 border-zinc-800 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-on-primary-fixed-variant text-3xl" data-icon="eco" data-weight="fill">eco</span>
+</div>
+<p class="font-label-bold text-on-surface">Green Master</p>
+</div>
+<!-- Badge 2 -->
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-4 neo-shadow-sm flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed border-2 border-zinc-800 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant text-3xl" data-icon="timer" data-weight="fill">timer</span>
+</div>
+<p class="font-label-bold text-on-surface">Flash Cook</p>
+</div>
+<!-- Badge 3 -->
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-4 neo-shadow-sm flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-tertiary-fixed border-2 border-zinc-800 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant text-3xl" data-icon="star" data-weight="fill">star</span>
+</div>
+<p class="font-label-bold text-on-surface">5 Stars</p>
+</div>
+<!-- Badge 4 -->
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-4 neo-shadow-sm flex flex-col items-center text-center opacity-40 grayscale">
+<div class="w-16 h-16 rounded-full bg-surface-container border-2 border-zinc-800 border-dashed flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="lock">lock</span>
+</div>
+<p class="font-label-bold text-outline">Spice Lord</p>
+</div>
+<!-- Badge 5 -->
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-4 neo-shadow-sm flex flex-col items-center text-center opacity-40 grayscale">
+<div class="w-16 h-16 rounded-full bg-surface-container border-2 border-zinc-800 border-dashed flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="lock">lock</span>
+</div>
+<p class="font-label-bold text-outline">Bake Off</p>
+</div>
+<!-- Badge 6 -->
+<div class="bg-white border-2 border-zinc-800 rounded-xl p-4 neo-shadow-sm flex flex-col items-center text-center opacity-40 grayscale">
+<div class="w-16 h-16 rounded-full bg-surface-container border-2 border-zinc-800 border-dashed flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="lock">lock</span>
+</div>
+<p class="font-label-bold text-outline">Night Owl</p>
+</div>
+</div>
+</div>
+<!-- Chef's Note: Callout -->
+<div class="md:col-span-12 mt-4">
+<div class="bg-on-secondary-container/5 border-2 border-dashed border-secondary rounded-xl p-6 flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="tips_and_updates">tips_and_updates</span>
+<div>
+<h4 class="font-label-bold text-secondary mb-1">Chef's Note</h4>
+<p class="font-body-md text-on-surface-variant">¿Sabías que completar el reto 'Zero Waste Hero' te otorga el doble de puntos de experiencia este mes? ¡Aprovecha esos restos de vegetales para un caldo delicioso!</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-white dark:bg-zinc-900 px-4 py-3 pb-safe border-t-2 border-zinc-800 dark:border-zinc-700 shadow-[0_-4px_8px_rgba(34,197,94,0.05)]">
+<a class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Pantry</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="shutter_speed">shutter_speed</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Scan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 py-1 px-3 hover:text-green-500 dark:hover:text-green-400 transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Recipes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-green-500 dark:text-green-400 bg-green-50 dark:bg-green-950/30 rounded-lg py-1 px-3 border-2 border-zinc-800 dark:border-zinc-700 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[12px] font-bold">Profile</span>
+</a>
+</nav>
+</body></html>

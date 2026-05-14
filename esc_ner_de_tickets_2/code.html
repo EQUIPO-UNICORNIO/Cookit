@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#6d7b6c",
+                        "surface-container-highest": "#e0e3e5",
+                        "background": "#f7f9fb",
+                        "primary": "#006e2f",
+                        "on-primary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "tertiary-fixed": "#ffe083",
+                        "tertiary-fixed-dim": "#eec200",
+                        "primary-container": "#22c55e",
+                        "inverse-on-surface": "#eff1f3",
+                        "inverse-surface": "#2d3133",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-primary-fixed-variant": "#005321",
+                        "on-secondary-fixed": "#341100",
+                        "secondary-container": "#fd761a",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-dim": "#d8dadc",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary": "#9d4300",
+                        "tertiary-container": "#cfa800",
+                        "on-tertiary-fixed": "#231b00",
+                        "surface-tint": "#006e2f",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#4f3e00",
+                        "primary-fixed": "#6bff8f",
+                        "surface": "#f7f9fb",
+                        "secondary-fixed-dim": "#ffb690",
+                        "surface-container": "#eceef0",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#bccbb9",
+                        "on-surface-variant": "#3d4a3d",
+                        "secondary-fixed": "#ffdbca",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#4ae176",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#004b1e",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#783200",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary-fixed": "#002109",
+                        "on-surface": "#191c1e",
+                        "tertiary": "#735c00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "margin": "20px",
+                        "sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(30, 41, 59, 1);
+        }
+        .viewfinder-corner {
+            width: 40px;
+            height: 40px;
+            border-color: white;
+            position: absolute;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-background selection:bg-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white border-b-2 border-slate-900 shadow-[0px_4px_0px_0px_rgba(30,41,59,1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-600" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="text-2xl font-black italic text-slate-900 tracking-tighter">Cookit</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-slate-900 overflow-hidden active:translate-y-0.5 transition-transform">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional and friendly headshot of a young chef with a warm smile, set against a clean, minimalist kitchen background. The lighting is soft and natural, emphasizing a modern and approachable brand aesthetic. The color palette is composed of soft whites and subtle greens, aligning with a high-end wellness application style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF3PPsJTWY_CU1mqZA5V1bk8767myda7NkWumlgO1yDTvxsBiMqJjnVGtxD4tjN1wcXAkXKrETW0ldX5OKwgGGiJH5Jh00V76ulNTwenlT6Yvi8xY3ia4uWit7MoIGdOqRHceEP6q5MalQm2hWd0UzIQItMRuN9jlhNbWpEH9e_75CKnWYyINM-YwE7z5xqoauZz9N0NcG4BV_5-kHUCZplYaEw4LZD-9P9p9bz0NfLGq4A1P2KRY2dOdeyyvjfIVh24Te4Mm7KeuN"/>
+</div>
+</header>
+<main class="pt-16 pb-40 min-h-screen">
+<!-- Viewfinder Section -->
+<section class="relative w-full aspect-[3/4] md:aspect-video bg-slate-800 overflow-hidden">
+<img alt="Camera View" class="w-full h-full object-cover opacity-60" data-alt="A first-person perspective of a smartphone camera viewfinder pointing at a grocery receipt and fresh vegetables on a white marble kitchen counter. The scene is bright and airy with high-key lighting, featuring vibrant green herbs and ripe red tomatoes. The visual style is crisp and modern, emphasizing a seamless integration of technology and fresh cooking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQA51V8PtFzJy7wQu8paMvXdnWviDUjulRc6U0a73XLFny3o0deCQ-Ytt329meFHFSdgZxASpR-EqBPwVETkejnKKhbLuWF8cwvxTfIMnv1uktHJkXKk-6aTA9CknGbpLHb7oVCZA2x4h_Djo555ptbNxT3V_Pla3d5B3Ie-JLe2KFr0I15rh5pG0kaGy-jTcJ77d5Rzql8YWqsCz_RI_Z9kqAnWQBA1xdfVbiFCl9wYjyR6-QRGWJIbQ1GqZJoW3IqtSTkr21UEcR"/>
+<!-- Viewfinder Overlay -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-64 h-80 border-2 border-dashed border-white/50 rounded-xl relative">
+<div class="viewfinder-corner top-0 left-0 border-t-4 border-l-4 rounded-tl-xl"></div>
+<div class="viewfinder-corner top-0 right-0 border-t-4 border-r-4 rounded-tr-xl"></div>
+<div class="viewfinder-corner bottom-0 left-0 border-b-4 border-l-4 rounded-bl-xl"></div>
+<div class="viewfinder-corner bottom-0 right-0 border-b-4 border-r-4 rounded-br-xl"></div>
+<!-- Scanning Animation Line (Mockup) -->
+<div class="absolute top-1/4 left-0 w-full h-1 bg-primary-container shadow-[0_0_15px_rgba(34,197,94,0.8)]"></div>
+</div>
+</div>
+<!-- Scan Button -->
+<div class="absolute bottom-10 left-0 w-full flex justify-center px-margin">
+<button class="bg-primary text-white font-headline-md px-8 py-4 rounded-full border-2 border-slate-900 shadow-[0px_8px_0px_0px_rgba(30,41,59,1)] flex items-center gap-3 active:translate-y-1 active:shadow-[0px_4px_0px_0px_rgba(30,41,59,1)] transition-all">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span>Escanear Ticket</span>
+</button>
+</div>
+</section>
+<!-- Slide-up Panel -->
+<section class="px-margin -mt-6 relative z-10">
+<div class="bg-surface-container-lowest border-2 border-slate-900 rounded-3xl p-6 shadow-[4px_4px_0px_0px_rgba(30,41,59,1)]">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-slate-900">Productos detectados</h2>
+<span class="bg-secondary-container text-white text-label-bold px-3 py-1 rounded-full border-2 border-slate-900">3 ÍTEMS</span>
+</div>
+<!-- Bento Grid for Scanned Products -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+<!-- Item 1 -->
+<div class="bg-white border-2 border-slate-900 p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-slate-50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="set_meal">set_meal</span>
+</div>
+<span class="font-label-bold text-slate-900">Pollo</span>
+<span class="text-label-sm text-outline">500g</span>
+</div>
+<!-- Item 2 -->
+<div class="bg-white border-2 border-slate-900 p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-slate-50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="rice_bowl">rice_bowl</span>
+</div>
+<span class="font-label-bold text-slate-900">Arroz</span>
+<span class="text-label-sm text-outline">1kg</span>
+</div>
+<!-- Item 3 -->
+<div class="bg-white border-2 border-slate-900 p-4 rounded-2xl flex flex-col items-center gap-2 hover:bg-slate-50 transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-error group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="nutrition">nutrition</span>
+</div>
+<span class="font-label-bold text-slate-900">Tomates</span>
+<span class="text-label-sm text-outline">3 uds</span>
+</div>
+<!-- Empty State / Add Manual -->
+<div class="bg-slate-100 border-2 border-dashed border-slate-400 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-slate-500" data-icon="add_circle">add_circle</span>
+<span class="font-label-bold text-slate-500">Añadir</span>
+</div>
+</div>
+<!-- Chef's Note Callout -->
+<div class="mb-8 p-4 bg-secondary-container/10 border-2 border-dashed border-secondary-container rounded-2xl flex gap-4">
+<span class="material-symbols-outlined text-secondary" data-icon="lightbulb">lightbulb</span>
+<div>
+<p class="font-label-bold text-secondary">Tip de Chef</p>
+<p class="text-label-sm text-on-surface-variant">¡Parece que tienes los ingredientes para un Risotto de Pollo! Confirma los productos para guardarlos en tu despensa.</p>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-headline-md py-5 rounded-2xl border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(30,41,59,1)] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                    Confirmar y Guardar
+                </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-white border-t-2 border-slate-900 shadow-[0px_-4px_8px_0px_rgba(34,197,94,0.1)]">
+<!-- Pantry -->
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:text-green-600 active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest">Pantry</span>
+</a>
+<!-- Scan (Active) -->
+<a class="flex flex-col items-center justify-center bg-green-500 text-white rounded-lg border-2 border-slate-900 px-4 py-1 shadow-[2px_2px_0px_0px_rgba(30,41,59,1)] active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest">Scan</span>
+</a>
+<!-- Recipes -->
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:text-green-600 active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="blender">blender</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest">Recipes</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-1 hover:text-green-600 active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-extrabold uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+</body></html>

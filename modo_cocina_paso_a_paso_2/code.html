@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-container": "#4f3e00",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-secondary-fixed-variant": "#783200",
+                        "primary": "#006e2f",
+                        "inverse-primary": "#4ae176",
+                        "surface-tint": "#006e2f",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary-fixed-dim": "#eec200",
+                        "tertiary": "#735c00",
+                        "outline": "#6d7b6c",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-surface": "#191c1e",
+                        "tertiary-container": "#cfa800",
+                        "surface": "#f7f9fb",
+                        "secondary": "#9d4300",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary-fixed": "#002109",
+                        "on-secondary-fixed": "#341100",
+                        "primary-container": "#22c55e",
+                        "on-error": "#ffffff",
+                        "outline-variant": "#bccbb9",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#004b1e",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#6bff8f",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#ffdbca",
+                        "tertiary-fixed": "#ffe083",
+                        "surface-dim": "#d8dadc",
+                        "on-primary-fixed-variant": "#005321",
+                        "inverse-surface": "#2d3133",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#ffb690",
+                        "secondary-container": "#fd761a",
+                        "on-surface-variant": "#3d4a3d",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "sm": "12px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "margin": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .neo-brutal-border { border: 2px solid #1E293B; }
+        .neo-brutal-shadow { shadow-[4px_4px_0px_0px_rgba(34,197,94,0.1)]; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest font-body-md text-on-surface">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white border-b-2 border-zinc-800 shadow-[4px_4px_0px_0px_rgba(34,197,94,0.1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-['Plus_Jakarta_Sans'] font-black tracking-tight text-2xl text-green-500">Cookit</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-bold text-on-surface-variant">Paso 3 de 8</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border-2 border-[#1E293B]">
+<img alt="User profile" data-alt="A clean, professional close-up portrait of a cheerful home chef wearing a white linen apron. The lighting is bright and natural, coming from a large kitchen window, creating a soft high-key aesthetic. The background is a modern, minimalist kitchen with light wood accents and fresh herbs in pots. The overall mood is welcoming, healthy, and optimistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQQdJMKixriCUqbmroLBSwPsm8E1VB8QZA3wW1KD5JVPWHI521-tOweUphzL7vCL64IavzGwssglvRsRbo2oFfTUuE1o_IXL-KNJ7cM0CLiYQSyUIF5C8gthNY5rR5ZNGCBWVosFdcqi_Qyal5vfLFyNPY5OpEVkkXyyvwVyYQR3u8XIXlO9SJ7DbsXGpPntsOmrl36-JT762xYmVJConDKH7vW8FC8pK2lyM3JaVMH6NUvFCGW9HCKR8DYyTy7WUemDU76hs6HgKC"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-gutter max-w-2xl mx-auto">
+<!-- Mode Title -->
+<div class="mb-md">
+<h1 class="font-display-lg text-display-lg text-on-surface">Modo Cocina</h1>
+<p class="font-body-md text-on-surface-variant">Risotto de Champiñones y Tomillo</p>
+</div>
+<!-- Progress Bar Component -->
+<div class="flex gap-2 mb-lg">
+<div class="h-3 flex-1 rounded-full bg-secondary-container"></div>
+<div class="h-3 flex-1 rounded-full bg-secondary-container"></div>
+<div class="h-3 flex-1 rounded-full bg-secondary-container"></div>
+<div class="h-3 flex-1 rounded-full bg-surface-container-high"></div>
+<div class="h-3 flex-1 rounded-full bg-surface-container-high"></div>
+<div class="h-3 flex-1 rounded-full bg-surface-container-high"></div>
+<div class="h-3 flex-1 rounded-full bg-surface-container-high"></div>
+<div class="h-3 flex-1 rounded-full bg-surface-container-high"></div>
+</div>
+<!-- Main Step Image -->
+<div class="relative w-full aspect-video mb-lg rounded-xl overflow-hidden neo-brutal-border shadow-[8px_8px_0px_0px_rgba(34,197,94,0.15)] bg-surface-container">
+<img alt="Sautéing onions" class="w-full h-full object-cover" data-alt="A high-angle, detailed shot of finely diced golden onions and minced garlic sizzling in a premium stainless steel pan with olive oil. Wisps of steam are visible under bright, warm kitchen lighting that emphasizes the textures of the food. The background features a clean marble countertop and a wooden spoon resting nearby. The aesthetic is vibrant, high-contrast, and focused on the sensory experience of cooking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqX7-a9OYECr2ub7ZDD_XYCNiiI6CcbUm3MEqt2zEGFI1RItToKrLn8CYdvs6juWFA0lU6bYxt8oObFsFkcENgKFhpnmaRO5354n49lBD9MyhdOhPBUyGfAmt0M6vyoqnE7_zVaJeyS2rrqvc-bUXFUmvtiD5a3rkt8H7Tj39lftTaFFVLcc0j0LcNEa06S_l90EGwCFmhhGdcmVoS_Ie0CB3hjcMLiG1YErcdEi7DT2Rvbz11AmJmxyif3mGDXBdj0B8I6lwqBWJJ"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary font-label-bold px-4 py-1 rounded-full neo-brutal-border">
+                PASO 3
+            </div>
+</div>
+<!-- Text Instructions Card -->
+<div class="bg-white p-md rounded-xl neo-brutal-border shadow-[4px_4px_0px_0px_rgba(30,41,59,1)] mb-md">
+<h2 class="font-headline-md text-headline-md mb-sm">Sofreír la base</h2>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                Añade la cebolla picada y el ajo a la sartén con el aceite caliente. Cocina a fuego medio durante unos 5-7 minutos, removiendo ocasionalmente, hasta que la cebolla esté translúcida y ligeramente dorada.
+            </p>
+</div>
+<!-- Chef's Note Callout -->
+<div class="bg-secondary-container/10 p-md rounded-xl border-2 border-dashed border-secondary-container mb-xl">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="lightbulb">lightbulb</span>
+<div>
+<p class="font-label-bold text-secondary mb-1">CONSEJO DEL CHEF</p>
+<p class="font-body-md text-on-surface-variant">No dejes que el ajo se dore demasiado; si se pone muy oscuro, puede dar un sabor amargo al risotto final.</p>
+</div>
+</div>
+</div>
+<!-- Navigation Buttons -->
+<div class="flex items-center gap-4">
+<button class="flex-1 min-h-[56px] flex items-center justify-center gap-2 rounded-full neo-brutal-border bg-white text-secondary font-label-bold shadow-[4px_4px_0px_0px_rgba(157,67,0,0.2)] active:translate-y-1 active:shadow-none transition-all">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                Anterior
+            </button>
+<button class="flex-[2] min-h-[56px] flex items-center justify-center gap-2 rounded-full neo-brutal-border bg-primary-container text-on-primary-container font-label-bold shadow-[4px_4px_0px_0px_rgba(0,110,47,0.2)] active:translate-y-1 active:shadow-none transition-all">
+                Siguiente Paso
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</main>
+<!-- Voice Control FAB -->
+<button class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-primary neo-brutal-border shadow-[8px_8px_0px_0px_rgba(30,41,59,0.3)] flex items-center justify-center text-on-primary active:scale-95 transition-transform z-50">
+<span class="material-symbols-outlined text-3xl" data-icon="mic" data-weight="fill">mic</span>
+<div class="absolute -top-2 -right-2 bg-secondary text-on-secondary text-[10px] px-2 py-1 rounded-full font-black animate-pulse">VOZ</div>
+</button>
+</body></html>

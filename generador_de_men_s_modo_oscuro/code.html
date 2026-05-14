@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "surface-bright": "#31394d",
+                        "primary-container": "#22c55e",
+                        "on-tertiary": "#00344d",
+                        "primary-fixed": "#6bff8f",
+                        "on-tertiary-container": "#004564",
+                        "secondary-fixed": "#ffdbca",
+                        "secondary-container": "#ec6a06",
+                        "surface-container-high": "#222a3d",
+                        "inverse-primary": "#006e2f",
+                        "surface-container-lowest": "#060e20",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-container": "#004b1e",
+                        "on-secondary": "#552100",
+                        "inverse-surface": "#dae2fd",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-error": "#690005",
+                        "on-primary-fixed": "#002109",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#36b6fb",
+                        "surface-tint": "#4ae176",
+                        "on-secondary-container": "#4a1c00",
+                        "tertiary-fixed": "#c9e6ff",
+                        "on-surface": "#dae2fd",
+                        "surface-variant": "#2d3449",
+                        "on-primary": "#003915",
+                        "primary": "#4be277",
+                        "outline": "#869585",
+                        "surface-container": "#171f33",
+                        "tertiary": "#8bcfff",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#2d3449",
+                        "inverse-on-surface": "#283044",
+                        "on-background": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "primary-fixed-dim": "#4ae176",
+                        "on-secondary-fixed-variant": "#783200",
+                        "outline-variant": "#3d4a3d",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#0b1326",
+                        "background": "#0b1326",
+                        "secondary": "#ffb690",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-primary-fixed-variant": "#005321",
+                        "surface": "#0b1326",
+                        "on-surface-variant": "#bccbb9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "48px",
+                        "unit": "4px",
+                        "sm": "8px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-bold": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px #000000;
+        }
+        .neo-shadow-sm {
+            box-shadow: 2px 2px 0px 0px #000000;
+        }
+        .neo-shadow-green {
+            box-shadow: 4px 4px 0px 0px #004b1e;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-container border-b-2 border-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">restaurant_menu</span>
+<h1 class="text-2xl font-black italic text-on-surface tracking-tighter">Cookit</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-black overflow-hidden active:translate-y-0.5 transition-transform">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A close-up high-quality portrait of a friendly professional chef smiling, wearing a clean white coat against a soft-focus kitchen background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUO9Qy07eM7VT_W8E4cd4cgWFTZkkz5OW9xLmgyQMV0DgdDSl4ea9FFU8W8vZJ7PVVtjHIebjnNn3Dllcx4KAGmM6ImU5nq4fSO2l4Mx7nELDpyCCMexjjBTYAoAR_uon2HhFcbVA0sdaOY0_wP5fxuaUomp6LF4-J2NGUZp3I07FLe1X9waDLXJ2x8C0qKmQEAFyRjKJMwqQREE1TOwwHnoQylTF9RfqtriXf3fNQ7wN92loyBscLGDidNEdjVISWh6_V7iSxt4_5"/>
+</div>
+</header>
+<main class="pt-24 px-margin max-w-2xl mx-auto space-y-md">
+<!-- Welcome Section -->
+<section class="space-y-sm">
+<h2 class="font-display-lg text-display-lg text-on-surface">¿Qué cocinamos hoy?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Genera tu menú ideal basado en lo que tienes.</p>
+</section>
+<!-- Toggle Section -->
+<section class="bg-surface-container-lowest p-gutter rounded-xl border-2 border-black neo-shadow flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">hourglass_bottom</span>
+<span class="font-label-bold text-label-bold uppercase text-on-surface">Priorizar caducidad</span>
+</div>
+<button class="relative inline-flex h-8 w-14 items-center rounded-full bg-primary-container border-2 border-black">
+<span class="translate-x-7 inline-block h-5 w-5 transform rounded-full bg-on-primary-container border-2 border-black transition-transform"></span>
+</button>
+</section>
+<!-- Chef's Note Callout -->
+<section class="p-gutter rounded-xl border-2 border-dashed border-secondary bg-secondary-container/10">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-secondary">tips_and_updates</span>
+<div class="space-y-xs">
+<span class="font-label-bold text-label-bold text-secondary uppercase">Chef's Note</span>
+<p class="font-body-md text-body-md text-on-surface">Optimiza tu compra: Tienes pollo y espinacas que alcanzan su fecha límite mañana.</p>
+</div>
+</div>
+</section>
+<!-- Recipe Grid -->
+<div class="grid grid-cols-1 gap-md">
+<!-- Recipe Card 1 -->
+<article class="bg-surface-container-high rounded-xl border-2 border-black overflow-hidden neo-shadow-green flex flex-col transition-all active:scale-[0.98]">
+<div class="relative h-64 w-full">
+<img class="w-full h-full object-cover" data-alt="A high-angle, gourmet photograph of a vibrant Mediterranean chicken salad." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeW6NSsv8twTYZgkmbtWWdvryr1oO-VIj6mFJpM2YaoUvcG2rPR7zNIBsiRWIVaYH2YYDdvQzL7HO5f2AcRqj4iYOkGxesCyGrqmWdo8xXfpRpzPRBmXM6P_wDhHuvYonEMkbdwhvSsJl-K6kbCTTXrA9pGWL3z8rzpWr_S_wV9ANnw-N6RkgIlDUR0yoKHVB1lsZ50DGSRUFDMKWM8Ay4NnxCMfnlcRZTw3vkba0b7O4mOj9mp8L_CJg1cSaEZuDER6NyI54q6Gu4"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-black">Fácil</span>
+<span class="bg-surface-bright text-on-surface px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-black">15 min</span>
+</div>
+</div>
+<div class="p-gutter space-y-sm">
+<div class="flex items-center gap-2 text-secondary font-label-bold text-label-sm uppercase">
+<span class="material-symbols-outlined text-sm">notification_important</span>
+                    Usa tu pollo que caduca mañana
+                </div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Ensalada de Pollo y Espinacas Baby</h3>
+<div class="flex gap-2 flex-wrap">
+<span class="px-3 py-1 bg-primary/20 text-primary-fixed rounded-full text-label-sm font-label-sm">Pollo</span>
+<span class="px-3 py-1 bg-primary/20 text-primary-fixed rounded-full text-label-sm font-label-sm">Saludable</span>
+<span class="px-3 py-1 bg-primary/20 text-primary-fixed rounded-full text-label-sm font-label-sm">Express</span>
+</div>
+<button class="w-full mt-4 h-14 bg-primary text-on-primary border-2 border-black rounded-full font-label-bold uppercase tracking-widest neo-shadow active:translate-y-1 active:shadow-none transition-all">
+                    Ver Receta
+                </button>
+</div>
+</article>
+<!-- Recipe Card 2 -->
+<article class="bg-surface-container-high rounded-xl border-2 border-black overflow-hidden neo-shadow-green flex flex-col transition-all active:scale-[0.98]">
+<div class="relative h-64 w-full">
+<img class="w-full h-full object-cover" data-alt="A professional food photograph of a steaming plate of al dente pasta with a rich basil pesto sauce." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKUU7Q2LSNCyOAbiWD1hb3b3kLDVXMKUtE94401dJNWtv-fmwFvOT6fbTQsJWexLRgWDTkOA_C9rot5pvGcvsWs_bqcmDvq-HUI_5vpAqsbjvwNPqIelKflsKs9wE0T7qUrOUAsDZ2y7oHFK_qwlwOyxonkS8OE6eDNuOhfLlkg5y8bseCYofHvFdXKeTZXwwiiGYL_w1LnSK_RKSmuV7T1QbClzD6sWsCxdDSW1iicN_iSTCEdoXzgB-ibR2uHdFMEWvinJY4fdV7"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-black">Medio</span>
+<span class="bg-surface-bright text-on-surface px-3 py-1 rounded-full text-label-sm font-label-sm neo-shadow-sm border-2 border-black">25 min</span>
+</div>
+</div>
+<div class="p-gutter space-y-sm">
+<div class="flex items-center gap-2 text-primary font-label-bold text-label-sm uppercase">
+<span class="material-symbols-outlined text-sm">eco</span>
+                    Favorito de la semana
+                </div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Pasta al Pesto con Piñones</h3>
+<div class="flex gap-2 flex-wrap">
+<span class="px-3 py-1 bg-primary/20 text-primary-fixed rounded-full text-label-sm font-label-sm">Pasta</span>
+<span class="px-3 py-1 bg-primary/20 text-primary-fixed rounded-full text-label-sm font-label-sm">Vegetariano</span>
+</div>
+<button class="w-full mt-4 h-14 bg-surface-container-lowest text-secondary-fixed-dim border-2 border-secondary rounded-full font-label-bold uppercase tracking-widest neo-shadow active:translate-y-1 active:shadow-none transition-all">
+                    Ver Receta
+                </button>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-container border-t-2 border-black shadow-[0px_-4px_8px_0px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-[10px] font-extrabold uppercase tracking-widest mt-1">Pantry</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="font-label-sm text-[10px] font-extrabold uppercase tracking-widest mt-1">Scan</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-lg border-2 border-black px-4 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">blender</span>
+<span class="font-label-sm text-[10px] font-extrabold uppercase tracking-widest mt-1">Recipes</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-[10px] font-extrabold uppercase tracking-widest mt-1">Profile</span>
+</div>
+</nav>
+<!-- FAB (Floating Action Button) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-secondary-container text-on-secondary-container border-2 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_#000000] active:translate-y-1 active:shadow-none transition-all z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

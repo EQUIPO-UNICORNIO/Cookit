@@ -1,0 +1,25 @@
+Warning: Permanently added 'localhost.run' (RSA) to the list of known hosts.
+
+===============================================================================
+Welcome to localhost.run!
+
+Follow your favourite reverse tunnel at [https://twitter.com/localhost_run].
+
+To set up and manage custom domains go to https://admin.localhost.run/
+
+More details on custom domains (and how to enable subdomains of your custom
+domain) at https://localhost.run/docs/custom-domains
+
+If you get a permission denied error check the faq for how to connect with a key or
+create a free tunnel without a key at [http://localhost:3000/docs/faq#generating-an-ssh-key].
+
+To explore using localhost.run visit the documentation site:
+https://localhost.run/docs/
+
+===============================================================================
+
+** your connection id is 5be95a63-1c15-4854-856b-17d9fdee802b, please mention it if you send me a message about an issue. **
+
+authenticated as anonymous user
+SSH key is required for custom domains but no SSH key was sent, add your key to [https://admin.localhost.run/] and reconnect as plan@localhost.run
+client_loop: send disconnect: Connection reset
