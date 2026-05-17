@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { createWorker } from 'tesseract.js';
@@ -107,67 +107,6 @@ export default function ScannerPage() {
   const [recommendations, setRecommendations] = useState([]);
   const [loadingRecommendations, setLoadingRecommendations] = useState(false);
   const fileInputRef = useRef(null);
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const streamRef = useRef(null);
-
-  const stopCamera = useCallback(() => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(t => t.stop());
-      streamRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (step === 'camera' && streamRef.current && videoRef.current) {
-      const video = videoRef.current;
-      video.srcObject = streamRef.current;
-      video.onloadedmetadata = () => video.play().catch(() => {});
-      if (video.readyState >= 1) video.play().catch(() => {});
-    }
-  }, [step]);
-
-  useEffect(() => {
-    return () => stopCamera();
-  }, [stopCamera]);
-
-  const startCamera = useCallback(async () => {
-    setError('');
-    try {
-      let stream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-        });
-      } catch {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 1280 }, height: { ideal: 720 } },
-        });
-      }
-      streamRef.current = stream;
-      setStep('camera');
-    } catch (e) {
-      if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
-        setError('Permiso denegado. Para escanear necesitas permitir el acceso a la cámara. Cámbialo en los ajustes de tu navegador o en los permisos del sitio.');
-      } else if (e.name === 'NotFoundError') {
-        setError('No se encontró ninguna cámara en este dispositivo.');
-      } else {
-        setError('No se pudo abrir la cámara. En móvil, accede desde una conexión HTTPS.');
-      }
-    }
-  }, []);
-
-  const capturePhoto = useCallback(() => {
-    if (!videoRef.current || !canvasRef.current) return;
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0);
-    stopCamera();
-    processImage(canvas);
-  }, [stopCamera]);
 
   const preprocessForOcr = (canvas) => {
     const src = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
@@ -298,7 +237,6 @@ export default function ScannerPage() {
   };
 
   const resetAll = () => {
-    stopCamera();
     setStep('initial');
     setParsedItems([]);
     setRawText('');
@@ -349,41 +287,13 @@ export default function ScannerPage() {
 
           <input ref={fileInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFileUpload} />
 
-          <button onClick={() => fileInputRef.current?.click()} className="neo-btn-primary text-base w-full mb-3">
+          <button onClick={() => fileInputRef.current?.click()} className="neo-btn-primary text-base w-full mb-6">
             <span className="material-symbols-outlined text-base align-text-bottom">add_a_photo</span> Subir ticket de compra
           </button>
 
-          <div className="relative mb-3">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-300" /></div>
-            <div className="relative flex justify-center"><span className="bg-page px-2 text-xs text-gray-400 font-medium">o</span></div>
-          </div>
-
-          <button onClick={startCamera} className="neo-btn !bg-gray-100 dark:!bg-gray-300 dark:!text-black text-base w-full">
-            <span className="material-symbols-outlined text-base align-text-bottom">scan</span> Usar cámara
-          </button>
-
-          <p className="text-xs text-gray-400 mt-6">
+          <p className="text-xs text-gray-400">
             La imagen se procesa localmente. No se envía a ningún servidor externo.
           </p>
-        </div>
-      )}
-
-      {step === 'camera' && (
-        <div>
-          <div className="relative rounded-2xl border-2 border-black overflow-hidden bg-black mb-3">
-            <video ref={videoRef} autoPlay playsInline muted className="w-full h-80 object-cover" />
-            <canvas ref={canvasRef} className="hidden" />
-            <div className="absolute inset-0 border-[3px] border-dashed border-white/40 pointer-events-none rounded-2xl m-4" />
-          </div>
-          <p className="text-center text-xs text-gray-500 mb-3 font-medium">Enfoca el ticket y procura buena iluminación</p>
-          <div className="flex gap-2">
-            <button onClick={capturePhoto} className="neo-btn-primary flex-1">
-              <span className="material-symbols-outlined text-base align-text-bottom">camera</span> Capturar
-            </button>
-            <button onClick={resetAll} className="neo-btn !bg-gray-100 dark:!bg-gray-300 flex-shrink-0 !px-4 dark:!text-black">
-              Cancelar
-            </button>
-          </div>
         </div>
       )}
 
