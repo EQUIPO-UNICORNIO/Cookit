@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { createWorker } from 'tesseract.js';
@@ -124,7 +124,11 @@ export default function ScannerPage() {
   const [ocrProgress, setOcrProgress] = useState('');
   const [recommendations, setRecommendations] = useState([]);
   const [loadingRecommendations, setLoadingRecommendations] = useState(false);
+  const [flashOn, setFlashOn] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
   const fileInputRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
 
   const processImage = async (canvas) => {
     setProcessing(true);
@@ -240,6 +244,7 @@ export default function ScannerPage() {
   };
 
   const resetAll = () => {
+    stopCamera();
     setStep('initial');
     setParsedItems([]);
     setRawText('');
@@ -261,8 +266,61 @@ export default function ScannerPage() {
     setParsedItems(prev => [...prev, { name: '', quantity: '1', unit: 'unidad', category: 'otro' }]);
   };
 
+  useEffect(() => () => stopCamera(), []);
+  useEffect(() => { if (step !== 'initial') stopCamera(); }, [step]);
+
+  const startCamera = async () => {
+    try {
+      if (cameraStream) stopCamera();
+      const constraints = {
+        video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
+        audio: false,
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      setCameraStream(stream);
+      if (videoRef.current) videoRef.current.srcObject = stream;
+    } catch {
+      setError('No se pudo abrir la camara. Usa la opcion de subir foto.');
+    }
+  };
+
+  const stopCamera = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(t => t.stop());
+      setCameraStream(null);
+    }
+  };
+
+  const toggleFlash = async () => {
+    if (!cameraStream) return;
+    const track = cameraStream.getVideoTracks()[0];
+    if (!track || !track.getCapabilities().torch) {
+      setError('Flash no disponible en este dispositivo');
+      return;
+    }
+    try {
+      await track.applyConstraints({ advanced: [{ torch: !flashOn }] });
+      setFlashOn(!flashOn);
+    } catch {
+      setError('Error al cambiar el flash');
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    stopCamera();
+    setFlashOn(false);
+    processImage(canvas);
+  };
+
   return (
     <div>
+      <canvas ref={canvasRef} className="hidden" />
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Escaner de Tickets</h1>
@@ -280,23 +338,46 @@ export default function ScannerPage() {
       )}
 
       {step === 'initial' && (
-        <div className="text-center pt-4">
-          <div className="w-36 h-36 mx-auto rounded-3xl border-4 border-dashed border-gray-300 flex items-center justify-center mb-5">
-            <span className="material-symbols-outlined text-5xl text-gray-300">receipt_long</span>
-          </div>
-          <p className="text-gray-500 font-medium mb-6">
-            Sube una foto de tu ticket de compra y los productos se guardaran automaticamente en tu despensa.
-          </p>
-
+        <div>
           <input ref={fileInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFileUpload} />
 
-          <button onClick={() => fileInputRef.current?.click()} className="neo-btn-primary text-base w-full mb-6">
-            <span className="material-symbols-outlined text-base align-text-bottom">add_a_photo</span> Subir ticket de compra
-          </button>
+          {!cameraStream ? (
+            <div className="text-center pt-4">
+              <div className="w-36 h-36 mx-auto rounded-3xl border-4 border-dashed border-gray-300 flex items-center justify-center mb-5">
+                <span className="material-symbols-outlined text-5xl text-gray-300">receipt_long</span>
+              </div>
+              <p className="text-gray-500 font-medium mb-6">
+                Toma una foto de tu ticket de compra y los productos se guardaran automaticamente en tu despensa.
+              </p>
 
-          <p className="text-xs text-gray-400">
-            La imagen se procesa localmente. No se envia a ningun servidor externo.
-          </p>
+              <button onClick={startCamera} className="neo-btn-primary text-base w-full mb-3">
+                <span className="material-symbols-outlined text-base align-text-bottom">photo_camera</span> Abrir camara
+              </button>
+
+              <button onClick={() => fileInputRef.current?.click()} className="neo-btn w-full mb-6">
+                <span className="material-symbols-outlined text-base align-text-bottom">add_a_photo</span> Subir foto
+              </button>
+
+              <p className="text-xs text-gray-400">
+                La imagen se procesa localmente. No se envia a ningun servidor externo.
+              </p>
+            </div>
+          ) : (
+            <div className="relative rounded-2xl overflow-hidden border-2 border-gray-300 bg-black mb-4">
+              <video ref={videoRef} autoPlay playsInline className="w-full max-h-[70vh] object-contain" />
+              <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-6">
+                <button onClick={capturePhoto} className="w-16 h-16 rounded-full border-4 border-white bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-white" />
+                </button>
+              </div>
+              <button onClick={toggleFlash} className={`absolute top-4 right-4 p-2.5 rounded-full transition-colors ${flashOn ? 'bg-yellow-400 text-yellow-900' : 'bg-black/40 text-white hover:bg-black/60'}`}>
+                <span className="material-symbols-outlined text-xl">{flashOn ? 'flash_on' : 'flash_off'}</span>
+              </button>
+              <button onClick={stopCamera} className="absolute top-4 left-4 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors">
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
 
