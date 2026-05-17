@@ -339,7 +339,7 @@ export default function ScannerPage() {
 
       {step === 'initial' && (
         <div>
-          <input ref={fileInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFileUpload} />
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
 
           {!cameraStream ? (
             <div className="text-center pt-4">
