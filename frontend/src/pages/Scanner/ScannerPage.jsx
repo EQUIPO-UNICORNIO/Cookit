@@ -19,6 +19,29 @@ const SUGGESTED_MEALS = [
   { name: 'Sopa de verduras', recipe: 'Sopa de verduras', ingredients: ['Zanahoria', 'Apio', 'Cebolla', 'Papa', 'Caldo de verduras'], instructions: '1. Corta todas las verduras en cubos.\n2. Sofríe la cebolla.\n3. Agrega el resto de verduras y caldo.\n4. Cocina 30 min y sirve caliente.' },
 ];
 
+const FOOD_DICT = [
+  'agua', 'aceite', 'arroz', 'azúcar', 'ajo', 'avena', 'atún', 'aceituna', 'almendra',
+  'brocoli', 'brócoli', 'berenjena', 'boniato', 'batata', 'burrito',
+  'cerveza', 'coca-cola', 'café', 'cacao', 'canela', 'cebolla', 'calabacín', 'calabaza',
+  'champinon', 'champiñón', 'chocolate', 'chorizo', 'carne', 'cordero', 'conejo', 'cereales',
+  'durazno', 'dorito', 'donut',
+  'espinaca', 'espárrago', 'ensalada', 'endulzante', 'edulcorante', 'embutido',
+  'fresa', 'frijol', 'fruta', 'fideo', 'flan',
+  'garbanzo', 'galleta', 'gaseosa', 'guisante', 'gelatina', 'germen', 'granola',
+  'huevo', 'harina', 'hummus', 'helado',
+  'jamón', 'jamon', 'judía', 'judia',
+  'kétchup', 'ketchup',
+  'leche', 'lenteja', 'limón', 'limon', 'lechuga', 'lata', 'langostino', 'lomo',
+  'manzana', 'mango', 'mandarina', 'mantequilla', 'maíz', 'maiz', 'merluza', 'miel',
+  'naranja', 'nuez', 'nabo',
+  'pan', 'papa', 'patata', 'pasta', 'pera', 'pescado', 'pimiento', 'pollo', 'plátano',
+  'platano', 'puerro', 'pavo', 'pepino', 'piña', 'pizza', 'palomita',
+  'queso', 'quinoa', 'rábano', 'rábano',
+  'salmón', 'salmon', 'sal', 'salsa', 'sandía', 'sandia', 'soja', 'sopa', 'sardina',
+  'tomate', 'tortilla', 'tostada', 'taco', 'té', 'te', 'trucha',
+  'uva', 'yogur', 'yogurt', 'yuca', 'zanahoria', 'zumo'
+];
+
 const matchIngredients = (itemNames, mealIngredients) => {
   const lowerItems = itemNames.map(n => n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
   return mealIngredients.filter(ing => {
@@ -109,20 +132,32 @@ export default function ScannerPage() {
   const fileInputRef = useRef(null);
 
   const preprocessForOcr = (canvas) => {
-    const src = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+    const w = canvas.width, h = canvas.height;
+    const src = canvas.getContext('2d').getImageData(0, 0, w, h);
     const data = src.data;
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i], g = data[i + 1], b = data[i + 2];
       const gray = Math.round(r * 0.299 + g * 0.587 + b * 0.114);
-      const contrast = ((gray - 128) * 1.5) + 128;
-      const threshold = contrast > 128 ? 255 : 0;
-      data[i] = data[i + 1] = data[i + 2] = threshold;
+      const contrast = ((gray - 128) * 1.3) + 128;
+      data[i] = data[i + 1] = data[i + 2] = Math.max(0, Math.min(255, contrast));
     }
     const out = document.createElement('canvas');
-    out.width = canvas.width;
-    out.height = canvas.height;
+    out.width = w;
+    out.height = h;
     out.getContext('2d').putImageData(src, 0, 0);
     return out;
+  };
+
+  const cleanWord = (w) => {
+    return w.replace(/[^a-záéíóúñüA-ZÁÉÍÓÚÑÜ0-9]/g, '').trim().toLowerCase();
+  };
+
+  const isLikelyFood = (name) => {
+    const lower = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (lower.length < 2) return false;
+    if (FOOD_DICT.some(f => lower.includes(f))) return true;
+    if (/[aeiou]/i.test(lower) && lower.length >= 3 && !/^[a-z]{1,2}$/i.test(lower)) return true;
+    return false;
   };
 
   const processImage = async (canvas) => {
@@ -137,8 +172,11 @@ export default function ScannerPage() {
           if (m.status && !ocrTimedOut) setOcrProgress(m.status + (m.progress ? ` ${Math.round(m.progress * 100)}%` : ''));
         },
       });
+      await worker.setParameters({
+        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúñüÁÉÍÓÚÑÜ0123456789.,/€- ',
+      });
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => { ocrTimedOut = true; reject(new Error('timeout')); }, 30000)
+        setTimeout(() => { ocrTimedOut = true; reject(new Error('timeout')); }, 60000)
       );
       const ocrPromise = worker.recognize(processed).then(({ data }) => {
         worker.terminate();
@@ -150,26 +188,34 @@ export default function ScannerPage() {
       const textResult = await Promise.race([ocrPromise, timeoutPromise]).catch(() => '');
       setRawText(textResult);
 
-      if (!textResult || isGarbage(textResult)) {
-        setError(!textResult
-          ? 'No se pudo leer ningún texto. Asegúrate de que el ticket esté bien iluminado y enfocado.'
-          : 'No se encontró texto legible en la imagen.');
+      if (!textResult || textResult.length < 5) {
+        setError('No se pudo leer el ticket. Asegúrate de que esté bien iluminado y enfocado.');
         setStep('initial');
+        setProcessing(false);
         return;
       }
 
-      const lines = textResult.split('\n').filter(l => {
-        const t = l.trim();
-        return t.length > 2 && /[aeiouáéíóú]/i.test(t) && !/^[A-Z0-9\s]{1,4}$/.test(t);
-      });
-
       let items = parseTicketText(textResult);
-      if (items.length === 0 && lines.length > 0) {
-        items = lines.map(l => ({ name: l.trim(), quantity: '1', unit: 'unidad', category: 'otro' })).slice(0, 50);
-      } else if (items.length === 0) {
-        items = [{ name: textResult.slice(0, 50), quantity: '1', unit: 'unidad', category: 'otro' }];
+
+      if (items.length === 0) {
+        const lines = textResult.split('\n').map(l => l.trim()).filter(Boolean);
+        const filtered = lines.filter(l => {
+          const clean = l.replace(/[^a-záéíóúA-ZÁÉÍÓÚ]/g, '').trim().toLowerCase();
+          return clean.length >= 3 && isLikelyFood(clean);
+        });
+        items = filtered.map(l => ({ name: l.trim(), quantity: '1', unit: 'unidad', category: 'otro' })).slice(0, 50);
       }
+
+      items = items.filter(i => i.name && isLikelyFood(i.name));
       items = items.map(i => ({ ...i, category: categoryOptions.includes(i.category) ? i.category : 'otro' }));
+
+      if (items.length === 0) {
+        setError('No se detectaron productos de alimentación. Intenta con una foto más clara del ticket.');
+        setStep('initial');
+        setProcessing(false);
+        return;
+      }
+
       setParsedItems(items);
       setStep('review');
       findRecommendations(items);
@@ -188,8 +234,14 @@ export default function ScannerPage() {
     img.src = URL.createObjectURL(file);
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = Math.min(img.width, 1280);
-      canvas.height = Math.min(img.height, 1280);
+      const maxDim = 2000;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = h * maxDim / w; w = maxDim; }
+        else { w = w * maxDim / h; h = maxDim; }
+      }
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       URL.revokeObjectURL(img.src);
