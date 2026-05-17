@@ -126,6 +126,7 @@ export default function ScannerPage() {
   const [loadingRecommendations, setLoadingRecommendations] = useState(false);
   const [flashOn, setFlashOn] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
+  const [receiptDetected, setReceiptDetected] = useState(null);
   const cameraStreamRef = useRef(null);
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
@@ -270,6 +271,28 @@ export default function ScannerPage() {
 
   useEffect(() => () => { cameraStreamRef.current?.getTracks().forEach(t => t.stop()); }, []);
   useEffect(() => { if (step !== 'initial') { cameraStreamRef.current?.getTracks().forEach(t => t.stop()); cameraStreamRef.current = null; setCameraActive(false); } }, [step]);
+  useEffect(() => {
+    if (!cameraActive) { setReceiptDetected(null); return; }
+    const interval = setInterval(() => {
+      const video = videoRef.current;
+      if (!video || !video.videoWidth) return;
+      const c = document.createElement('canvas');
+      c.width = 80; c.height = 60;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(video, 0, 0, 80, 60);
+      const data = ctx.getImageData(0, 0, 80, 60).data;
+      let sum = 0;
+      for (let i = 0; i < data.length; i += 4) sum += data[i] + data[i+1] + data[i+2];
+      const mean = sum / (data.length / 4 * 3);
+      let sumSq = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        const gray = (data[i] + data[i+1] + data[i+2]) / 3;
+        sumSq += (gray - mean) ** 2;
+      }
+      setReceiptDetected(Math.sqrt(sumSq / (data.length / 4)) > 30);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [cameraActive]);
 
   const startCamera = async () => {
     setCameraActive(true);
@@ -330,6 +353,7 @@ export default function ScannerPage() {
     cameraStreamRef.current?.getTracks().forEach(t => t.stop());
     cameraStreamRef.current = null;
     setCameraActive(false);
+    setReceiptDetected(null);
     setFlashOn(false);
     processImage(canvas);
   };
@@ -381,6 +405,15 @@ export default function ScannerPage() {
           ) : (
             <div className="relative -mx-4 rounded-none overflow-hidden border-0 bg-black mb-4" style={{ height: 'calc(100vh - 220px)' }}>
               <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
+              {receiptDetected === false && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                  <div className="text-center px-6">
+                    <span className="material-symbols-outlined text-5xl text-white/80">receipt_long</span>
+                    <p className="text-white font-bold text-lg mt-2">No se detecta ningún ticket</p>
+                    <p className="text-white/60 text-sm mt-1">Apunta hacia un ticket de compra</p>
+                  </div>
+                </div>
+              )}
               <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center">
                 <button onClick={capturePhoto} className="w-20 h-20 rounded-full border-[5px] border-white bg-white/20 flex items-center justify-center hover:bg-white/30 active:scale-90 transition-all">
                   <div className="w-14 h-14 rounded-full bg-white shadow-md" />
