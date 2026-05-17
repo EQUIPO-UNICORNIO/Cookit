@@ -272,13 +272,22 @@ export default function ScannerPage() {
   const startCamera = async () => {
     try {
       if (cameraStream) stopCamera();
-      const constraints = {
-        video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
-        audio: false,
-      };
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
+        });
+      } catch {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
+      const video = videoRef.current;
+      if (!video) { stream.getTracks().forEach(t => t.stop()); return; }
+      video.srcObject = stream;
+      await new Promise((resolve, reject) => {
+        video.onloadedmetadata = () => { video.play().then(resolve).catch(reject); };
+        video.onerror = reject;
+      });
       setCameraStream(stream);
-      if (videoRef.current) videoRef.current.srcObject = stream;
     } catch {
       setError('No se pudo abrir la camara. Usa la opcion de subir foto.');
     }
