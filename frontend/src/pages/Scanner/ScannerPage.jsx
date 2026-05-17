@@ -32,7 +32,7 @@ const matchIngredients = (itemNames, mealIngredients) => {
 const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 function preprocessImage(canvas) {
-  const MIN_HEIGHT = 1500;
+  const MIN_HEIGHT = 2000;
   let w = canvas.width, h = canvas.height;
   if (h < MIN_HEIGHT) {
     const scale = MIN_HEIGHT / h;
@@ -50,9 +50,9 @@ function preprocessImage(canvas) {
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i], g = data[i + 1], b = data[i + 2];
     const gray = Math.round(r * 0.299 + g * 0.587 + b * 0.114);
-    const contrasted = ((gray - 128) * 2.2) + 128;
-    const clamped = Math.max(0, Math.min(255, contrasted));
-    data[i] = data[i + 1] = data[i + 2] = clamped > 140 ? 255 : 0;
+    const light = gray > 180 ? 255 : gray;
+    const dark = light < 40 ? 0 : light;
+    data[i] = data[i + 1] = data[i + 2] = dark;
   }
   ctx.putImageData(imageData, 0, 0);
   return canvas;
@@ -60,9 +60,10 @@ function preprocessImage(canvas) {
 
 function parseLineToProduct(line) {
   let clean = line.replace(/\s+/g, ' ').trim();
-  if (!clean) return null;
+  if (!clean || clean.length < 5) return null;
   const lower = normalize(clean);
   if (ignoreKeywords.some(k => lower.includes(k))) return null;
+  if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda|travesia)/i.test(clean)) return null;
   const numbers = clean.match(/[\d.,]+/g);
   if (!numbers || numbers.length === 0) return null;
   let rawPrice = numbers[numbers.length - 1].replace(/\./g, '').replace(',', '.');
@@ -70,8 +71,11 @@ function parseLineToProduct(line) {
   if (isNaN(price) || price <= 0 || price > 9999) return null;
   let name = clean.substring(0, clean.lastIndexOf(numbers[numbers.length - 1])).trim();
   name = name.replace(/^\d+\s*[xX*]?\s*/, '').trim();
-  name = name.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
   if (!name || name.length < 2) return null;
+  const nameLower = normalize(name);
+  if (ignoreKeywords.some(k => nameLower.includes(k))) return null;
+  if (/^[\d\s]+$/.test(name)) return null;
+  if (!/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/.test(name)) return null;
   let quantity = '1';
   let unit = 'unidad';
   const qtyMatch = name.match(/^(\d+)\s*(kg|g|l|ml|ud|unidad|unidades|paq|pack|lata|botella|bolsa|pieza|tarro)?\s+/i);
@@ -80,6 +84,8 @@ function parseLineToProduct(line) {
     if (qtyMatch[2]) unit = qtyMatch[2].toLowerCase();
     name = name.substring(qtyMatch[0].length).trim();
   }
+  name = name.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
+  if (!name || name.length < 2) return null;
   return { name, quantity, unit };
 }
 
@@ -88,16 +94,20 @@ function fallbackParseLines(text) {
   const items = [];
   const seen = new Set();
   for (const line of lines) {
-    const clean = line.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
-    if (!clean || clean.length < 3) continue;
+    let clean = line.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
+    if (!clean || clean.length < 4) continue;
     const lower = normalize(clean);
     if (ignoreKeywords.some(k => lower.includes(k))) continue;
-    if (/^[a-zA-Z\s]+$/.test(clean) && /[aeiouáéíóú]/i.test(clean)) {
-      const key = normalize(clean);
-      if (seen.has(key)) continue;
-      seen.add(key);
-      items.push({ name: clean, quantity: '1', unit: 'unidad' });
-    }
+    if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda)/i.test(clean)) continue;
+    if (/^[\d\s]+$/.test(clean)) continue;
+    const words = clean.split(/\s+/).filter(w => w.length >= 3);
+    if (words.length === 0) continue;
+    const hasVowel = /[aeiouáéíóú]/i.test(clean);
+    if (!hasVowel) continue;
+    const key = normalize(clean);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    items.push({ name: clean, quantity: '1', unit: 'unidad' });
   }
   return items.slice(0, 50);
 }
