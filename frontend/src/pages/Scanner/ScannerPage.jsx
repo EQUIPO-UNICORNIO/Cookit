@@ -19,26 +19,7 @@ const SUGGESTED_MEALS = [
   { name: 'Sopa de verduras', recipe: 'Sopa de verduras', ingredients: ['Zanahoria', 'Apio', 'Cebolla', 'Papa', 'Caldo de verduras'], instructions: '1. Corta todas las verduras en cubos.\n2. Sofríe la cebolla.\n3. Agrega el resto de verduras y caldo.\n4. Cocina 30 min y sirve caliente.' },
 ];
 
-const FOOD_DICT = [
-  'agua', 'aceite', 'arroz', 'azucar', 'ajo', 'avena', 'atun', 'aceituna', 'almendra',
-  'brocoli', 'berenjena', 'boniato', 'batata',
-  'cerveza', 'cafe', 'cacao', 'canela', 'cebolla', 'calabacin', 'calabaza',
-  'chocolate', 'chorizo', 'carne', 'cordero', 'conejo', 'cereal',
-  'espinaca', 'esparrago', 'ensalada', 'embutido',
-  'fresa', 'frijol', 'fruta', 'fideo', 'flan',
-  'garbanzo', 'galleta', 'gaseosa', 'guisante', 'gelatina', 'granola',
-  'huevo', 'harina', 'helado',
-  'jamon', 'judia',
-  'leche', 'lenteja', 'limon', 'lechuga', 'langostino', 'lomo',
-  'manzana', 'mango', 'mandarina', 'mantequilla', 'maiz', 'merluza', 'miel',
-  'naranja', 'nuez',
-  'pan', 'papa', 'patata', 'pasta', 'pera', 'pescado', 'pimiento', 'pollo', 'platano',
-  'puerro', 'pavo', 'pepino', 'pina', 'pizza', 'palomita',
-  'queso', 'quinua',
-  'salmon', 'sal', 'salsa', 'sandia', 'soja', 'sopa', 'sardina',
-  'tomate', 'tortilla', 'taco',
-  'uva', 'yogur', 'yuca', 'zanahoria', 'zumo'
-];
+const ignoreKeywords = ['total', 'iva', 'subtotal', 'efectivo', 'tarjeta', 'cambio', 'nif', 'cif', 'caja', 'sup', 'op', 'telefono', 'paseo', 'calle', 'gracias', 'ticket', 'factura', 'cliente', 'importe', 'descuento', 'redondo', 'base', 'unidades', 'euros', 'centimos'];
 
 const matchIngredients = (itemNames, mealIngredients) => {
   const lowerItems = itemNames.map(n => n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
@@ -47,6 +28,79 @@ const matchIngredients = (itemNames, mealIngredients) => {
     return lowerItems.some(item => item.includes(lowerIng) || lowerIng.includes(item));
   });
 };
+
+const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+function preprocessImage(canvas) {
+  const MIN_HEIGHT = 1500;
+  let w = canvas.width, h = canvas.height;
+  if (h < MIN_HEIGHT) {
+    const scale = MIN_HEIGHT / h;
+    w = Math.round(w * scale);
+    h = MIN_HEIGHT;
+    const scaled = document.createElement('canvas');
+    scaled.width = w;
+    scaled.height = h;
+    scaled.getContext('2d').drawImage(canvas, 0, 0, w, h);
+    canvas = scaled;
+  }
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, w, h);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    const gray = Math.round(r * 0.299 + g * 0.587 + b * 0.114);
+    const contrasted = ((gray - 128) * 2.2) + 128;
+    const clamped = Math.max(0, Math.min(255, contrasted));
+    data[i] = data[i + 1] = data[i + 2] = clamped > 140 ? 255 : 0;
+  }
+  ctx.putImageData(imageData, 0, 0);
+  return canvas;
+}
+
+function parseLineToProduct(line) {
+  let clean = line.replace(/\s+/g, ' ').trim();
+  if (!clean) return null;
+  const lower = normalize(clean);
+  if (ignoreKeywords.some(k => lower.includes(k))) return null;
+  const numbers = clean.match(/[\d.,]+/g);
+  if (!numbers || numbers.length === 0) return null;
+  let rawPrice = numbers[numbers.length - 1].replace(/\./g, '').replace(',', '.');
+  let price = parseFloat(rawPrice);
+  if (isNaN(price) || price <= 0 || price > 9999) return null;
+  let name = clean.substring(0, clean.lastIndexOf(numbers[numbers.length - 1])).trim();
+  name = name.replace(/^\d+\s*[xX*]?\s*/, '').trim();
+  name = name.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
+  if (!name || name.length < 2) return null;
+  let quantity = '1';
+  let unit = 'unidad';
+  const qtyMatch = name.match(/^(\d+)\s*(kg|g|l|ml|ud|unidad|unidades|paq|pack|lata|botella|bolsa|pieza|tarro)?\s+/i);
+  if (qtyMatch) {
+    quantity = qtyMatch[1];
+    if (qtyMatch[2]) unit = qtyMatch[2].toLowerCase();
+    name = name.substring(qtyMatch[0].length).trim();
+  }
+  return { name, quantity, unit };
+}
+
+function fallbackParseLines(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const items = [];
+  const seen = new Set();
+  for (const line of lines) {
+    const clean = line.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
+    if (!clean || clean.length < 3) continue;
+    const lower = normalize(clean);
+    if (ignoreKeywords.some(k => lower.includes(k))) continue;
+    if (/^[a-zA-Z\s]+$/.test(clean) && /[aeiouáéíóú]/i.test(clean)) {
+      const key = normalize(clean);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      items.push({ name: clean, quantity: '1', unit: 'unidad' });
+    }
+  }
+  return items.slice(0, 50);
+}
 
 export default function ScannerPage() {
   const navigate = useNavigate();
@@ -62,26 +116,12 @@ export default function ScannerPage() {
   const [loadingRecommendations, setLoadingRecommendations] = useState(false);
   const fileInputRef = useRef(null);
 
-  const preprocessForOcr = (canvas) => {
-    const w = canvas.width, h = canvas.height;
-    const src = canvas.getContext('2d').getImageData(0, 0, w, h);
-    const data = src.data;
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i], g = data[i + 1], b = data[i + 2];
-      const gray = Math.round(r * 0.299 + g * 0.587 + b * 0.114);
-      const inv = 255 - gray;
-      const stretch = ((inv - 128) * 1.8) + 128;
-      data[i] = data[i + 1] = data[i + 2] = Math.max(0, Math.min(255, stretch));
-    }
-    return canvas;
-  };
-
   const processImage = async (canvas) => {
     setProcessing(true);
     setOcrProgress('');
     setError('');
     try {
-      const processed = preprocessForOcr(canvas);
+      const processed = preprocessImage(canvas);
       const worker = await createWorker('spa+eng', 1, {
         logger: m => {
           if (m.status) setOcrProgress(m.status + (m.progress ? ` ${Math.round(m.progress * 100)}%` : ''));
@@ -89,47 +129,41 @@ export default function ScannerPage() {
       });
       await worker.setParameters({
         tessedit_pageseg_mode: '6',
-        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúñüÁÉÍÓÚÑÜ0123456789.,/€-% ',
+        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúñüÁÉÍÓÚÑÜ0123456789., ',
+        preserve_interword_spaces: '1',
       });
       const { data } = await worker.recognize(processed);
       const text = data.text.trim();
       worker.terminate();
       setRawText(text);
 
-      if (!text || text.length < 10) {
+      if (!text || text.length < 5) {
         setError('No se pudo leer el ticket. Asegurate de que este bien iluminado y enfocado.');
         setStep('initial');
         setProcessing(false);
         return;
       }
 
-      const lines = text.split('\n').map(l => {
-        const clean = l.replace(/[^a-zA-Z0-9\s.,]/g, '').trim();
-        return clean;
-      }).filter(Boolean);
-      const items = lines.filter(l => {
-        const lower = l.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        if (lower.length < 3) return false;
-        if (/^(total|subtotal|iva|efectivo|tarjeta|cambio|gracias|ticket|factura|nif|cif|cliente|importe|descuento|redondo|€|\d+)/.test(lower)) return false;
-        if (/^\d+$/.test(lower.replace(/[\s.,]/g, ''))) return false;
-        const words = lower.split(/\s+/);
-        const foodWords = words.filter(w => FOOD_DICT.some(f => f === w || f.includes(w) || w.includes(f)));
-        return foodWords.length > 0 || (words.some(w => /[aeiouáéíóú]/i.test(w) && w.length >= 4 && !/^\d/.test(w)));
-      }).slice(0, 50).map(l => ({
-        name: l.replace(/^[\d\s.,]+/, '').trim(),
-        quantity: '1',
-        unit: 'unidad',
-        category: 'otro'
-      })).filter(i => i.name.length >= 2);
+      const lines = text.split('\n').filter(l => l.trim());
+      let items = [];
+      for (const line of lines) {
+        const product = parseLineToProduct(line);
+        if (product) items.push(product);
+        if (items.length >= 50) break;
+      }
 
       if (items.length === 0) {
-        setError('No se detectaron productos de alimentacion. Intenta con una foto mas clara del ticket.');
+        items = fallbackParseLines(text);
+      }
+
+      if (items.length === 0) {
+        setError('No se detectaron productos en el ticket. Intenta con una foto mas clara.');
         setStep('initial');
         setProcessing(false);
         return;
       }
 
-      setParsedItems(items);
+      setParsedItems(items.map(i => ({ ...i, category: 'otro' })));
       setStep('review');
       findRecommendations(items);
     } catch (e) {
@@ -147,16 +181,10 @@ export default function ScannerPage() {
     img.src = URL.createObjectURL(file);
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const maxDim = 2500;
-      let w = img.width, h = img.height;
-      if (w > maxDim || h > maxDim) {
-        if (w > h) { h = h * maxDim / w; w = maxDim; }
-        else { w = w * maxDim / h; h = maxDim; }
-      }
-      canvas.width = w;
-      canvas.height = h;
+      canvas.width = img.width;
+      canvas.height = img.height;
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
       URL.revokeObjectURL(img.src);
       processImage(canvas);
     };
