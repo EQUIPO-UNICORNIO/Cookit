@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import AccessPage from './pages/Access/AccessPage';
+import ResetPasswordPage from './pages/Access/ResetPasswordPage';
 import PantryPage from './pages/Pantry/PantryPage';
 import ShoppingPage from './pages/Shopping/ShoppingPage';
 import MealsPage from './pages/Meals/MealsPage';
@@ -38,6 +39,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/access" element={user ? <Navigate to="/" replace /> : <AccessPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={<MealsPage />} />
         <Route path="pantry" element={<PantryPage />} />

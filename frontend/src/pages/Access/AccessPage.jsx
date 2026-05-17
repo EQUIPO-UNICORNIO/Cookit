@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import ForgotPasswordModal from './ForgotPasswordModal';
 
 function Toast({ message, onClose }) {
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function AccessPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [toast, setToast] = useState(null);
   const { login, register } = useAuth();
@@ -95,6 +97,7 @@ export default function AccessPage() {
 
   return (
     <div className="min-h-screen bg-page flex flex-col">
+      {showForgotPassword && <ForgotPasswordModal onClose={() => setShowForgotPassword(false)} />}
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       <div className="flex-1 flex flex-col justify-center px-6 max-w-sm mx-auto w-full">
         <div className="text-center mb-8">
@@ -167,7 +170,7 @@ export default function AccessPage() {
               </div>
               {fieldErrors.password && <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.password}</p>}
               <div className="flex justify-end mt-1">
-                <button type="button" className="text-xs text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors">
+                <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors">
                   ¿Olvidaste tu contraseña?
                 </button>
               </div>

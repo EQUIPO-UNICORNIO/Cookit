@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getOne, create, updateById, saveDb } = require('../config/database');
 const { JWT_SECRET, authMiddleware } = require('../middleware/auth');
+const supabase = require('../lib/supabase');
 
 const router = express.Router();
 
@@ -17,6 +18,12 @@ router.post('/register', async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
     const user = await create('users', { name, email, password: hashed });
+
+    const { error: authError } = await supabase.auth.admin.createUser({
+      email, password, email_confirm: true
+    });
+    if (authError) console.error('Error creating auth user:', authError.message);
+
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar || '' } });
   } catch (e) {

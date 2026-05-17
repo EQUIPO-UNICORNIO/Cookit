@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.env
+backend/cookit.db
 backend/cookit.db
 backend/server.log
 backend/server.err
