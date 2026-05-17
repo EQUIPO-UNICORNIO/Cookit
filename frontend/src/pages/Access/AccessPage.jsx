@@ -39,8 +39,8 @@ export default function AccessPage() {
             <span className="material-symbols-outlined text-4xl text-white">restaurant</span>
           </div>
           <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">CookIt</h1>
-          <p className="text-gray-500 text-sm mt-1">Bienvenido de nuevo</p>
-          <p className="text-gray-400 text-xs mt-1">Inicia sesión para continuar</p>
+          <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">Bienvenido de nuevo</p>
+          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Inicia sesión para continuar</p>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)]">
@@ -119,13 +119,13 @@ export default function AccessPage() {
           <button
             type="button"
             onClick={() => { setEmail('aronets2004@gmail.com'); setPassword('Cookit2026'); setIsLogin(true); }}
-            className="text-xs text-primary-600 hover:text-primary-700 font-semibold underline underline-offset-2 transition-colors"
+            className="text-xs text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
           >
             Acceso Desarrollador (aronets2004@gmail.com)
           </button>
         </div>
 
-        <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-4">
+        <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4">
           Al continuar, aceptas nuestros términos y condiciones
         </p>
       </div>
