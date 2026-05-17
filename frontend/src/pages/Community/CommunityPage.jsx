@@ -56,6 +56,7 @@ export default function CommunityPage() {
   const [expandedComments, setExpandedComments] = useState({});
   const [saving, setSaving] = useState({});
   const [toast, setToast] = useState(null);
+  const [viewingPost, setViewingPost] = useState(null);
   const fileInputRef = useRef(null);
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
 
@@ -253,6 +254,9 @@ export default function CommunityPage() {
               <button onClick={() => setExpandedComments(prev => ({ ...prev, [post.id]: !prev[post.id] }))} className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">
                 <span className="material-symbols-outlined text-base">chat_bubble_outline</span> {post.comments?.length || 0}
               </button>
+              <button onClick={() => setViewingPost(post)} className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">
+                <span className="material-symbols-outlined text-base">visibility</span> Ver
+              </button>
               {user && post.user_name !== user.name && (
                 <button onClick={() => handleSave(post.id)} disabled={saving[post.id]}
                   className="flex items-center gap-1 text-sm font-bold text-primary-600 hover:text-primary-800 transition-colors ml-auto disabled:opacity-30">
@@ -291,6 +295,43 @@ export default function CommunityPage() {
         ))}
       </div>
 
+      {viewingPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={() => setViewingPost(null)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl p-6" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setViewingPost(null)} className="absolute top-3 right-3 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400">
+              <span className="material-symbols-outlined text-lg">close</span>
+            </button>
+            <div className="flex items-center gap-3 mb-4">
+              <AvatarDisplay avatar={viewingPost.user_avatar} name={viewingPost.user_name} />
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-sm truncate">{viewingPost.user_name}</p>
+                <p className="text-xs text-gray-400">{new Date(viewingPost.created_at).toLocaleString('es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+              </div>
+            </div>
+            <p className="text-base font-bold mb-3">{viewingPost.content}</p>
+            {viewingPost.photo && (
+              <img src={viewingPost.photo} alt={viewingPost.content} className="w-full h-48 object-cover rounded-xl mb-4 border border-gray-200" />
+            )}
+            {viewingPost.ingredients?.length > 0 && (
+              <div className="mb-4">
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Ingredientes</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {viewingPost.ingredients.map((ing, i) => (
+                    <span key={i} className="text-sm bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-700 rounded-lg px-3 py-1 font-medium text-primary-700 dark:text-primary-300">{ing}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {viewingPost.instructions && (
+              <div className="mb-4">
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Instrucciones</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-line leading-relaxed">{viewingPost.instructions}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       {posts.length === 0 && (
         <div className="text-center py-12">
           <span className="material-symbols-outlined text-5xl text-gray-300">forum</span>
