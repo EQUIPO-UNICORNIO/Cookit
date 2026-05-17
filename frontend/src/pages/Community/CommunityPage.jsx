@@ -49,8 +49,7 @@ export default function CommunityPage() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState('');
   const [newPhoto, setNewPhoto] = useState('');
-  const [newIngredients, setNewIngredients] = useState([]);
-  const [ingredientInput, setIngredientInput] = useState('');
+  const [newIngredients, setNewIngredients] = useState('');
   const [newInstructions, setNewInstructions] = useState('');
   const [commentText, setCommentText] = useState({});
   const [expandedComments, setExpandedComments] = useState({});
@@ -91,12 +90,11 @@ export default function CommunityPage() {
     e.preventDefault();
     if (!newPost.trim()) return;
     try {
-      const data = { content: newPost, photo: newPhoto, ingredients: newIngredients, instructions: newInstructions };
+      const data = { content: newPost, photo: newPhoto, ingredients: newIngredients.split(',').map(i => i.trim()).filter(Boolean), instructions: newInstructions };
       await api.createPost(data);
       setNewPost('');
       setNewPhoto('');
-      setNewIngredients([]);
-      setIngredientInput('');
+      setNewIngredients('');
       setNewInstructions('');
       loadPosts();
     } catch (e) { showToast('Error al publicar'); }
@@ -149,40 +147,7 @@ export default function CommunityPage() {
           className="w-full rounded-xl border-2 border-gray-200 p-3 text-sm font-medium resize-none min-h-[80px] focus:outline-none focus:border-primary-500"
         />
         <div className="flex gap-2 mt-2">
-          <div className="flex-1 flex flex-wrap gap-1 items-center border-2 border-gray-200 rounded-xl px-2 py-1.5 min-h-[36px] focus-within:border-primary-500 transition-colors">
-            {newIngredients.map((ing, i) => (
-              <span key={i} className="inline-flex items-center gap-1 text-xs bg-primary-50 text-primary-700 border border-primary-200 rounded-lg px-2 py-0.5 font-medium">
-                {ing}
-                <button type="button" onClick={() => setNewIngredients(prev => prev.filter((_, j) => j !== i))} className="text-primary-400 hover:text-primary-700 leading-none">&times;</button>
-              </span>
-            ))}
-            <input
-              className="flex-1 text-xs bg-transparent border-none outline-none min-w-[80px] p-0.5"
-              placeholder={newIngredients.length === 0 ? 'Ingredientes' : 'Añadir más...'}
-              value={ingredientInput}
-              onChange={e => {
-                const val = e.target.value;
-                if (val.endsWith(',') || val.endsWith(';')) {
-                  const item = val.slice(0, -1).trim();
-                  if (item) setNewIngredients(prev => [...prev, item]);
-                  setIngredientInput('');
-                } else {
-                  setIngredientInput(val);
-                }
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ',') {
-                  e.preventDefault();
-                  const item = ingredientInput.trim();
-                  if (item) setNewIngredients(prev => [...prev, item]);
-                  setIngredientInput('');
-                }
-                if (e.key === 'Backspace' && !ingredientInput && newIngredients.length > 0) {
-                  setNewIngredients(prev => prev.slice(0, -1));
-                }
-              }}
-            />
-          </div>
+          <input className="neo-input flex-1 text-xs" placeholder="Ingredientes (separados por coma)" value={newIngredients} onChange={e => setNewIngredients(e.target.value)} />
           <button type="button" onClick={() => fileInputRef.current?.click()} className="neo-btn !py-1.5 !px-3 !text-xs !border-secondary-300 text-secondary-600">
             <span className="material-symbols-outlined text-sm align-text-bottom">photo_camera</span>
           </button>
@@ -209,7 +174,7 @@ export default function CommunityPage() {
 
       <div className="space-y-3">
         {posts.map(post => (
-          <div key={post.id} className="neo-card">
+          <div key={post.id} className="neo-card cursor-pointer" onClick={() => setViewingPost(post)}>
             <div className="flex items-center gap-3 mb-2">
               <AvatarDisplay avatar={post.user_avatar} name={post.user_name} />
               <div className="flex-1 min-w-0">
@@ -217,7 +182,7 @@ export default function CommunityPage() {
                 <p className="text-xs text-gray-400">{new Date(post.created_at).toLocaleString('es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
               </div>
               {user && post.user_name === user.name && (
-                <button onClick={() => handleDelete(post.id)} className="p-1 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
+                <button onClick={e => { e.stopPropagation(); handleDelete(post.id); }} className="p-1 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
                   <span className="material-symbols-outlined text-sm">delete</span>
                 </button>
               )}
@@ -248,17 +213,14 @@ export default function CommunityPage() {
             )}
 
             <div className="flex items-center gap-4 mb-2">
-              <button onClick={() => handleLike(post.id)} className={`flex items-center gap-1 text-sm font-bold transition-colors ${post.liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}>
+              <button onClick={e => { e.stopPropagation(); handleLike(post.id); }} className={`flex items-center gap-1 text-sm font-bold transition-colors ${post.liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}>
                 <span className="material-symbols-outlined text-base">{post.liked ? 'favorite' : 'favorite_border'}</span> {post.likes}
               </button>
-              <button onClick={() => setExpandedComments(prev => ({ ...prev, [post.id]: !prev[post.id] }))} className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">
+              <button onClick={e => { e.stopPropagation(); setExpandedComments(prev => ({ ...prev, [post.id]: !prev[post.id] })); }} className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">
                 <span className="material-symbols-outlined text-base">chat_bubble_outline</span> {post.comments?.length || 0}
               </button>
-              <button onClick={() => setViewingPost(post)} className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">
-                <span className="material-symbols-outlined text-base">visibility</span> Ver
-              </button>
               {user && post.user_name !== user.name && (
-                <button onClick={() => handleSave(post.id)} disabled={saving[post.id]}
+                <button onClick={e => { e.stopPropagation(); handleSave(post.id); }} disabled={saving[post.id]}
                   className="flex items-center gap-1 text-sm font-bold text-primary-600 hover:text-primary-800 transition-colors ml-auto disabled:opacity-30">
                   <span className="material-symbols-outlined text-base">bookmark_add</span> {saving[post.id] ? 'Guardando...' : 'Guardar'}
                 </button>
@@ -266,7 +228,7 @@ export default function CommunityPage() {
             </div>
 
             {expandedComments[post.id] && (
-              <div className="border-t-2 border-gray-100 pt-3 mt-1 space-y-2">
+              <div className="border-t-2 border-gray-100 pt-3 mt-1 space-y-2" onClick={e => e.stopPropagation()}>
                 {post.comments?.map(c => (
                   <div key={c.id} className="flex items-start gap-2">
                     <AvatarDisplay avatar={c.user_avatar} name={c.user_name} size="sm" />
@@ -286,7 +248,7 @@ export default function CommunityPage() {
                     value={commentText[post.id] || ''}
                     onChange={e => setCommentText(prev => ({ ...prev, [post.id]: e.target.value }))}
                   />
-                  <button onClick={() => handleComment(post.id)} disabled={!commentText[post.id]?.trim()}
+                  <button onClick={e => { e.stopPropagation(); handleComment(post.id); }} disabled={!commentText[post.id]?.trim()}
                     className="neo-btn-primary !py-1.5 !px-3 !text-xs disabled:opacity-30">Enviar</button>
                 </div>
               </div>
