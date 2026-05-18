@@ -6,6 +6,7 @@ import ResetPasswordPage from './pages/Access/ResetPasswordPage';
 import PantryPage from './pages/Pantry/PantryPage';
 import ShoppingPage from './pages/Shopping/ShoppingPage';
 import MealsPage from './pages/Meals/MealsPage';
+import RecipesPage from './pages/Recipes/RecipesPage';
 import CookingPage from './pages/Cooking/CookingPage';
 import ScannerPage from './pages/Scanner/ScannerPage';
 import SubstitutionPage from './pages/Substitution/SubstitutionPage';
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="pantry" element={<PantryPage />} />
         <Route path="shopping" element={<ShoppingPage />} />
         <Route path="meals" element={<MealsPage />} />
+        <Route path="recipes" element={<RecipesPage />} />
         <Route path="cooking" element={<CookingPage />} />
         <Route path="cooking/:sessionId" element={<CookingPage />} />
         <Route path="scanner" element={<ScannerPage />} />
