@@ -258,7 +258,7 @@ export default function MealsPage() {
         {steps.length > 0 && (
           <div className="flex gap-2">
             <button onClick={() => setCookingStep(Math.max(0, cookingStep - 1))} disabled={cookingStep <= 0}
-              className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">Anterior</button>
+              className="neo-btn !bg-gray-100 dark:text-white flex-1 disabled:opacity-30">Anterior</button>
             <button onClick={() => cookingStep < steps.length - 1 ? setCookingStep(cookingStep + 1) : (setSelectedMeal(null), setCookingStep(0))}
               className="neo-btn-primary flex-1">
               {cookingStep >= steps.length - 1 ? '¡Completado!' : 'Siguiente'}
