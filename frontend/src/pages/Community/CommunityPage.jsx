@@ -128,7 +128,7 @@ export default function CommunityPage() {
       const res = await api.likePost(id);
       setPosts(prev => prev.map(p =>
         p.id === id
-          ? { ...p, liked: res.liked, likes: res.liked ? p.likes + 1 : Math.max(0, p.likes - 1) }
+          ? { ...p, liked: res.liked, likes: res.likes }
           : p
       ));
     } catch (e) { showToast('Error al dar like'); }
