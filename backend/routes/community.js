@@ -67,13 +67,12 @@ router.post('/:id/like', async (req, res) => {
 
     if (existing) {
       await supabase.from('post_likes').delete().eq('id', existing.id);
-      await supabase.from('community_posts').update({ likes: supabase.raw('GREATEST(likes - 1, 0)') }).eq('id', req.params.id);
+      await supabase.rpc('decrement_likes', { post_id: req.params.id });
     } else {
       await supabase.from('post_likes').insert({ post_id: parseInt(req.params.id), user_id: req.userId });
-      await supabase.from('community_posts').update({ likes: supabase.raw('likes + 1') }).eq('id', req.params.id);
+      await supabase.rpc('increment_likes', { post_id: req.params.id });
     }
-    const { data: updated } = await supabase.from('community_posts').select('likes').eq('id', req.params.id).single();
-    res.json({ success: true, liked: !existing, likes: updated?.likes || 0 });
+    res.json({ success: true, liked: !existing });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
