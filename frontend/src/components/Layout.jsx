@@ -40,7 +40,7 @@ export default function Layout() {
     <div className="min-h-screen bg-page font-jakarta">
       <Sidebar />
       <div className="md:ml-[70px] lg:ml-[200px] flex flex-col min-h-screen">
-        <header className="sticky top-0 z-40 bg-page/95 backdrop-blur-sm border-b-2 border-black md:border-l-0">
+        <header className="sticky top-0 z-40 bg-page/95 backdrop-blur-sm md:border-l-0">
           <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link to="/meals" className="flex items-center gap-2 md:hidden">
               <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
@@ -53,7 +53,7 @@ export default function Layout() {
             </Link>
           </div>
         </header>
-        <main className="flex-1 pb-24 md:pb-6 max-w-5xl w-full mx-auto px-4 pt-4">
+        <main className="flex-1 pb-24 md:pb-6 max-w-5xl w-full mx-auto px-4 pt-4 border-t-2 border-black">
           <Outlet />
         </main>
       </div>
