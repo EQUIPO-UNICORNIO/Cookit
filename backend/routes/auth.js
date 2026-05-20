@@ -86,4 +86,18 @@ router.post('/sync-password', async (req, res) => {
   }
 });
 
+router.post('/reset-dev', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ error: 'Email y contraseña requeridos' });
+    const user = await getOne('users', { email });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+    const hashed = await bcrypt.hash(password, 10);
+    await supabase.from('users').update({ password: hashed }).eq('email', email);
+    res.json({ success: true, message: 'Contraseña actualizada' });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;
