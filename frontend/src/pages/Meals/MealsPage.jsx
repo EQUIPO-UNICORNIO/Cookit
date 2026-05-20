@@ -134,10 +134,10 @@ export default function MealsPage() {
     const steps = parseInstructions(selectedMeal.instructions);
     return (
       <div>
-        <button onClick={() => { setSelectedMeal(null); setCookingStep(0); }} className="neo-btn !bg-gray-100 dark:!text-black dark:!border-gray-400 !py-2 !px-3 !text-sm mb-4">
+        <button onClick={() => { setSelectedMeal(null); setCookingStep(0); }} className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl py-2 px-3 text-sm transition-all active:scale-95 mb-4">
           <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> Volver a menús
         </button>
-        <button onClick={() => { const m = selectedMeal; setSelectedMeal(null); setEditing(m.id); setForm({ name: m.name, day: m.day, meal_type: m.meal_type, recipe: m.recipe, ingredients: (m.ingredients || []).join(', '), instructions: m.instructions || '', photo: m.photo }); setShowForm(true); }} className="neo-btn !bg-primary-50 !text-primary-600 !border-primary-300 !py-2 !px-3 !text-sm mb-4 ml-2">
+        <button onClick={() => { const m = selectedMeal; setSelectedMeal(null); setEditing(m.id); setForm({ name: m.name, day: m.day, meal_type: m.meal_type, recipe: m.recipe, ingredients: (m.ingredients || []).join(', '), instructions: m.instructions || '', photo: m.photo }); setShowForm(true); }} className="bg-primary-50 hover:bg-primary-100 text-primary-700 font-bold rounded-xl py-2 px-3 text-sm transition-all active:scale-95 mb-4 ml-2">
           <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
         </button>
 
@@ -146,7 +146,7 @@ export default function MealsPage() {
             {selectedMeal.meal_type}
           </span>
           {selectedMeal.photo && (
-            <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full h-48 object-cover rounded-xl mt-3 border-2 border-black" />
+            <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full h-48 object-cover rounded-xl mt-3 shadow-[0_2px_8px_rgba(0,0,0,0.08)]" />
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
           {selectedMeal.recipe && <p className="text-sm text-gray-500 font-medium mt-1">Receta: {selectedMeal.recipe}</p>}
@@ -174,9 +174,9 @@ export default function MealsPage() {
         {steps.length > 0 && (
           <div className="flex gap-2">
             <button onClick={() => setCookingStep(Math.max(0, cookingStep - 1))} disabled={cookingStep <= 0}
-              className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">Anterior</button>
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl py-3 text-sm transition-all disabled:opacity-30 active:scale-[0.98]">Anterior</button>
             <button onClick={() => cookingStep < steps.length - 1 ? setCookingStep(cookingStep + 1) : null}
-              className="neo-btn-primary flex-1">
+              className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl py-3 text-sm transition-all shadow-[0_2px_8px_rgba(0,110,47,0.2)] active:scale-[0.98]">
               {cookingStep >= steps.length - 1 ? '¡Completado!' : 'Siguiente'}
             </button>
           </div>
@@ -201,7 +201,7 @@ export default function MealsPage() {
           <p className="text-sm text-gray-500 font-medium">{meals.length} comidas planificadas</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' }); }}
-          className="neo-btn-primary !p-3 !rounded-xl">
+          className="bg-primary-600 hover:bg-primary-700 text-white rounded-xl p-3 transition-all shadow-[0_2px_8px_rgba(0,110,47,0.2)] active:scale-95">
           <span className="material-symbols-outlined">add</span>
         </button>
       </div>
@@ -210,7 +210,7 @@ export default function MealsPage() {
         {days.map(d => (
           <button key={d}
             onClick={() => setSelectedDay(d)}
-            className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedDay === d ? 'bg-primary-600 text-white neo-shadow-primary' : 'bg-white dark:bg-gray-300 border-2 border-black dark:text-black'}`}
+            className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedDay === d ? 'bg-primary-600 text-white shadow-[0_2px_6px_rgba(0,110,47,0.25)]' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}
           >
             {d}
           </button>
@@ -221,7 +221,7 @@ export default function MealsPage() {
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
           <p className="text-gray-400 font-bold mt-2">Sin comidas para {selectedDay}</p>
-          <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); generateSuggestion(); }} className="neo-btn-primary !py-2 !px-4 !text-sm mt-3">
+          <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); generateSuggestion(); }} className="bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl py-2 px-4 text-sm transition-all shadow-[0_2px_8px_rgba(0,110,47,0.2)] active:scale-95 mt-3">
             Sugerir comida
           </button>
         </div>
@@ -253,10 +253,10 @@ export default function MealsPage() {
               )}
             </div>
             <div className="flex gap-2 mt-2 pt-2 border-t border-gray-100">
-              <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
+              <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo }); setShowForm(true); }} className="text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg py-1.5 px-3 flex-1 transition-all active:scale-95">
                 <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
               </button>
-              <button onClick={(e) => { e.stopPropagation(); confirmDelete(meal.id); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-red-300 text-red-500">
+              <button onClick={(e) => { e.stopPropagation(); confirmDelete(meal.id); }} className="text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 rounded-lg py-1.5 px-3 flex-1 transition-all active:scale-95">
                 <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Eliminar
               </button>
             </div>
@@ -266,19 +266,19 @@ export default function MealsPage() {
 
       {showForm && (
         <div className="fixed inset-0 bg-black/40 z-[60] flex items-end justify-center" onClick={() => setShowForm(false)}>
-          <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-14 border-t-2 border-black max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-14 max-h-[85vh] overflow-y-auto shadow-[0_-4px_20px_rgba(0,0,0,0.08)]" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-extrabold">{editing ? 'Editar Menú' : 'Nuevo Menú'}</h2>
               <div className="flex gap-1">
-                <button onClick={generateSuggestion} className="text-xs font-bold text-primary-600 neo-btn !py-1 !px-3 !border-primary-300">
+                <button onClick={generateSuggestion} className="text-xs font-bold bg-primary-600 hover:bg-primary-700 text-white rounded-lg py-1.5 px-3 transition-all shadow-[0_2px_6px_rgba(0,110,47,0.2)] active:scale-95">
                   Sugerencia
                 </button>
                 <button type="button" onClick={() => fileInputRef.current?.click()} disabled={ocrLoading}
-                  className="text-xs font-bold neo-btn !py-1 !px-3 !border-secondary-300 text-secondary-600">
+                  className="text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg py-1.5 px-3 transition-all active:scale-95">
                   <span className="material-symbols-outlined text-sm align-text-bottom">{ocrLoading ? 'hourglass_top' : 'photo_camera'}</span> Foto
                 </button>
                 <input ref={fileInputRef} type="file" accept="image/*" capture="environment" onChange={handleOcrPhoto} className="hidden" />
-                {form.photo && <button type="button" onClick={() => setForm(prev => ({ ...prev, photo: '' }))} className="text-xs font-bold neo-btn !py-1 !px-3 !border-red-300 text-red-500">
+                {form.photo && <button type="button" onClick={() => setForm(prev => ({ ...prev, photo: '' }))} className="text-xs font-bold bg-red-50 hover:bg-red-100 text-red-600 rounded-lg py-1.5 px-3 transition-all active:scale-95">
                   <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Foto
                 </button>}
               </div>
@@ -300,8 +300,8 @@ export default function MealsPage() {
               <input className="neo-input" placeholder="Ingredientes (separados por coma)" value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />
               <textarea className="neo-input min-h-[80px]" placeholder="Instrucciones (un paso por línea)" value={form.instructions} onChange={e => setForm({...form, instructions: e.target.value})} />
               <div className="flex gap-2 sticky bottom-0 bg-white pt-2">
-                <button type="submit" className="neo-btn-primary flex-1">{editing ? 'Guardar' : 'Agregar'}</button>
-                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
+                <button type="submit" className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl py-3 text-sm transition-all shadow-[0_2px_8px_rgba(0,110,47,0.2)] active:scale-[0.98]">{editing ? 'Guardar' : 'Agregar'}</button>
+                <button type="button" onClick={() => setShowForm(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl py-3 text-sm transition-all active:scale-[0.98]">Cancelar</button>
               </div>
             </form>
           </div>
@@ -310,7 +310,7 @@ export default function MealsPage() {
 
       {toast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[80] pointer-events-none">
-          <div className="bg-primary-600 text-white font-bold text-sm px-5 py-3 rounded-2xl border-2 border-primary-800 shadow-lg whitespace-nowrap">
+          <div className="bg-primary-600 text-white font-bold text-sm px-5 py-3 rounded-2xl shadow-[0_4px_12px_rgba(0,110,47,0.3)] whitespace-nowrap">
             {toast}
           </div>
         </div>
@@ -322,8 +322,8 @@ export default function MealsPage() {
             <h3 className="font-extrabold text-base text-gray-900 text-center mb-1">Eliminar este menú?</h3>
             <p className="text-sm text-gray-500 text-center mb-5">Esta acción no se puede deshacer.</p>
             <div className="flex gap-2">
-              <button onClick={cancelDelete} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
-              <button onClick={() => handleDelete(confirmDeleteId)} className="neo-btn !bg-red-500 !text-white flex-1">Aceptar</button>
+              <button onClick={cancelDelete} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl py-2.5 text-sm transition-all active:scale-[0.98]">Cancelar</button>
+              <button onClick={() => handleDelete(confirmDeleteId)} className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl py-2.5 text-sm transition-all shadow-[0_2px_6px_rgba(239,68,68,0.3)] active:scale-[0.98]">Aceptar</button>
             </div>
           </div>
         </div>
