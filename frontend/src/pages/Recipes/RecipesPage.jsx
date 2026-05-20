@@ -135,17 +135,6 @@ export default function RecipesPage() {
         const names = items.map(i => i.name).filter(Boolean);
         setPantryItems(names);
         setSelectedIngredients(names);
-        const scored = RECIPE_DB.map(recipe => {
-          const matched = matchIngredients(names, recipe.ingredients);
-          const matchPercent = Math.round((matched.length / recipe.ingredients.length) * 100);
-          return { ...recipe, matched, missing: recipe.ingredients.filter(i => !matched.includes(i)), matchPercent };
-        }).filter(r => r.matchPercent > 0);
-        scored.sort((a, b) => {
-          if (b.matchPercent !== a.matchPercent) return b.matchPercent - a.matchPercent;
-          return b.matched.length - a.matched.length;
-        });
-        setResults(scored);
-        setSearched(true);
       }
     } catch (e) { console.error(e); }
   };
