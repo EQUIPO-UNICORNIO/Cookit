@@ -12,13 +12,14 @@ function AvatarIcon({ user }) {
       const parsed = JSON.parse(avatar);
       if (parsed.emoji) {
         return (
-        <div className="w-8 h-8 rounded-xl flex items-center justify-center text-base shrink-0"
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-base shrink-0"
             style={{ backgroundColor: parsed.bg || '#006e2f' }}>
             {parsed.emoji}
           </div>
         );
-      } catch {}
-      return <img src={avatar} alt="" className="w-8 h-8 rounded-xl object-cover shrink-0" />;
+      }
+    } catch {}
+    return <img src={avatar} alt="" className="w-8 h-8 rounded-xl object-cover shrink-0" />;
   }
   const initials = user.name?.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
   let hash = 0;
