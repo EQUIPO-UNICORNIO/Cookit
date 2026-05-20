@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 
+const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const today = days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
+
 const RECIPE_DB = [
   { id: 'r1', name: 'Pollo al horno con verduras', category: 'comida', time: '50 min', difficulty: 'Fácil', ingredients: ['Pollo', 'Patatas', 'Zanahoria', 'Aceite de oliva', 'Sal', 'Pimienta', 'Ajo'], instructions: '1. Precalienta el horno a 200°C.\n2. Sazona el pollo con sal, pimienta y ajo picado.\n3. Corta las patatas y zanahorias en trozos.\n4. Coloca todo en una bandeja con aceite de oliva.\n5. Hornea durante 45-50 minutos hasta que esté dorado.' },
   { id: 'r2', name: 'Ensalada César', category: 'almuerzo', time: '20 min', difficulty: 'Fácil', ingredients: ['Lechuga', 'Pollo', 'Pan', 'Queso parmesano', 'Aceite de oliva', 'Limón', 'Ajo', 'Mostaza'], instructions: '1. Cocina el pollo a la plancha y corta en tiras.\n2. Corta el pan en cubos y tuéstalos en el horno.\n3. Prepara el aliño con aceite, limón, ajo y mostaza.\n4. Mezcla la lechuga con el pollo y los crutones.\n5. Añade el aliño y queso parmesano rallado.' },
@@ -202,13 +205,13 @@ export default function RecipesPage() {
     try {
       await api.addMeal({
         name: recipe.name,
-        day: '',
+        day: today,
         meal_type: recipe.category,
         recipe: recipe.name,
         ingredients: recipe.ingredients,
         instructions: recipe.instructions,
       });
-      showToast('Receta añadida a tus menús');
+      showToast(`Receta añadida a ${today}`);
     } catch (e) {
       showToast('Error al añadir: ' + e.message);
     }

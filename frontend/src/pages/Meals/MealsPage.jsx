@@ -195,7 +195,7 @@ export default function MealsPage() {
 
   const parseInstructions = (text) => text?.split('\n').filter(l => l.trim()) || [];
 
-  const dayMeals = meals.filter(m => m.day === selectedDay || !m.day);
+  const dayMeals = meals.filter(m => m.day === selectedDay);
 
   if (selectedMeal) {
     const steps = parseInstructions(selectedMeal.instructions);
@@ -288,7 +288,7 @@ export default function MealsPage() {
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
           <p className="text-gray-400 font-bold mt-2">Sin comidas para {selectedDay}</p>
-          <p className="text-gray-300 text-sm mt-1">Las recetas sin día asignado aparecen en todos los días</p>
+          <p className="text-gray-300 text-sm mt-1"></p>
           <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); setTimeout(suggestFromPantry, 100); }} className="neo-btn-primary !py-2 !px-4 !text-sm mt-3">
             Sugerir comida
           </button>
