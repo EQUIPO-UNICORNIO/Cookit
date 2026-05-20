@@ -255,15 +255,19 @@ export default function PantryPage() {
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-3 mb-3">
-        {quickItems.map(name => (
-          <button
-            key={name}
-            onClick={() => quickAdd(name)}
-            className="text-xs font-bold neo-btn !py-1.5 !px-3 !border-primary-300 text-primary-600 whitespace-nowrap"
-          >
-            + {name}
-          </button>
-        ))}
+        {quickItems.map(name => {
+          const cat = autoCategorize(name);
+          const icon = categoryIcons[cat] || 'inventory_2';
+          return (
+            <button
+              key={name}
+              onClick={() => quickAdd(name)}
+              className="text-xs font-bold neo-btn !py-1.5 !px-3 !border-primary-300 text-primary-600 whitespace-nowrap flex items-center gap-1"
+            >
+              <span className="material-symbols-outlined text-sm">{icon}</span> + {name} <span className="text-primary-400 font-normal">· {cat}</span>
+            </button>
+          );
+        })}
       </div>
 
       {showForm && (
@@ -305,7 +309,12 @@ export default function PantryPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-sm truncate">{item.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · Vence: ${item.expiry_date}` : ''}</p>
+                  <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                    <span className="text-xs text-gray-400 font-medium flex items-center gap-0.5">
+                      <span className="material-symbols-outlined text-xs">{categoryIcons[item.category] || 'inventory_2'}</span> {item.category}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · Vence: ${item.expiry_date}` : ''}</span>
+                  </div>
                   {item.expiry_date && isExpiringSoon(item.expiry_date) && (
                     <span className="text-xs font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-lg border border-red-300 inline-flex items-center gap-0.5 mt-0.5">
                       <span className="material-symbols-outlined text-xs">warning</span> ¡Consumir pronto!
