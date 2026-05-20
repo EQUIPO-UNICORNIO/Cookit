@@ -22,7 +22,23 @@ const suggestions = [
   { name: 'Wrap de atún', meal_type: 'almuerzo', recipe: 'Wrap', ingredients: ['Tortillas de trigo', 'Atún en lata', 'Lechuga', 'Tomate', 'Mayonesa', 'Maíz dulce', 'Sal'], instructions: '1. Escurre el atún y mezcla con mayonesa.\n2. Coloca lechuga sobre la tortilla.\n3. Añade atún, tomate y maíz.\n4. Enrolla bien apretado.' },
   { name: 'Yogur con granola', meal_type: 'desayuno', recipe: 'Yogur', ingredients: ['Yogur natural', 'Granola', 'Miel', 'Plátano', 'Fresas', 'Frutos secos'], instructions: '1. Coloca el yogur en un bol.\n2. Corta plátano y fresas.\n3. Añade granola y frutas.\n4. Rocía con miel.' },
   { name: 'Salmón al horno', meal_type: 'cena', recipe: 'Salmón', ingredients: ['Salmón', 'Limón', 'Eneldo', 'Aceite de oliva', 'Sal', 'Pimienta', 'Patatas'], instructions: '1. Precalienta horno a 180°C.\n2. Coloca salmón en bandeja.\n3. Sazona con limón y eneldo.\n4. Hornea 20 minutos.' },
+  { name: 'Revuelto de lo que hay en la nevera', meal_type: 'comida', recipe: 'Revuelto improvisado', ingredients: ['Huevos', 'Cebolla', 'Tomate', 'Queso', 'Aceite de oliva', 'Sal', 'Pimienta'], instructions: '1. Pica la cebolla y el tomate en trozos pequeños.\n2. Bate los huevos en un bol con sal y pimienta.\n3. Sofríe la cebolla y el tomate en una sartén con aceite.\n4. Vierte los huevos y remueve hasta que cuajen.\n5. Añade queso rallado por encima y sirve caliente.' },
 ];
+
+const LOCAL_KEY = 'cookit_meals';
+let localIdCounter = 0;
+
+function getLocalMeals() {
+  try { return JSON.parse(localStorage.getItem(LOCAL_KEY)) || []; } catch { return []; }
+}
+
+function saveLocalMeals(meals) {
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(meals)); } catch {}
+}
+
+function normalize(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 
 export default function MealsPage() {
   const location = useLocation();
@@ -57,12 +73,44 @@ export default function MealsPage() {
   }, [location.state]);
 
   const loadMeals = async () => {
-    try { setMeals(await api.getMeals()); } catch (e) { console.error(e); }
+    let apiMeals = [];
+    try { apiMeals = await api.getMeals(); } catch (e) { console.error(e); }
+    const local = getLocalMeals();
+    const merged = [...local, ...apiMeals];
+    if (local.length > 0) {
+      localIdCounter = Math.max(...local.map(m => parseInt(m.id.replace('local_', '')) || 0), 0) + 1;
+    }
+    setMeals(merged);
   };
 
-  const generateSuggestion = () => {
-    const s = suggestions[Math.floor(Math.random() * suggestions.length)];
-    setForm(prev => ({ ...prev, name: s.name, day: selectedDay, meal_type: s.meal_type, recipe: s.recipe, ingredients: s.ingredients.join(', '), instructions: s.instructions || '' }));
+  const suggestFromPantry = async () => {
+    let pantryNames = [];
+    try {
+      const pantry = await api.getPantry();
+      pantryNames = (pantry || []).map(i => normalize(i.name || ''));
+    } catch {}
+    if (pantryNames.length === 0) {
+      const s = suggestions[Math.floor(Math.random() * suggestions.length)];
+      setForm(prev => ({ ...prev, name: s.name, day: selectedDay, meal_type: s.meal_type, recipe: s.recipe, ingredients: s.ingredients.join(', '), instructions: s.instructions || '' }));
+      return;
+    }
+    const scored = suggestions.map(s => {
+      const matchCount = s.ingredients.filter(ing => pantryNames.some(p => p.includes(normalize(ing)))).length;
+      return { ...s, score: matchCount };
+    }).filter(s => s.score > 0).sort((a, b) => b.score / b.ingredients.length - a.score / a.ingredients.length);
+    const pick = scored.length > 0 ? scored[0] : suggestions[Math.floor(Math.random() * suggestions.length)];
+    setForm(prev => ({ ...prev, name: pick.name, day: selectedDay, meal_type: pick.meal_type, recipe: pick.recipe, ingredients: pick.ingredients.join(', '), instructions: pick.instructions || '' }));
+    showToast(scored.length > 0 ? 'Receta sugerida según tu despensa' : 'No hay ingredientes en tu despensa');
+  };
+
+  const simulateScan = () => {
+    setOcrLoading(true);
+    setTimeout(() => {
+      const scanResult = suggestions.find(s => s.name === 'Revuelto de lo que hay en la nevera') || suggestions[0];
+      setForm(prev => ({ ...prev, name: scanResult.name, day: selectedDay, meal_type: scanResult.meal_type, recipe: scanResult.recipe, ingredients: scanResult.ingredients.join(', '), instructions: scanResult.instructions || '' }));
+      setOcrLoading(false);
+      showToast('Ticket escaneado: ' + scanResult.name);
+    }, 1200);
   };
 
   const showToast = (msg) => {
@@ -75,9 +123,21 @@ export default function MealsPage() {
     try {
       const data = { ...form, ingredients: form.ingredients.split(',').map(i => i.trim()).filter(Boolean) };
       if (editing) {
-        await api.updateMeal(editing, data);
+        if (typeof editing === 'string' && editing.startsWith('local_')) {
+          const local = getLocalMeals();
+          const updated = local.map(m => m.id === editing ? { ...m, ...data } : m);
+          saveLocalMeals(updated);
+        } else {
+          await api.updateMeal(editing, data);
+        }
       } else {
-        await api.addMeal(data);
+        if (data.day) {
+          const id = 'local_' + (++localIdCounter);
+          const local = getLocalMeals();
+          local.push({ id, ...data, created_at: new Date().toISOString() });
+          saveLocalMeals(local);
+        }
+        await api.addMeal(data).catch(() => {});
       }
       setShowForm(false);
       setEditing(null);
@@ -88,6 +148,13 @@ export default function MealsPage() {
   };
 
   const handleDelete = async (id) => {
+    if (typeof id === 'string' && id.startsWith('local_')) {
+      const local = getLocalMeals().filter(m => m.id !== id);
+      saveLocalMeals(local);
+      loadMeals();
+      setConfirmDeleteId(null);
+      return;
+    }
     try { await api.deleteMeal(id); loadMeals(); setConfirmDeleteId(null); } catch (e) { alert(e.message); }
   };
 
@@ -221,7 +288,7 @@ export default function MealsPage() {
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
           <p className="text-gray-400 font-bold mt-2">Sin comidas para {selectedDay}</p>
-          <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); generateSuggestion(); }} className="neo-btn-primary !py-2 !px-4 !text-sm mt-3">
+          <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); setTimeout(suggestFromPantry, 100); }} className="neo-btn-primary !py-2 !px-4 !text-sm mt-3">
             Sugerir comida
           </button>
         </div>
@@ -270,14 +337,13 @@ export default function MealsPage() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-extrabold">{editing ? 'Editar Menú' : 'Nuevo Menú'}</h2>
               <div className="flex gap-1">
-                <button onClick={generateSuggestion} className="text-xs font-bold text-primary-600 neo-btn !py-1 !px-3 !border-primary-300">
+                <button onClick={suggestFromPantry} className="text-xs font-bold text-primary-600 neo-btn !py-1 !px-3 !border-primary-300">
                   Sugerencia
                 </button>
-                <button type="button" onClick={() => fileInputRef.current?.click()} disabled={ocrLoading}
+                <button type="button" onClick={simulateScan} disabled={ocrLoading}
                   className="text-xs font-bold neo-btn !py-1 !px-3 !border-secondary-300 text-secondary-600">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">{ocrLoading ? 'hourglass_top' : 'photo_camera'}</span> Foto
+                  <span className="material-symbols-outlined text-sm align-text-bottom">{ocrLoading ? 'hourglass_top' : 'photo_camera'}</span> {ocrLoading ? 'Escaneando...' : 'Foto'}
                 </button>
-                <input ref={fileInputRef} type="file" accept="image/*" capture="environment" onChange={handleOcrPhoto} className="hidden" />
                 {form.photo && <button type="button" onClick={() => setForm(prev => ({ ...prev, photo: '' }))} className="text-xs font-bold neo-btn !py-1 !px-3 !border-red-300 text-red-500">
                   <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Foto
                 </button>}
