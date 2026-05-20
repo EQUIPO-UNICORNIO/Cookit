@@ -265,7 +265,7 @@ export default function MealsPage() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Mis Menús</h1>
-          <p className="text-sm text-gray-500 font-medium">{meals.length} comidas planificadas</p>
+          <p className="text-sm text-gray-500 font-medium">{dayMeals.length} comida(s) para {selectedDay}</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' }); }}
           className="neo-btn-primary !p-3 !rounded-xl">
