@@ -53,7 +53,7 @@ export default function Layout() {
             </Link>
           </div>
         </header>
-        <main className="flex-1 pb-24 md:pb-6 max-w-5xl w-full mx-auto px-4 pt-4 border-t-2 border-black">
+        <main className="flex-1 pb-24 md:pb-6 max-w-5xl w-full mx-auto px-4 pt-4">
           <Outlet />
         </main>
       </div>
