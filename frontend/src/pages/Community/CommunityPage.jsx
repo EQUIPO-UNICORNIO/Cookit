@@ -259,7 +259,7 @@ export default function CommunityPage() {
 
             {normalizeIngredients(post.ingredients).length > 0 && (
               <div className="mb-2">
-                <p className="text-xs font-bold text-gray-600 uppercase mb-1">Ingredientes</p>
+                <p className="text-xs font-bold text-gray-600 dark:text-gray-200 uppercase mb-1">Ingredientes</p>
                 <div className="flex flex-wrap gap-1.5">
                   {normalizeIngredients(post.ingredients).map((ing, i) => (
                     <span key={i} className="text-xs bg-white dark:bg-gray-700 border border-black rounded-md px-2.5 py-1 font-medium">{ing}</span>
@@ -270,8 +270,8 @@ export default function CommunityPage() {
 
             {post.instructions && (
               <div className="mb-3">
-                <p className="text-xs font-bold text-gray-600 uppercase mb-1">Instrucciones</p>
-                <p className="text-xs text-gray-600 whitespace-pre-line">{post.instructions}</p>
+                <p className="text-xs font-bold text-gray-600 dark:text-gray-200 uppercase mb-1">Instrucciones</p>
+                <p className="text-xs text-gray-600 dark:text-gray-200 whitespace-pre-line">{post.instructions}</p>
               </div>
             )}
 
@@ -297,7 +297,7 @@ export default function CommunityPage() {
                     <AvatarDisplay avatar={c.user_avatar} name={c.user_name} size="sm" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold">{c.user_name}</p>
-                      <p className="text-xs text-gray-600">{c.content}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-200">{c.content}</p>
                     </div>
                   </div>
                 ))}
@@ -401,7 +401,7 @@ export default function CommunityPage() {
             {viewingPost.instructions && (
               <div className="mb-4">
                 <p className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Instrucciones</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-line leading-relaxed">{viewingPost.instructions}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200 whitespace-pre-line leading-relaxed">{viewingPost.instructions}</p>
               </div>
             )}
           </div>

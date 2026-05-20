@@ -454,7 +454,7 @@ export default function RecipesPage() {
                 {selectedIngredients.length} ingredientes seleccionados
               </p>
               <div className="flex gap-1">
-                <button onClick={() => setShowIngredientPicker(true)} className="text-xs font-bold neo-btn !py-1 !px-2 !border-primary-300 text-primary-600">
+                <button onClick={() => setShowIngredientPicker(true)} className="text-xs font-bold neo-btn !py-1 !px-2 !border-primary-300 text-primary-600 dark:text-white">
                   <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
                 </button>
                 <button onClick={clearAll} className="text-xs font-bold neo-btn !py-1 !px-2 !border-red-300 text-red-500">
@@ -537,10 +537,10 @@ export default function RecipesPage() {
                 </div>
 
                 <div className="flex gap-2 mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
-                  <button onClick={(e) => { e.stopPropagation(); setSelectedRecipe(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1">
+                  <button onClick={(e) => { e.stopPropagation(); setSelectedRecipe(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 dark:text-white">
                     <span className="material-symbols-outlined text-sm align-text-bottom">visibility</span> Ver receta
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600">
+                  <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600 dark:text-white">
                     <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> Añadir a menús
                   </button>
                 </div>
