@@ -82,10 +82,12 @@ router.post('/:id/comments', async (req, res) => {
     if (!content) return res.status(400).json({ error: 'Contenido requerido' });
     const { data: post } = await supabase.from('community_posts').select('id').eq('id', req.params.id).maybeSingle();
     if (!post) return res.status(404).json({ error: 'Post no encontrado' });
-    const comment = await create('post_comments', {
-      post_id: parseInt(req.params.id), user_id: req.userId, content
-    });
-    res.status(201).json(comment);
+    const { data: inserted, error } = await supabase
+      .from('post_comments')
+      .insert({ post_id: parseInt(req.params.id), user_id: req.userId, content })
+      .select('id, content, created_at');
+    if (error) throw new Error(error.message);
+    res.status(201).json(inserted[0]);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 

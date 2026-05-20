@@ -124,7 +124,7 @@ export default function CommunityPage() {
           : p
       ));
       setCommentText(prev => ({ ...prev, [postId]: '' }));
-    } catch (e) { showToast('Error al comentar'); }
+    } catch (e) { showToast('Error: ' + e.message); }
   };
 
   const handleSave = async (id) => {
