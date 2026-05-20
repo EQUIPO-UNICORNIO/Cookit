@@ -381,6 +381,11 @@ export default function MealsPage() {
               <input className="neo-input" placeholder="Nombre de receta" value={form.recipe} onChange={e => setForm({...form, recipe: e.target.value})} />
               <input className="neo-input" placeholder="Ingredientes (separados por coma)" value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />
               <textarea className="neo-input min-h-[80px]" placeholder="Instrucciones (un paso por línea)" value={form.instructions} onChange={e => setForm({...form, instructions: e.target.value})} />
+              {form.instructions && estimateTime(form.instructions) && (
+                <p className="text-xs text-gray-400 font-medium flex items-center gap-1 mt-1">
+                  <span className="material-symbols-outlined text-sm">schedule</span> Tiempo estimado: {estimateTime(form.instructions)} min
+                </p>
+              )}
               <div className="flex gap-2 sticky bottom-0 bg-white pt-2">
                 <button type="submit" className="neo-btn-primary flex-1">{editing ? 'Guardar' : 'Agregar'}</button>
                 <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
