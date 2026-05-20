@@ -360,10 +360,6 @@ export default function MealsPage() {
                   <span className="material-symbols-outlined text-sm align-text-bottom">add_photo_alternate</span> Subir foto
                 </button>
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleOcrPhoto} className="hidden" />
-                <button type="button" onClick={simulateScan} disabled={ocrLoading}
-                  className="text-xs font-bold neo-btn !py-1 !px-3 !border-secondary-300 text-secondary-600">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">{ocrLoading ? 'hourglass_top' : 'photo_camera'}</span> {ocrLoading ? 'Escaneando...' : 'Escanear'}
-                </button>
                 {form.photo && <button type="button" onClick={() => setForm(prev => ({ ...prev, photo: '' }))} className="text-xs font-bold neo-btn !py-1 !px-3 !border-red-300 text-red-500">
                   <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Foto
                 </button>}
