@@ -223,7 +223,7 @@ export default function MealsPage() {
             {selectedMeal.meal_type}
           </span>
           {selectedMeal.photo && (
-            <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full max-h-28 object-contain bg-gray-100 rounded-xl mt-3 border-2 border-black cursor-pointer" onClick={() => setFullPhoto(selectedMeal.photo)} />
+            <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full max-h-28 object-contain rounded-xl mt-3 border-2 border-black cursor-pointer" onClick={() => setFullPhoto(selectedMeal.photo)} />
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
           <div className="flex items-center gap-3 mt-1">

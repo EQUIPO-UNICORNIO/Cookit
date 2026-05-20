@@ -219,7 +219,7 @@ export default function CommunityPage() {
             <p className="text-sm font-medium mb-2">{post.content}</p>
 
             {post.photo && (
-              <img src={post.photo} alt={post.content} className="w-full max-h-32 object-contain bg-gray-100 dark:bg-gray-700 rounded-xl mb-3 border border-gray-200" />
+              <img src={post.photo} alt={post.content} className="w-full max-h-32 object-contain rounded-xl mb-3 border border-gray-200" />
             )}
 
             {normalizeIngredients(post.ingredients).length > 0 && (
@@ -313,7 +313,7 @@ export default function CommunityPage() {
             </div>
             <p className="text-base font-bold mb-3">{viewingPost.content}</p>
             {viewingPost.photo && (
-              <img src={viewingPost.photo} alt={viewingPost.content} className="w-full max-h-48 object-contain bg-gray-100 dark:bg-gray-700 rounded-xl mb-4 border border-gray-200" />
+              <img src={viewingPost.photo} alt={viewingPost.content} className="w-full max-h-48 object-contain rounded-xl mb-4 border border-gray-200" />
             )}
             {normalizeIngredients(viewingPost.ingredients).length > 0 && (
               <div className="mb-4">
