@@ -30,21 +30,19 @@ body {
 
 @layer components {
   .neo-shadow {
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.12);
+    box-shadow: none;
   }
   .neo-shadow-primary {
-    box-shadow: 3px 3px 0px rgba(0,77,34,0.2);
+    box-shadow: none;
   }
   .neo-shadow-secondary {
-    box-shadow: 3px 3px 0px rgba(107,46,0,0.2);
+    box-shadow: none;
   }
   .neo-btn {
     @apply font-bold rounded-full border-2 border-black px-6 py-3 transition-all duration-200;
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.12);
   }
   .neo-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0px rgba(0,0,0,0.12);
+    transform: translate(1px, 1px);
   }
   .neo-btn-primary {
     @apply neo-btn bg-primary-600 text-white border-black;
@@ -55,7 +53,6 @@ body {
   .neo-card {
     background: var(--card);
     @apply rounded-2xl border-2 border-black p-4;
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.12);
   }
   .dark .neo-card {
     border-color: var(--border);

@@ -91,7 +91,7 @@ export default function AccessPage() {
     return `w-full rounded-xl border-2 bg-white dark:bg-gray-700 pl-10 ${hasToggle ? 'pr-10' : 'pr-4'} py-3 text-sm font-medium text-gray-900 dark:text-white placeholder-gray-400 transition-all ${
       err
         ? 'border-red-400 dark:border-red-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-        : 'border-black dark:border-gray-600 neo-shadow focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
+        : 'border-black dark:border-gray-600 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
     }`;
   };
 
@@ -178,7 +178,7 @@ export default function AccessPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl py-3 text-base transition-all border-2 border-black neo-shadow disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2"
+              className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl py-3 text-base transition-all border-2 border-black disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2"
             >
               {loading ? <Spinner /> : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')}
             </button>

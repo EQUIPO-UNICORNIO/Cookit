@@ -82,7 +82,7 @@ export default function ShoppingPage() {
         {['all', 'pending', 'done'].map(f => (
           <button key={f}
             onClick={() => setFilter(f)}
-            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${filter === f ? 'bg-white neo-shadow text-primary-600' : 'text-gray-500'}`}
+            className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${filter === f ? 'bg-white text-primary-600' : 'text-gray-500'}`}
           >
             {f === 'all' ? 'Todas' : f === 'pending' ? 'Pendientes' : 'Completadas'}
           </button>
