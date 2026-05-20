@@ -212,17 +212,17 @@ export default function CommunityPage() {
               </div>
             )}
 
-            <div className="flex items-center gap-4 mb-2">
-              <button onClick={e => { e.stopPropagation(); handleLike(post.id); }} className={`flex items-center gap-1 text-sm font-bold transition-colors ${post.liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}>
-                <span className="material-symbols-outlined text-base">{post.liked ? 'favorite' : 'favorite_border'}</span> {post.likes}
+            <div className="flex items-center gap-2 mb-2">
+              <button onClick={e => { e.stopPropagation(); handleLike(post.id); }} className={`neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 ${post.liked ? '!bg-red-50 !text-red-600 !border-red-300' : '!bg-gray-50 !text-gray-500 !border-gray-300'}`}>
+                <span className="material-symbols-outlined text-sm">{post.liked ? 'favorite' : 'favorite_border'}</span> {post.likes}
               </button>
-              <button onClick={e => { e.stopPropagation(); setExpandedComments(prev => ({ ...prev, [post.id]: !prev[post.id] })); }} className="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">
-                <span className="material-symbols-outlined text-base">chat_bubble_outline</span> {post.comments?.length || 0}
+              <button onClick={e => { e.stopPropagation(); setExpandedComments(prev => ({ ...prev, [post.id]: !prev[post.id] })); }} className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-gray-50 !text-gray-500 !border-gray-300">
+                <span className="material-symbols-outlined text-sm">chat_bubble_outline</span> {post.comments?.length || 0}
               </button>
               {user && post.user_name !== user.name && (
                 <button onClick={e => { e.stopPropagation(); handleSave(post.id); }} disabled={saving[post.id]}
-                  className="flex items-center gap-1 text-sm font-bold text-primary-600 hover:text-primary-800 transition-colors ml-auto disabled:opacity-30">
-                  <span className="material-symbols-outlined text-base">bookmark_add</span> {saving[post.id] ? 'Guardando...' : 'Guardar'}
+                  className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-primary-50 !text-primary-600 !border-primary-300 ml-auto disabled:opacity-30">
+                  <span className="material-symbols-outlined text-sm">bookmark_add</span> {saving[post.id] ? 'Guardando...' : 'Guardar'}
                 </button>
               )}
             </div>
