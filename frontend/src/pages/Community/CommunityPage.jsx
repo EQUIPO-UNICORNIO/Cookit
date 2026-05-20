@@ -102,17 +102,29 @@ export default function CommunityPage() {
   };
 
   const handleLike = async (id) => {
-    try { await api.likePost(id); loadPosts(); } catch (e) { console.error(e); }
+    try {
+      const res = await api.likePost(id);
+      setPosts(prev => prev.map(p =>
+        p.id === id
+          ? { ...p, liked: res.liked, likes: p.likes + (res.liked ? 1 : -1) }
+          : p
+      ));
+    } catch (e) { showToast('Error al dar like'); }
   };
 
   const handleComment = async (postId) => {
     const text = commentText[postId]?.trim();
     if (!text) return;
     try {
-      await api.addComment(postId, text);
+      const comment = await api.addComment(postId, text);
+      const enriched = { ...comment, user_name: user?.name || '', user_avatar: user?.avatar || '' };
+      setPosts(prev => prev.map(p =>
+        p.id === postId
+          ? { ...p, comments: [...(p.comments || []), enriched] }
+          : p
+      ));
       setCommentText(prev => ({ ...prev, [postId]: '' }));
-      loadPosts();
-    } catch (e) { console.error(e); }
+    } catch (e) { showToast('Error al comentar'); }
   };
 
   const handleSave = async (id) => {
