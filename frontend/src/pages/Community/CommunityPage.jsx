@@ -73,6 +73,12 @@ export default function CommunityPage() {
   const [toast, setToast] = useState(null);
   const [viewingPost, setViewingPost] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [editingPost, setEditingPost] = useState(null);
+  const [editContent, setEditContent] = useState('');
+  const [editPhoto, setEditPhoto] = useState('');
+  const [editIngredients, setEditIngredients] = useState('');
+  const [editInstructions, setEditInstructions] = useState('');
+  const editPhotoInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
 
@@ -152,6 +158,30 @@ export default function CommunityPage() {
     setSaving(prev => ({ ...prev, [id]: false }));
   };
 
+  const openEdit = (post) => {
+    setEditingPost(post);
+    setEditContent(post.content);
+    setEditPhoto(post.photo || '');
+    setEditIngredients((post.ingredients || []).join(', '));
+    setEditInstructions(post.instructions || '');
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    if (!editingPost) return;
+    try {
+      await api.updatePost(editingPost.id, {
+        content: editContent,
+        photo: editPhoto,
+        ingredients: editIngredients.split(',').map(i => i.trim()).filter(Boolean),
+        instructions: editInstructions
+      });
+      setEditingPost(null);
+      loadPosts();
+      showToast('Publicación editada');
+    } catch (e) { showToast('Error al editar'); }
+  };
+
   const handleDelete = async (id) => {
     try { await api.deletePost(id); loadPosts(); setDeleteConfirm(null); } catch (e) { showToast('Error al eliminar'); setDeleteConfirm(null); }
   };
@@ -210,9 +240,14 @@ export default function CommunityPage() {
                 <p className="text-xs text-gray-400">{new Date(post.created_at).toLocaleString('es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
               </div>
               {user && post.user_name === user.name && (
-                <button onClick={e => { e.stopPropagation(); setDeleteConfirm(post.id); }} className="p-1 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
-                  <span className="material-symbols-outlined text-sm">delete</span>
-                </button>
+                <>
+                  <button onClick={e => { e.stopPropagation(); openEdit(post); }} className="p-1 rounded-lg hover:bg-primary-50 text-primary-500 flex-shrink-0">
+                    <span className="material-symbols-outlined text-sm">edit</span>
+                  </button>
+                  <button onClick={e => { e.stopPropagation(); setDeleteConfirm(post.id); }} className="p-1 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
+                    <span className="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </>
               )}
             </div>
 
@@ -285,6 +320,44 @@ export default function CommunityPage() {
         ))}
       </div>
 
+      {editingPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={() => setEditingPost(null)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-extrabold">Editar publicación</h2>
+              <button onClick={() => setEditingPost(null)} className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400">
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleEditSubmit} className="space-y-3">
+              <textarea className="neo-input min-h-[80px]" value={editContent} onChange={e => setEditContent(e.target.value)} required />
+              <input className="neo-input text-xs" placeholder="Ingredientes (separados por coma)" value={editIngredients} onChange={e => setEditIngredients(e.target.value)} />
+              <div className="flex gap-2">
+                <button type="button" onClick={() => editPhotoInputRef.current?.click()} className="neo-btn !py-1.5 !px-3 !text-xs">
+                  <span className="material-symbols-outlined text-sm align-text-bottom">add_photo_alternate</span> {editPhoto ? 'Cambiar foto' : 'Añadir foto'}
+                </button>
+                {editPhoto && <button type="button" onClick={() => setEditPhoto('')} className="neo-btn !py-1.5 !px-3 !text-xs !border-red-300 text-red-500">
+                  <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Quitar foto
+                </button>}
+                <input ref={editPhotoInputRef} type="file" accept="image/*" onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const reader = new FileReader();
+                  reader.onload = () => setEditPhoto(reader.result);
+                  reader.readAsDataURL(file);
+                }} className="hidden" />
+              </div>
+              {editPhoto && <img src={editPhoto} alt="Preview" className="w-full h-20 object-cover rounded-xl border-2 border-primary-300" />}
+              <textarea className="neo-input min-h-[60px]" placeholder="Instrucciones" value={editInstructions} onChange={e => setEditInstructions(e.target.value)} />
+              <div className="flex gap-2">
+                <button type="submit" className="neo-btn-primary flex-1">Guardar</button>
+                <button type="button" onClick={() => setEditingPost(null)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {deleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={() => setDeleteConfirm(null)}>
           <div className="absolute inset-0 bg-black/40" />

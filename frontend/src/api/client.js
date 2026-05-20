@@ -49,6 +49,7 @@ export const api = {
   likePost: (id) => request(`/community/${id}/like`, { method: 'POST' }),
   addComment: (postId, content) => request(`/community/${postId}/comments`, { method: 'POST', body: JSON.stringify({ content }) }),
   savePost: (id) => request(`/community/${id}/save`, { method: 'POST' }),
+  updatePost: (id, data) => request(`/community/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deletePost: (id) => request(`/community/${id}`, { method: 'DELETE' }),
 
   // Impact

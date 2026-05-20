@@ -111,6 +111,22 @@ router.post('/:id/save', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const { content, photo, ingredients, instructions } = req.body;
+    if (!content) return res.status(400).json({ error: 'Contenido requerido' });
+    const { data: post } = await supabase.from('community_posts').select('id, user_id').eq('id', req.params.id).maybeSingle();
+    if (!post) return res.status(404).json({ error: 'Post no encontrado' });
+    if (post.user_id !== req.userId) return res.status(403).json({ error: 'No autorizado' });
+    await updateById('community_posts', req.params.id, {
+      content, photo: photo || '',
+      ingredients: JSON.stringify(ingredients || []),
+      instructions: instructions || ''
+    }, req.userId);
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
     await supabase.from('post_likes').delete().eq('post_id', req.params.id);
