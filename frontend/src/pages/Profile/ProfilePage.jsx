@@ -136,6 +136,12 @@ export default function ProfilePage() {
           </div>
         </button>
       </div>
+
+      <div className="text-center mt-6 space-x-3">
+        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Política de Privacidad</a>
+        <span className="text-xs text-gray-300">·</span>
+        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Términos de Servicio</a>
+      </div>
     </div>
   );
 }
