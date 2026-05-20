@@ -179,7 +179,7 @@ export default function CommunityPage() {
       setEditingPost(null);
       loadPosts();
       showToast('Publicación editada');
-    } catch (e) { showToast('Error al editar'); }
+    } catch (e) { showToast('Error: ' + e.message); }
   };
 
   const handleDelete = async (id) => {

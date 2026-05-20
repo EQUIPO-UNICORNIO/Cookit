@@ -117,12 +117,13 @@ router.put('/:id', async (req, res) => {
     if (!content) return res.status(400).json({ error: 'Contenido requerido' });
     const { data: post } = await supabase.from('community_posts').select('id, user_id').eq('id', req.params.id).maybeSingle();
     if (!post) return res.status(404).json({ error: 'Post no encontrado' });
-    if (post.user_id !== req.userId) return res.status(403).json({ error: 'No autorizado' });
-    await updateById('community_posts', req.params.id, {
+    if (Number(post.user_id) !== Number(req.userId)) return res.status(403).json({ error: 'No autorizado' });
+    const { error } = await supabase.from('community_posts').update({
       content, photo: photo || '',
       ingredients: JSON.stringify(ingredients || []),
       instructions: instructions || ''
-    }, req.userId);
+    }).eq('id', req.params.id).eq('user_id', req.userId);
+    if (error) throw new Error(error.message);
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
