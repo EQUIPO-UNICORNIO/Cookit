@@ -51,6 +51,11 @@ function isExpiringSoon(expiryDate) {
   return days !== null && days >= 0 && days <= 3;
 }
 
+function isExpired(expiryDate) {
+  const days = daysUntilExpiry(expiryDate);
+  return days !== null && days < 0;
+}
+
 export default function PantryPage() {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -315,7 +320,12 @@ export default function PantryPage() {
                     </span>
                     <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · Vence: ${item.expiry_date}` : ''}</span>
                   </div>
-                  {item.expiry_date && isExpiringSoon(item.expiry_date) && (
+                  {item.expiry_date && isExpired(item.expiry_date) && (
+                    <span className="text-xs font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-lg border border-gray-400 inline-flex items-center gap-0.5 mt-0.5 line-through">
+                      <span className="material-symbols-outlined text-xs">block</span> ¡Producto caducado!
+                    </span>
+                  )}
+                  {item.expiry_date && !isExpired(item.expiry_date) && isExpiringSoon(item.expiry_date) && (
                     <span className="text-xs font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-lg border border-red-300 inline-flex items-center gap-0.5 mt-0.5">
                       <span className="material-symbols-outlined text-xs">warning</span> ¡Consumir pronto!
                     </span>
