@@ -108,7 +108,7 @@ export default function ProfilePage() {
               <span className="material-symbols-outlined text-primary-600">{dark ? 'dark_mode' : 'light_mode'}</span>
             </div>
             <div>
-              <p className="font-bold text-sm">{dark ? 'Modo Oscuro' : 'Modo Claro'}</p>
+              <p className="font-bold text-sm">{dark ? 'Modo Claro' : 'Modo Oscuro'}</p>
               <p className="text-xs text-gray-500">Toca para cambiar</p>
             </div>
           </div>
