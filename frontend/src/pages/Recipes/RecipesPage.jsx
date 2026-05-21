@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 
 const RECIPE_DB = [
@@ -63,7 +62,6 @@ const matchIngredients = (haveList, recipeIngredients) => {
 };
 
 export default function RecipesPage() {
-  const navigate = useNavigate();
   const [pantryItems, setPantryItems] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [customIngredient, setCustomIngredient] = useState('');
@@ -244,14 +242,9 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <button onClick={() => addToMealPlan(selectedRecipe)} className="neo-btn-primary flex-1">
-            <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> Añadir a menús
-          </button>
-          <button onClick={() => { navigate('/cooking'); }} className="neo-btn !bg-secondary-50 !text-secondary-600 !border-secondary-300 flex-1">
-            <span className="material-symbols-outlined text-sm align-text-bottom">chef</span> Modo cocina
-          </button>
-        </div>
+        <button onClick={() => addToMealPlan(selectedRecipe)} className="neo-btn-primary w-full">
+          <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> Añadir a menús
+        </button>
 
         {selectedRecipe.videoUrl && (
           <button onClick={() => setShowVideoModal(selectedRecipe.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2">
