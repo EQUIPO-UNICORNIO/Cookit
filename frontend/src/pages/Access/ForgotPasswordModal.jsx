@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 export default function ForgotPasswordModal({ onClose }) {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
@@ -17,7 +19,7 @@ export default function ForgotPasswordModal({ onClose }) {
     e.preventDefault();
     setError('');
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Introduce un correo válido');
+      setError(t('access.validEmail'));
       return;
     }
     setLoading(true);
@@ -28,7 +30,7 @@ export default function ForgotPasswordModal({ onClose }) {
       if (supaError) throw supaError;
       setSent(true);
     } catch (err) {
-      setError(err.message || 'Error al enviar el correo');
+      setError(err.message || t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -41,28 +43,28 @@ export default function ForgotPasswordModal({ onClose }) {
         {sent ? (
           <div className="text-center py-4">
             <span className="material-symbols-outlined text-5xl text-primary-600 mb-3">mark_email_read</span>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Correo enviado</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('access.emailSent')}</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Te hemos enviado un correo. Revisa tu bandeja de entrada para cambiar tu contraseña.
+              {t('access.emailSentDesc')}
             </p>
             <button
               onClick={onClose}
               className="mt-5 text-sm text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
             >
-              Volver al inicio de sesión
+              {t('access.backToLogin')}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Recuperar contraseña</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{t('access.recoverPassword')}</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
-              Te enviaremos un enlace para restablecer tu contraseña.
+              {t('access.recoverSubtitle')}
             </p>
             <div className="relative mb-4">
               <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none">mail</span>
               <input
                 type="email"
-                placeholder="Tu correo electrónico"
+                placeholder={t('access.yourEmail')}
                 value={email}
                 onChange={e => { setEmail(e.target.value); setError(''); }}
                 className={`w-full rounded-xl border bg-white dark:bg-gray-700 pl-10 pr-4 py-3 text-sm font-medium text-gray-900 dark:text-white placeholder-gray-400 transition-all ${
@@ -81,14 +83,14 @@ export default function ForgotPasswordModal({ onClose }) {
             >
               {loading ? (
                 <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : 'Enviar enlace de recuperación'}
+              ) : t('access.sendRecoveryLink')}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="w-full mt-3 text-sm text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
             >
-              Volver al inicio de sesión
+              {t('access.backToLogin')}
             </button>
           </form>
         )}

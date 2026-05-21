@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import ForgotPasswordModal from './ForgotPasswordModal';
+import { useTranslation } from 'react-i18next';
 
 function Toast({ message, onClose }) {
   useEffect(() => {
@@ -39,21 +40,22 @@ export default function AccessPage() {
   const [toast, setToast] = useState(null);
   const { login, register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const validate = () => {
     const errors = {};
     if (!email.trim()) {
-      errors.email = 'El correo es requerido';
+      errors.email = t('access.emailRequired');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = 'Correo no válido';
+      errors.email = t('access.emailInvalid');
     }
     if (!password) {
-      errors.password = 'La contraseña es requerida';
+      errors.password = t('access.passwordRequired');
     } else if (password.length < 6) {
-      errors.password = 'Mínimo 6 caracteres';
+      errors.password = t('access.passwordMin');
     }
     if (!isLogin && !name.trim()) {
-      errors.name = 'El nombre es requerido';
+      errors.name = t('access.nameRequired');
     }
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -106,8 +108,8 @@ export default function AccessPage() {
             <span className="material-symbols-outlined text-4xl text-white">restaurant</span>
           </div>
           <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white">CookIt</h1>
-          <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">Bienvenido de nuevo</p>
-          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Inicia sesión para continuar</p>
+          <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">{t('access.welcome')}</p>
+          <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{t('access.loginToContinue')}</p>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)]">
@@ -116,13 +118,13 @@ export default function AccessPage() {
               onClick={() => setIsLogin(true)}
               className={`flex-1 py-2.5 rounded-lg font-bold text-sm transition-all ${isLogin ? 'bg-white dark:bg-gray-600 shadow-sm text-primary-600' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'}`}
             >
-              Iniciar Sesión
+              {t('access.login')}
             </button>
             <button
               onClick={() => setIsLogin(false)}
               className={`flex-1 py-2.5 rounded-lg font-bold text-sm transition-all ${!isLogin ? 'bg-white dark:bg-gray-600 shadow-sm text-primary-600' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'}`}
             >
-              Crear Cuenta
+              {t('access.register')}
             </button>
           </div>
 
@@ -133,7 +135,7 @@ export default function AccessPage() {
                   <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none">person</span>
                   <input
                     type="text"
-                    placeholder="Nombre completo"
+                    placeholder={t('access.fullName')}
                     value={name}
                     onChange={e => { setName(e.target.value); clearError('name'); }}
                     className={inputClass('name')}
@@ -147,7 +149,7 @@ export default function AccessPage() {
                 <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none">mail</span>
                 <input
                   type="email"
-                  placeholder="Correo electrónico"
+                  placeholder={t('access.email')}
                   value={email}
                   onChange={e => { setEmail(e.target.value); clearError('email'); }}
                   className={inputClass('email')}
@@ -160,7 +162,7 @@ export default function AccessPage() {
                 <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none">lock</span>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Contraseña"
+                  placeholder={t('access.password')}
                   value={password}
                   onChange={e => { setPassword(e.target.value); clearError('password'); }}
                   className={inputClass('password', true)}
@@ -172,7 +174,7 @@ export default function AccessPage() {
               {fieldErrors.password && <p className="text-red-500 text-xs mt-1 ml-1">{fieldErrors.password}</p>}
               <div className="flex justify-end mt-1">
                 <button type="button" onClick={() => setShowForgotPassword(true)} className="text-xs text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors">
-                  ¿Olvidaste tu contraseña?
+                  {t('access.forgotPassword')}
                 </button>
               </div>
             </div>
@@ -182,7 +184,7 @@ export default function AccessPage() {
               disabled={loading}
               className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl py-3 text-base transition-all border-2 border-black disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              {loading ? <Spinner /> : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')}
+              {loading ? <Spinner /> : (isLogin ? t('access.login') : t('access.register'))}
             </button>
           </form>
         </div>
@@ -199,12 +201,12 @@ export default function AccessPage() {
             }}
             className="text-xs text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
           >
-            Acceso Desarrollador
+            {t('access.developerAccess')}
           </button>
         </div>
 
         <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4">
-          Al continuar, aceptas nuestros términos y condiciones
+          {t('access.termsAccept')}
         </p>
       </div>
     </div>

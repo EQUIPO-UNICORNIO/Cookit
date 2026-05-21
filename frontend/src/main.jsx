@@ -5,6 +5,7 @@ import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import './i18n/i18n';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

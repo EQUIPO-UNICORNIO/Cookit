@@ -3,6 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
+import { setLanguage } from '../../i18n/i18n';
 
 const builtInAvatars = [
   { emoji: '👨‍🍳', bg: '#006e2f', name: 'Chef' },
@@ -22,6 +24,7 @@ const builtInAvatars = [
 export default function ProfilePage() {
   const { user, logout, refreshUser } = useAuth();
   const { dark, toggle } = useTheme();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const currentAvatar = user?.avatar || '';
   const [builtIn, setBuiltIn] = useState(currentAvatar);
@@ -54,9 +57,13 @@ export default function ProfilePage() {
     navigate('/access');
   };
 
+  const handleLangChange = (lng) => {
+    setLanguage(lng);
+  };
+
   return (
     <div>
-      <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6">Mi Perfil</h1>
+      <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6">{t('profile.title')}</h1>
 
       <div className="neo-card text-center p-6 mb-4">
         <div className="relative inline-block">
@@ -80,7 +87,7 @@ export default function ProfilePage() {
         <h2 className="text-xl font-extrabold mt-3">{user?.name || 'Usuario'}</h2>
         <p className="text-sm text-gray-500 font-medium">{user?.email || ''}</p>
 
-        <p className="text-xs font-bold text-gray-500 mt-4 mb-2">Elige tu avatar</p>
+        <p className="text-xs font-bold text-gray-500 mt-4 mb-2">{t('profile.chooseAvatar')}</p>
         <div className="flex flex-wrap justify-center gap-2 mb-3">
           {builtInAvatars.map(av => (
             <button
@@ -97,7 +104,7 @@ export default function ProfilePage() {
           ))}
         </div>
         <button onClick={() => { setBuiltIn(''); saveAvatar(''); }} className="text-xs font-medium text-gray-400 hover:text-red-500">
-          Quitar avatar
+          {t('profile.removeAvatar')}
         </button>
       </div>
 
@@ -108,9 +115,24 @@ export default function ProfilePage() {
               <span className="material-symbols-outlined text-primary-600">{dark ? 'light_mode' : 'dark_mode'}</span>
             </div>
             <div>
-              <p className="font-bold text-sm">{dark ? 'Modo Claro' : 'Modo Oscuro'}</p>
-              <p className="text-xs text-gray-500">Toca para cambiar</p>
+              <p className="font-bold text-sm">{dark ? t('profile.lightMode') : t('profile.darkMode')}</p>
+              <p className="text-xs text-gray-500">{t('profile.tapToChange')}</p>
             </div>
+          </div>
+        </div>
+
+        <div className="neo-card !p-4 cursor-pointer" onClick={() => handleLangChange(i18n.language === 'es' ? 'en' : 'es')}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center border-2 border-black">
+              <span className="material-symbols-outlined text-primary-600">language</span>
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-sm">{t('profile.language')}</p>
+              <p className="text-xs text-gray-500">{i18n.language === 'es' ? t('profile.spanish') : t('profile.english')}</p>
+            </div>
+            <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-1 rounded-lg border border-primary-200">
+              {i18n.language === 'es' ? 'ES' : 'EN'}
+            </span>
           </div>
         </div>
 
@@ -131,16 +153,16 @@ export default function ProfilePage() {
             <span className="material-symbols-outlined text-red-500">logout</span>
           </div>
           <div>
-            <p className="font-bold text-sm text-red-600">Cerrar sesión</p>
+            <p className="font-bold text-sm text-red-600">{t('profile.logout')}</p>
             <p className="text-xs text-gray-500">{user?.email || ''}</p>
           </div>
         </button>
       </div>
 
       <div className="text-center mt-6 space-x-3">
-        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Política de Privacidad</a>
+        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">{t('profile.privacyPolicy')}</a>
         <span className="text-xs text-gray-300">·</span>
-        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Términos de Servicio</a>
+        <a href="#" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">{t('profile.termsOfService')}</a>
       </div>
     </div>
   );

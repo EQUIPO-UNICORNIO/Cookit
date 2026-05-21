@@ -1,8 +1,10 @@
-export const navItems = [
-  { path: '/meals', icon: 'today', label: 'Men\u00fas' },
-  { path: '/recipes', icon: 'restaurant_menu', label: 'Recetas' },
-  { path: '/pantry', icon: 'kitchen', label: 'Despensa' },
-  { path: '/scanner', icon: 'document_scanner', label: 'Escaner' },
-  { path: '/community', icon: 'forum', label: 'Comunidad' },
-  { path: '/profile', icon: 'account_circle', label: 'Perfil' },
+import i18n from '../i18n/i18n';
+
+export const getNavItems = () => [
+  { path: '/meals', icon: 'today', label: i18n.t('nav.meals') },
+  { path: '/recipes', icon: 'restaurant_menu', label: i18n.t('nav.recipes') },
+  { path: '/pantry', icon: 'kitchen', label: i18n.t('nav.pantry') },
+  { path: '/scanner', icon: 'document_scanner', label: i18n.t('nav.scanner') },
+  { path: '/community', icon: 'forum', label: i18n.t('nav.community') },
+  { path: '/profile', icon: 'account_circle', label: i18n.t('nav.profile') },
 ];

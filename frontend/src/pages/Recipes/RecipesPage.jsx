@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
+import { useTranslation } from 'react-i18next';
 
 const RECIPE_DB = [
   { id: 'r1', name: 'Tortilla francesa', category: 'desayuno', time: '5 min', difficulty: 'Fácil', ingredients: ['Huevos', 'Sal', 'Aceite de oliva'], instructions: '1. Bate los huevos con sal.\n2. Calienta aceite en una sartén antiadherente.\n3. Vierte los huevos y deja cuajar.\n4. Cuando la base esté firme, dobla por la mitad.\n5. Sirve inmediatamente.', videoUrl: 'https://www.youtube.com/embed/weFUTzk1nJE' },
@@ -62,6 +63,7 @@ const matchIngredients = (haveList, recipeIngredients) => {
 };
 
 export default function RecipesPage() {
+  const { t } = useTranslation();
   const [pantryItems, setPantryItems] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [customIngredient, setCustomIngredient] = useState('');
@@ -117,7 +119,7 @@ export default function RecipesPage() {
 
   const searchRecipes = () => {
     if (selectedIngredients.length === 0) {
-      showToast('Selecciona al menos un ingrediente');
+      showToast(t('recipes.selectIngredient'));
       return;
     }
 
@@ -164,9 +166,9 @@ export default function RecipesPage() {
         ingredients: recipe.ingredients,
         instructions: recipe.instructions,
       });
-      showToast('Receta añadida a tus menús');
+      showToast(t('common.addedToMealPlan'));
     } catch (e) {
-      showToast('Error al añadir: ' + e.message);
+      showToast(t('common.errorAdding') + e.message);
     }
   };
 
@@ -184,7 +186,7 @@ export default function RecipesPage() {
     return (
       <div>
         <button onClick={() => setSelectedRecipe(null)} className="neo-btn !bg-gray-100 dark:!text-black dark:!border-gray-400 !py-2 !px-3 !text-sm mb-4">
-          <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> Volver a recetas
+          <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> {t('common.back')}
         </button>
 
         <div className="neo-card mb-4">
@@ -210,7 +212,7 @@ export default function RecipesPage() {
           </div>
 
           <div className="mt-4">
-            <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-2">Ingredientes</p>
+            <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-2">{t('common.ingredients')}</p>
             <div className="flex flex-wrap gap-1.5">
               {selectedRecipe.ingredients.map((ing, i) => {
                 const isAvailable = selectedIngredients.some(si => normalize(si).includes(normalize(ing)) || normalize(ing).includes(normalize(si)));
@@ -229,7 +231,7 @@ export default function RecipesPage() {
         </div>
 
         <div className="neo-card !bg-primary-50 !border-primary-200 mb-4">
-          <p className="text-xs font-bold text-primary-700 uppercase mb-3">Instrucciones</p>
+          <p className="text-xs font-bold text-primary-700 uppercase mb-3">{t('common.instructions')}</p>
           <div className="space-y-3">
             {steps.map((step, i) => (
               <div key={i} className="flex gap-3 items-start">
@@ -243,12 +245,12 @@ export default function RecipesPage() {
         </div>
 
         <button onClick={() => addToMealPlan(selectedRecipe)} className="neo-btn-primary w-full">
-          <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> Añadir a menús
+          <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
         </button>
 
         {selectedRecipe.videoUrl && (
           <button onClick={() => setShowVideoModal(selectedRecipe.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2">
-            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> Ver vídeo tutorial
+            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
           </button>
         )}
       </div>
@@ -259,8 +261,8 @@ export default function RecipesPage() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Recetas</h1>
-          <p className="text-sm text-gray-500 font-medium">Elige tus ingredientes y descubre qué cocinar</p>
+          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">{t('recipes.title')}</h1>
+          <p className="text-sm text-gray-500 font-medium">{t('recipes.subtitle')}</p>
         </div>
       </div>
 
@@ -269,10 +271,10 @@ export default function RecipesPage() {
           <div className="w-28 h-28 mx-auto rounded-3xl bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-300 flex items-center justify-center mb-5">
             <span className="material-symbols-outlined text-5xl text-primary-500">restaurant_menu</span>
           </div>
-          <h2 className="text-lg font-extrabold text-gray-700 dark:text-gray-200 mb-2">¿Qué tienes en tu cocina?</h2>
-          <p className="text-sm text-gray-400 mb-6 max-w-xs mx-auto">Selecciona los ingredientes que tienes y te diremos qué recetas puedes preparar</p>
+          <h2 className="text-lg font-extrabold text-gray-700 dark:text-gray-200 mb-2">{t('recipes.whatInKitchen')}</h2>
+          <p className="text-sm text-gray-400 mb-6 max-w-xs mx-auto">{t('recipes.kitchenDesc')}</p>
           <button onClick={() => setShowIngredientPicker(true)} className="neo-btn-primary !py-3 !px-6">
-            <span className="material-symbols-outlined align-text-bottom">kitchen</span> Elegir ingredientes
+            <span className="material-symbols-outlined align-text-bottom">kitchen</span> {t('recipes.chooseIngredients')}
           </button>
         </div>
       )}
@@ -281,9 +283,9 @@ export default function RecipesPage() {
         <div className="fixed inset-0 bg-black/40 z-[60] flex items-end justify-center" onClick={() => setShowIngredientPicker(false)}>
           <div className="bg-white dark:bg-gray-800 rounded-t-3xl w-full max-w-lg p-6 pb-14 border-t-2 border-black max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-extrabold">Elige tus ingredientes</h2>
+              <h2 className="text-lg font-extrabold">{t('recipes.chooseYourIngredients')}</h2>
               <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-1 rounded-lg border border-primary-200">
-                {selectedIngredients.length} seleccionados
+                {selectedIngredients.length} {t('recipes.selected')}
               </span>
             </div>
 
@@ -303,7 +305,7 @@ export default function RecipesPage() {
             <div className="flex gap-2 mb-3">
               <input
                 className="neo-input flex-1"
-                placeholder="Añadir ingrediente..."
+                placeholder={t('recipes.addIngredient')}
                 value={customIngredient}
                 onChange={e => setCustomIngredient(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addCustomIngredient()}
@@ -315,7 +317,7 @@ export default function RecipesPage() {
 
             <input
               className="neo-input mb-3"
-              placeholder="Buscar ingrediente..."
+              placeholder={t('recipes.searchIngredient')}
               value={searchIngredient}
               onChange={e => setSearchIngredient(e.target.value)}
             />
@@ -356,10 +358,10 @@ export default function RecipesPage() {
 
             <div className="flex gap-2 sticky bottom-0 bg-white dark:bg-gray-800 pt-3 border-t border-gray-100 dark:border-gray-700">
               <button onClick={searchRecipes} className="neo-btn-primary flex-1" disabled={selectedIngredients.length === 0}>
-                <span className="material-symbols-outlined text-sm align-text-bottom">search</span> Buscar recetas
+                <span className="material-symbols-outlined text-sm align-text-bottom">search</span> {t('recipes.searchRecipes')}
               </button>
               <button onClick={() => setShowIngredientPicker(false)} className="neo-btn !bg-gray-100 dark:!bg-gray-700 flex-1">
-                Cerrar
+                {t('recipes.close')}
               </button>
             </div>
           </div>
@@ -371,14 +373,14 @@ export default function RecipesPage() {
           <div className="neo-card mb-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs font-bold text-gray-500">
-                {selectedIngredients.length} ingredientes seleccionados
+                {selectedIngredients.length} {t('recipes.selected')}
               </p>
               <div className="flex gap-1">
                 <button onClick={() => setShowIngredientPicker(true)} className="text-xs font-bold neo-btn !py-1 !px-2 !border-primary-300 text-primary-600">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
+                  <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
                 </button>
                 <button onClick={clearAll} className="text-xs font-bold neo-btn !py-1 !px-2 !border-red-300 text-red-500">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">close</span> Limpiar
+                  <span className="material-symbols-outlined text-sm align-text-bottom">close</span> {t('meals.clear')}
                 </button>
               </div>
             </div>
@@ -394,21 +396,21 @@ export default function RecipesPage() {
 
           <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
             <select className="neo-input !py-2 !text-xs !px-3" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-              {categories.map(c => <option key={c} value={c}>{c === 'Todas' ? 'Todas las comidas' : c}</option>)}
+              {categories.map(c => <option key={c} value={c}>{c === 'Todas' ? t('recipes.allMeals') : c}</option>)}
             </select>
             <select className="neo-input !py-2 !text-xs !px-3" value={filterDifficulty} onChange={e => setFilterDifficulty(e.target.value)}>
-              {difficulties.map(d => <option key={d} value={d}>{d === 'Todas' ? 'Todas' : d}</option>)}
+              {difficulties.map(d => <option key={d} value={d}>{d === 'Todas' ? t('recipes.allDifficulties') : d}</option>)}
             </select>
             <button onClick={searchRecipes} className="neo-btn-primary !py-2 !px-4 !text-xs whitespace-nowrap">
-              <span className="material-symbols-outlined text-sm align-text-bottom">search</span> Buscar
+              <span className="material-symbols-outlined text-sm align-text-bottom">search</span> {t('common.search')}
             </button>
           </div>
 
           {results.length === 0 && (
             <div className="text-center py-8">
               <span className="material-symbols-outlined text-4xl text-gray-300">search_off</span>
-              <p className="text-gray-400 font-bold mt-2">No se encontraron recetas</p>
-              <p className="text-gray-300 text-sm">Prueba con otros ingredientes o cambia los filtros</p>
+              <p className="text-gray-400 font-bold mt-2">{t('recipes.noRecipesFound')}</p>
+              <p className="text-gray-300 text-sm">{t('recipes.tryOther')}</p>
             </div>
           )}
 
@@ -438,7 +440,7 @@ export default function RecipesPage() {
                 </div>
 
                 <div className="mt-2">
-                  <p className="text-xs font-bold text-gray-500 mb-1">Ingredientes ({recipe.matched.length}/{recipe.ingredients.length})</p>
+                  <p className="text-xs font-bold text-gray-500 mb-1">{t('common.ingredients')} ({recipe.matched.length}/{recipe.ingredients.length})</p>
                   <div className="flex flex-wrap gap-1">
                     {recipe.ingredients.slice(0, 5).map((ing, j) => {
                       const has = recipe.matched.includes(ing);
@@ -458,10 +460,10 @@ export default function RecipesPage() {
 
                 <div className="flex gap-2 mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
                   <button onClick={(e) => { e.stopPropagation(); setSelectedRecipe(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1">
-                    <span className="material-symbols-outlined text-sm align-text-bottom">visibility</span> Ver receta
+                    <span className="material-symbols-outlined text-sm align-text-bottom">visibility</span> {t('recipes.viewRecipe')}
                   </button>
                   <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600">
-                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> Añadir a menús
+                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
                   </button>
                   {recipe.videoUrl && (
                     <button onClick={(e) => { e.stopPropagation(); setShowVideoModal(recipe.videoUrl); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300">
@@ -480,7 +482,7 @@ export default function RecipesPage() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
               <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-red-500">play_circle</span> Vídeo tutorial
+                <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.videoTutorial')}
               </h3>
               <button onClick={() => setShowVideoModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
                 <span className="material-symbols-outlined">close</span>

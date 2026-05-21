@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { navItems } from './navConfig';
+import { getNavItems } from './navConfig';
+import { useTranslation } from 'react-i18next';
 
 export default function BottomNav() {
+  const { t } = useTranslation();
+  const navItems = getNavItems();
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-black z-50 md:hidden">
       <div className="max-w-lg mx-auto flex items-center justify-around px-2 py-1">

@@ -1,6 +1,7 @@
 import { NavLink, Link } from 'react-router-dom';
-import { navItems } from './navConfig';
+import { getNavItems } from './navConfig';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const fallbackColors = ['#006e2f', '#9d4300', '#735c00', '#4f46e5', '#0891b2', '#be185d', '#7c3aed', '#db2777'];
 
@@ -35,6 +36,8 @@ function AvatarIcon({ user }) {
 
 export default function Sidebar() {
   const { user } = useAuth();
+  const { t } = useTranslation();
+  const navItems = getNavItems();
   return (
     <aside className="hidden md:flex md:flex-col md:fixed md:left-0 md:top-0 md:h-full md:z-50 bg-surface border-r-2 border-black">
       <Link to="/meals" className="flex items-center gap-2 px-3 py-4 border-b-2 border-black lg:px-5">
