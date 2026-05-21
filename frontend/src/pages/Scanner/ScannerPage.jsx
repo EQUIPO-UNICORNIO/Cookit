@@ -59,7 +59,7 @@ export default function ScannerPage() {
           'HTTP-Referer': window.location.origin,
         },
         body: JSON.stringify({
-          model: 'openrouter/free',
+          model: 'google/gemma-4-31b-it:free',
           messages: [{
             role: 'user',
             content: [
