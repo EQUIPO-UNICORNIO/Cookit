@@ -253,6 +253,7 @@ export default function ScannerPage() {
 
       const fallbackItems = fallbackParseLines(text);
       for (const fb of fallbackItems) {
+        fb.name = cleanProductName(fb.name) || fb.name;
         const fn = normalize(fb.name);
         const dup = seenNames.has(fn) || items.some(i => {
           const iname = normalize(i.name);
