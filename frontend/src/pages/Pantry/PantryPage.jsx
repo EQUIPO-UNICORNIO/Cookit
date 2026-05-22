@@ -1,38 +1,9 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
+import { CATEGORIES, CATEGORY_ICONS, autoCategorize } from '../../utils/categories';
 
-const categories = ['Carne', 'Marisco', 'Verduras', 'Frutas', 'Lácteos', 'Hidratos', 'Conservas', 'Condimentos', 'Congelados', 'Bebidas', 'Otros'];
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
-
-const categoryIcons = {
-  'Carne': 'lunch_dining',
-  'Marisco': 'set_meal',
-  'Verduras': 'eco',
-  'Frutas': 'nutrition',
-  'Lácteos': 'water_drop',
-  'Hidratos': 'bakery_dining',
-  'Conservas': 'inventory_2',
-  'Condimentos': 'spa',
-  'Congelados': 'ac_unit',
-  'Bebidas': 'local_cafe',
-  'Otros': 'inventory_2',
-};
-
-const autoCategorize = (name) => {
-  const n = name.toLowerCase().trim();
-  if (/pollo|ternera|cerdo|carne|filete|chuleta|solomillo|lomo|cordero|hamburguesa|salchicha|tocino|jamón|pavo|conejo|chorizo|mortadela|salchichón|butifarra|fuet|longaniza|secreto|presa|costilla|entrecot|rabo|higado|riñón|seso/i.test(n)) return 'Carne';
-  if (/salmón|merluza|atún|bacalao|pescado|gamba|langostino|lubina|dorada|sardina|anchoa|pulpo|calamar|sepia|boquerón|mejillón|almeja|berberecho|vieira|cigala|centollo|nécora|percebe|navaja|bacaladilla|caballa|rape|rodaballo|besugo|trucha|lenguado|pez espada|marisco|pescadilla/i.test(n)) return 'Marisco';
-  if (/lechuga|tomate|cebolla|ajo|pimiento|espinaca|brócoli|coliflor|zanahoria|calabacín|berenjena|patata|papa|batata|boniato|verdura|acelga|apio|alcachofa|espárrago|champiñón|seta|hortaliza|rúcula|canónigo|remolacha|nabo|rábano|jengibre|puerro|perejil|albahaca|cilantro|col|repollo|guisante|haba|judía verde|germinado|berro|endibia/i.test(n)) return 'Verduras';
-  if (/manzana|plátano|naranja|limón|fresa|uva|pera|melón|sandía|kiwi|mango|piña|fruta|arándano|cereza|pomelo|higo|ciruela|albaricoque|melocotón|aguacate|coco|papaya|granada|mandarina|frambuesa|mora|parchita|maracuyá|carambola|lichi|caqui|nispero|dátil|higo chumbo/i.test(n)) return 'Frutas';
-  if (/leche|queso|yogur|mantequilla|nata|crema|lácteo|requesón|cuajada|quesito|mozzarella|parmesano|kefir|ricotta|cottage|gouda|cheddar/i.test(n)) return 'Lácteos';
-  if (/arroz|pasta|macarrón|espagueti|pan|bollo|barra|baguette|molde|integral|tostada|pancake|crepe|chapata|centeno|harina|avena|legumbre|lenteja|garbanzo|alubia|judía|garrofón|quinoa|cuscús|trigo|maíz|tortilla|taco|galleta|bizcocho|magdalena|cereal|mijo|bulgur|sémola|fideo|tallarín|lasaña|canelón|ravioli|gnocchi/i.test(n)) return 'Hidratos';
-  if (/lata|conserva|aceituna|encurtido|maíz dulce|tomate frito|tomate triturado|pimiento asado|alcachofa en conserva|berberecho|mejillón en conserva|caldo|sopa|pate|anchoa en lata|espárrago en conserva/i.test(n)) return 'Conservas';
-  if (/aceite|sal|pimienta|orégano|canela|especia|laurel|tomillo|romero|curry|pimentón|comino|nuez moscada|clavo|vinagre|mostaza|azafrán|eneldo|condimento|salsa|kétchup|mayonesa|mostaza|miel|sirope|azúcar|edulcorante|levadura|bicarbonato/i.test(n)) return 'Condimentos';
-  if (/congelado|helado|hielo|pizza congelada|verduras congeladas|pescado congelado|patatas congeladas/i.test(n)) return 'Congelados';
-  if (/agua|refresco|zumo|vino|cerveza|café|té|infusión|leche vegetal|bebida|cola|gaseosa|sidra|cava|ron|whisky|vodka|licor/i.test(n)) return 'Bebidas';
-  return 'Otros';
-};
 
 const LOCAL_KEY = 'cookit_pantry';
 let localIdCounter = 0;
@@ -179,7 +150,7 @@ export default function PantryPage() {
         <div className="neo-card mb-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center border-2 border-black">
-              <span className="material-symbols-outlined text-3xl text-primary-600">{categoryIcons[selectedItem.category] || 'inventory_2'}</span>
+              <span className="material-symbols-outlined text-3xl text-primary-600">{CATEGORY_ICONS[selectedItem.category] || 'inventory_2'}</span>
             </div>
             <div>
               <h2 className="text-xl font-extrabold">{selectedItem.name}</h2>
@@ -259,7 +230,7 @@ export default function PantryPage() {
               <input className="neo-input" placeholder={t('pantry.itemName')} value={form.name} onChange={handleNameChange} required />
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                  {categories.map(c => <option key={c}>{c}</option>)}
+                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
                 </select>
                 <input className="neo-input w-20" type="number" value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} />
                 <select className="neo-input w-28" value={form.unit} onChange={e => setForm({...form, unit: e.target.value})}>
@@ -280,19 +251,19 @@ export default function PantryPage() {
       {Object.entries(grouped).map(([cat, catItems]) => (
         <div key={cat} className="mb-4">
           <h2 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">{sortByExpiry ? 'schedule' : (categoryIcons[cat] || 'inventory_2')}</span> {cat}
+            <span className="material-symbols-outlined text-sm">{sortByExpiry ? 'schedule' : (CATEGORY_ICONS[cat] || 'inventory_2')}</span> {cat}
           </h2>
           <div className="space-y-2">
             {catItems.map(item => (
               <div key={item.id} className="neo-card flex items-center gap-3 !p-3 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedItem(item)}>
                 <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0 border-2 border-black">
-                  <span className="material-symbols-outlined text-primary-600">{categoryIcons[item.category] || 'inventory_2'}</span>
+                  <span className="material-symbols-outlined text-primary-600">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-sm truncate">{item.name}</p>
                   <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                     <span className="text-xs text-gray-400 font-medium flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs">{categoryIcons[item.category] || 'inventory_2'}</span> {item.category}
+                      <span className="material-symbols-outlined text-xs">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span> {item.category}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · Vence: ${item.expiry_date}` : ''}</span>
                   </div>
