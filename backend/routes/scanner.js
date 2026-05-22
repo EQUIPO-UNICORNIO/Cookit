@@ -44,10 +44,20 @@ Responde UNICAMENTE con JSON valido, sin texto extra:
             const parsed = JSON.parse(match[0]);
             items = (parsed.productos || []).filter(p => p.nombre?.trim());
           }
+        } else {
+          const err = await response.json().catch(() => ({}));
+          const msg = err.error?.message || `HTTP ${response.status}`;
+          return res.status(502).json({ error: 'Gemini falló: ' + msg });
         }
       } catch (e) {
-        // Gemini fallo, continuar con fallback
+        return res.status(502).json({ error: 'Error llamando a Gemini: ' + e.message });
       }
+    } else {
+      return res.status(500).json({ error: 'Falta GEMINI_KEY en el servidor' });
+    }
+
+    if (items.length === 0) {
+      return res.json({ items: [], message: 'Gemini no detectó productos' });
     }
 
     res.json({ items });
