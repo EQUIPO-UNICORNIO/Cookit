@@ -19,61 +19,93 @@ const SUGGESTED_MEALS = [
 
 const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-const ignoreKeywords = [
+const IGNORE_WORDS = new Set([
   'total', 'iva', 'subtotal', 'efectivo', 'tarjeta', 'cambio', 'nif', 'cif', 'caja', 'sup', 'op',
   'telefono', 'paseo', 'calle', 'gracias', 'ticket', 'factura', 'cliente', 'importe', 'descuento',
-  'redondo', 'base', 'unidades', 'euros', 'centimos', 'neto', 'bruto', 'iva incluido', 'iva al',
-  'resto', 'pagado', 'cobrado', 'devuelta', 'vuelta', 'a pagar', 'articulos', 'unidades vendidas',
-  'le atendio', 'atendido', 'cajero', 'dependiente', 'fecha', 'hora', 'numer', 'ticket num',
-  'factura num', 'compra', 'op', 'referencia', 'codigo', 'bultos', 'peso', 'valor', 'pagas',
-  'socio', 'tarjeta regalo', 'gastos', 'envio', 'portes', 'recargo', 'fin ticket', 'inicio ticket',
-  'promocion', 'ahorro', 'ahorras', 'dto', 'descuento aplicado', 'bono', 'cupon', 'cheque',
-  'regalo', 'puntos', 'saldo', 'disponible', 'consumicion', 'camara', 'carnet', 'nº', 'numero',
-  'telf', 'movil', 'email', 'web', 'www', 'direccion', 'poblacion', 'provincia', 'cod postal',
-  'c.p', 'cpostal', 'tienda', 'local', 'comercio', 'supermercado', 'market', 'mercadona',
-  'carrefour', 'alcampo', 'dia', 'lidl', 'aldi', 'consum', 'eroski', 'caprabo', 'bonpreu',
-  'esclat', 'condis', 'socio', 'tarjeta', 'visa', 'mastercard', 'bizum', 'contado', 'metalico',
-];
+  'redondo', 'base', 'unidades', 'euros', 'centimos', 'neto', 'bruto', 'resto', 'pagado', 'cobrado',
+  'devuelta', 'vuelta', 'articulos', 'cajero', 'dependiente', 'fecha', 'hora', 'numero',
+  'compra', 'referencia', 'codigo', 'bultos', 'peso', 'valor', 'tienda', 'local', 'comercio',
+  'supermercado', 'market', 'socio', 'visa', 'mastercard', 'bizum', 'contado', 'metalico',
+  'promocion', 'ahorro', 'ahorras', 'dto', 'bono', 'cupon', 'puntos', 'saldo', 'disponible',
+  'consumicion', 'camara', 'carnet', 'telf', 'movil', 'email', 'direccion', 'poblacion',
+  'provincia', 'codigo postal', 'recargo', 'gastos', 'envio', 'portes', 'atendido',
+]);
 
-function isNoProductLine(text) {
-  const lower = normalize(text);
-  if (ignoreKeywords.some(k => lower.includes(k))) return true;
-  if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda|travesia|carretera)/i.test(text)) return true;
-  if (/^(l |m |x |j |v |s |d )/.test(lower)) return true;
-  if (/^\d{1,2}[/-]\d{1,2}[/-]\d{2,4}$/.test(text)) return true;
-  if (/^\d{1,2}:\d{2}/.test(text)) return true;
-  if (/^[\d\s]+$/.test(text)) return true;
-  if (/^\d{10,}$/.test(text.replace(/\s/g, ''))) return true;
-  if (/[<>@#]/.test(text)) return true;
-  if (/^.{1,3}$/.test(text.trim())) return true;
-  return false;
+const IGNORE_STARTS = ['avda', 'calle', 'plaza', 'ctra', 'camino', 'paseo', 'ronda', 'carretera', 'c/', 'travesia'];
+
+function isProductLine(line) {
+  const clean = line.replace(/\s+/g, ' ').trim();
+  if (clean.length < 5) return false;
+
+  // Debe tener un precio al final (formato español: nn,nn o europeo: nn.nn)
+  const priceMatch = clean.match(/(\d{1,4}[.,]\d{2})\s*$/);
+  if (!priceMatch) return false;
+  const price = parseFloat(priceMatch[1].replace(',', '.'));
+  if (isNaN(price) || price <= 0 || price > 9999) return false;
+
+  // Extraer nombre quitando el precio del final
+  let name = clean.substring(0, clean.length - priceMatch[0].length).trim();
+  if (!name) return false;
+
+  // Quitar prefijo numérico (cantidad inicial como "2 " o "2x ")
+  name = name.replace(/^\d+\s*[xX*]?\s*/, '').trim();
+  if (name.length < 2) return false;
+
+  const lower = normalize(name);
+
+  // Descartar si contiene palabras de IGNORE
+  const words = lower.split(/\s+/);
+  if (words.some(w => IGNORE_WORDS.has(w))) return false;
+
+  // Descartar si empieza con patrones de direccion
+  if (IGNORE_STARTS.some(s => lower.startsWith(s))) return false;
+
+  // Descartar si son solo numeros
+  if (/^[\d\s]+$/.test(name)) return false;
+
+  // Descartar si no tiene letras
+  if (!/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/.test(name)) return false;
+
+  // Descartar codigos mixtos como "tpv3" "caje1698" "tda"
+  const mixto = name.split(/\s+/).filter(w => /\d/.test(w) && /[a-z]/i.test(w) && w.length > 3);
+  if (mixto.length > 0) return false;
+
+  // Descartar lineas con mas digitos que letras (codigos de barras, referencias)
+  const digitCount = (name.match(/\d/g) || []).length;
+  const letterCount = (name.match(/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/g) || []).length;
+  if (digitCount > letterCount) return false;
+
+  // Limpiar y normalizar nombre
+  let cleaned = cleanProductName(name);
+  if (!cleaned || cleaned.length < 2) return false;
+
+  return true;
+}
+
+function cleanProductName(name) {
+  let n = name.replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
+  // Quitar pesos/medidas al final (ej: "1k", "1kg", "200g", "1l", "500ml")
+  n = n.replace(/\s+\d+\s*(kg|g|l|ml|k|gr|litro|litros|mililitro|cc|kl)\s*$/i, '').trim();
+  // Quitar envases y formatos al final
+  n = n.replace(/\s+(envase|pack|botella|lata|bolsa|caja|brik|tarro|frasco|tubo|blister|unidad|unidades|paquete|sobre)\s*$/i, '').trim();
+  // Quitar "con" y "de" al final si es solo una palabra sobrante
+  n = n.replace(/\s+(de|con|en|sin|para)\s+\w{1,4}\s*$/i, '').trim();
+  // Quitar el ultimo segmento si es 1 o 2 letras
+  n = n.replace(/\s+\w{1,2}$/, '').trim();
+  // Quitar caracteres no deseados
+  n = n.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
+  return n || null;
 }
 
 function parseLineToProduct(line) {
-  let clean = line.replace(/\s+/g, ' ').trim();
-  if (!clean || clean.length < 5) return null;
-  if (isNoProductLine(clean)) return null;
-  const numbers = clean.match(/[\d.,]+/g);
-  if (!numbers || numbers.length === 0) return null;
-  let rawPrice = numbers[numbers.length - 1].replace(/\./g, '').replace(',', '.');
-  let price = parseFloat(rawPrice);
-  if (isNaN(price) || price <= 0 || price > 9999) return null;
-  let name = clean.substring(0, clean.lastIndexOf(numbers[numbers.length - 1])).trim();
+  if (!isProductLine(line)) return null;
+  const clean = line.replace(/\s+/g, ' ').trim();
+  const priceMatch = clean.match(/(\d{1,4}[.,]\d{2})\s*$/);
+  let name = clean.substring(0, clean.length - priceMatch[0].length).trim();
   name = name.replace(/^\d+\s*[xX*]?\s*/, '').trim();
-  if (!name || name.length < 2) return null;
-  if (isNoProductLine(name)) return null;
-  if (!/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/.test(name)) return null;
-  let quantity = '1';
-  let unit = 'unidad';
-  const qtyMatch = name.match(/^(\d+)\s*(kg|g|l|ml|ud|unidad|unidades|paq|pack|lata|botella|bolsa|pieza|tarro)?\s+/i);
-  if (qtyMatch) {
-    quantity = qtyMatch[1];
-    if (qtyMatch[2]) unit = qtyMatch[2].toLowerCase();
-    name = name.substring(qtyMatch[0].length).trim();
-  }
-  name = name.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
-  if (!name || name.length < 2) return null;
-  return { name, quantity, unit };
+  name = cleanProductName(name);
+  if (!name) return null;
+  return { name, quantity: '1', unit: 'unidad' };
 }
 
 function fallbackParseLines(text) {
@@ -82,13 +114,17 @@ function fallbackParseLines(text) {
   const seen = new Set();
   for (const line of lines) {
     let clean = line.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
-    if (!clean || clean.length < 4) continue;
-    if (isNoProductLine(clean)) continue;
-    const words = clean.split(/\s+/).filter(w => w.length >= 3);
-    if (words.length === 0) continue;
-    const hasVowel = /[aeiouáéíóú]/i.test(clean);
-    if (!hasVowel) continue;
-    if (words.length === 1 && words[0].length > 12) continue;
+    if (!clean || clean.length < 5) continue;
+    const lower = normalize(clean);
+    const words = lower.split(/\s+/).filter(w => w.length >= 3);
+    if (words.length < 2) continue;
+    if (words.some(w => IGNORE_WORDS.has(w))) continue;
+    if (IGNORE_STARTS.some(s => lower.startsWith(s))) continue;
+    if (lower.replace(/\s/g, '').length < 5) continue;
+    if (!/[aeiouáéíóú]/i.test(clean)) continue;
+    const digitCount = (clean.match(/\d/g) || []).length;
+    const letterCount = (clean.match(/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/g) || []).length;
+    if (digitCount > letterCount) continue;
     const key = normalize(clean);
     if (seen.has(key)) continue;
     seen.add(key);
