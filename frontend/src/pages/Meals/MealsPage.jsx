@@ -203,6 +203,7 @@ export default function MealsPage() {
                 ))}
           </div>
         </div>
+        </div>
 
         {selectedMeal.videoUrl && (
           <button onClick={() => setShowVideoModal(selectedMeal.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mb-3">
