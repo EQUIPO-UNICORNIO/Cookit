@@ -202,7 +202,7 @@ export default function MealsPage() {
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
           {selectedMeal.recipe && <p className="text-sm text-gray-500 font-medium mt-1">Receta: {selectedMeal.recipe}</p>}
-          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">Día: {selectedMeal.day}</p>}
+          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">Día: {DAY_NAMES[selectedMeal.day] || selectedMeal.day}</p>}
 
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
