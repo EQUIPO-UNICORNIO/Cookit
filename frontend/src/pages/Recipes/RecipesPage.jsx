@@ -3,7 +3,11 @@ import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import RECIPE_DB from '../../data/recipeDb';
 
-const recipesWithIds = RECIPE_DB.map((r, i) => ({ ...r, id: `r${i}` }));
+const recipesWithIds = RECIPE_DB.map((r, i) => ({
+  ...r,
+  id: `r${i}`,
+  videoUrl: r.videoUrl || `https://www.youtube.com/results?search_query=receta+${encodeURIComponent(r.name)}`,
+}));
 
 const ingredientCategories = {
   'Proteínas': [
@@ -68,7 +72,6 @@ export default function RecipesPage() {
   const [filterCategory, setFilterCategory] = useState('Todas');
   const [filterDifficulty, setFilterDifficulty] = useState('Todas');
   const [showIngredientPicker, setShowIngredientPicker] = useState(false);
-  const [showVideoModal, setShowVideoModal] = useState(null);
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
@@ -246,7 +249,7 @@ export default function RecipesPage() {
         </button>
 
         {selectedRecipe.videoUrl && (
-          <button onClick={() => setShowVideoModal(selectedRecipe.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2">
+          <button onClick={() => window.open(selectedRecipe.videoUrl, '_blank')} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2">
             <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
           </button>
         )}
@@ -463,7 +466,7 @@ export default function RecipesPage() {
                     <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
                   </button>
                   {recipe.videoUrl && (
-                    <button onClick={(e) => { e.stopPropagation(); setShowVideoModal(recipe.videoUrl); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300">
+                    <button onClick={(e) => { e.stopPropagation(); window.open(recipe.videoUrl, '_blank'); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300">
                       <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
                     </button>
                   )}
@@ -472,31 +475,6 @@ export default function RecipesPage() {
             ))}
           </div>
         </>
-      )}
-
-      {showVideoModal && (
-        <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => setShowVideoModal(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.videoTutorial')}
-              </h3>
-              <button onClick={() => setShowVideoModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <div className="aspect-video">
-              <iframe
-                src={showVideoModal}
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title="Vídeo tutorial"
-              />
-            </div>
-          </div>
-        </div>
       )}
 
       {toast && (
