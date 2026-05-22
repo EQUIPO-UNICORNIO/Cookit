@@ -8,18 +8,18 @@ router.use(authMiddleware);
 router.get('/', async (req, res) => {
   try {
     const meals = await getAll('meal_plans', { user_id: req.userId }, { orderBy: 'day', direction: 'asc' });
-    res.json(meals.map(m => ({ ...m, videoUrl: m.video_url || '', ingredients: JSON.parse(m.ingredients || '[]') })));
+    res.json(meals.map(m => ({ ...m, ingredients: JSON.parse(m.ingredients || '[]') })));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 router.post('/', async (req, res) => {
   try {
-    const { name, day, meal_type, recipe, ingredients, instructions, photo, videoUrl } = req.body;
+    const { name, day, meal_type, recipe, ingredients, instructions, photo } = req.body;
     if (!name) return res.status(400).json({ error: 'Nombre requerido' });
     const meal = await create('meal_plans', {
       user_id: req.userId, name, day: day || '', meal_type: meal_type || 'comida',
       recipe: recipe || '', ingredients: JSON.stringify(ingredients || []),
-      instructions: instructions || '', photo: photo || '', video_url: videoUrl || ''
+      instructions: instructions || '', photo: photo || ''
     });
     res.status(201).json({ ...meal, ingredients: ingredients || [] });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -27,10 +27,10 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const { name, day, meal_type, recipe, ingredients, instructions, photo, videoUrl } = req.body;
+    const { name, day, meal_type, recipe, ingredients, instructions, photo } = req.body;
     await updateById('meal_plans', req.params.id, {
       name, day, meal_type, recipe, ingredients: JSON.stringify(ingredients || []),
-      instructions, photo: photo || '', video_url: videoUrl || ''
+      instructions, photo: photo || ''
     }, req.userId);
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
