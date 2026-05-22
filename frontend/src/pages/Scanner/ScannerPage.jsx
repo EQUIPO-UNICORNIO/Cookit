@@ -23,12 +23,14 @@ const IGNORE_WORDS = new Set([
   'total', 'iva', 'subtotal', 'efectivo', 'tarjeta', 'cambio', 'nif', 'cif', 'caja', 'sup', 'op',
   'telefono', 'paseo', 'calle', 'gracias', 'ticket', 'factura', 'cliente', 'importe', 'descuento',
   'redondo', 'base', 'unidades', 'euros', 'centimos', 'neto', 'bruto', 'resto', 'pagado', 'cobrado',
-  'devuelta', 'vuelta', 'articulos', 'cajero', 'dependiente', 'fecha', 'hora', 'numero',
-  'compra', 'referencia', 'codigo', 'bultos', 'peso', 'valor', 'tienda', 'local', 'comercio',
-  'supermercado', 'market', 'socio', 'visa', 'mastercard', 'bizum', 'contado', 'metalico',
-  'promocion', 'ahorro', 'ahorras', 'dto', 'bono', 'cupon', 'puntos', 'saldo', 'disponible',
-  'consumicion', 'camara', 'carnet', 'telf', 'movil', 'email', 'direccion', 'poblacion',
-  'provincia', 'codigo postal', 'recargo', 'gastos', 'envio', 'portes', 'atendido',
+  'devuelta', 'vuelta', 'articulo', 'articulos', 'vendidos', 'cajero', 'cajg', 'dependiente',
+  'fecha', 'hora', 'numero', 'compra', 'referencia', 'codigo', 'bultos', 'peso', 'valor',
+  'tienda', 'tda', 'local', 'comercio', 'supermercado', 'market', 'socio', 'tpv',
+  'visa', 'mastercard', 'bizum', 'contado', 'metalico', 'promocion', 'ahorro', 'ahorras',
+  'dto', 'bono', 'cupon', 'puntos', 'saldo', 'disponible', 'consumicion', 'camara',
+  'carnet', 'telf', 'movil', 'email', 'direccion', 'poblacion', 'provincia', 'codigo postal',
+  'recargo', 'gastos', 'envio', 'portes', 'atendido', 'bolsa', 'bolsas', 'cuenta',
+  'ambiente', 'medio', 'redondeo',
 ]);
 
 const IGNORE_STARTS = ['avda', 'calle', 'plaza', 'ctra', 'camino', 'paseo', 'ronda', 'carretera', 'c/', 'travesia'];
@@ -129,6 +131,7 @@ function fallbackParseLines(text) {
     const digitCount = (clean.match(/\d/g) || []).length;
     const letterCount = (clean.match(/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/g) || []).length;
     if (digitCount > letterCount) continue;
+    if (words.length <= 3 && words.every(w => w.length <= 4)) continue;
     const key = normalize(clean);
     if (seen.has(key)) continue;
     seen.add(key);
