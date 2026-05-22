@@ -80,6 +80,29 @@ export default function RecipesPage() {
     setRecipes(recipesWithIds);
   }, []);
 
+  useEffect(() => {
+    if (!recipes.length) return;
+    if (selectedIngredients.length === 0) {
+      setResults([]);
+      setSearched(false);
+      return;
+    }
+    let filtered = [...recipes];
+    if (filterCategory !== 'Todas') filtered = filtered.filter(r => r.category === filterCategory);
+    if (filterDifficulty !== 'Todas') filtered = filtered.filter(r => r.difficulty === filterDifficulty);
+    const scored = filtered.map(recipe => {
+      const matched = matchIngredients(selectedIngredients, recipe.ingredients);
+      const matchPercent = Math.round((matched.length / recipe.ingredients.length) * 100);
+      return { ...recipe, matched, missing: recipe.ingredients.filter(i => !matched.includes(i)), matchPercent };
+    }).filter(r => r.matchPercent > 0);
+    scored.sort((a, b) => {
+      if (b.matchPercent !== a.matchPercent) return b.matchPercent - a.matchPercent;
+      return b.matched.length - a.matched.length;
+    });
+    setResults(scored);
+    setSearched(true);
+  }, [selectedIngredients, filterCategory, filterDifficulty, recipes]);
+
   const loadPantry = async () => {
     try {
       const items = await api.getPantry();
@@ -112,37 +135,6 @@ export default function RecipesPage() {
 
   const removeIngredient = (ing) => {
     setSelectedIngredients(prev => prev.filter(i => i !== ing));
-  };
-
-  const searchRecipes = () => {
-    if (selectedIngredients.length === 0) {
-      showToast(t('recipes.selectIngredient'));
-      return;
-    }
-
-    let filtered = [...recipes];
-
-    if (filterCategory !== 'Todas') {
-      filtered = filtered.filter(r => r.category === filterCategory);
-    }
-    if (filterDifficulty !== 'Todas') {
-      filtered = filtered.filter(r => r.difficulty === filterDifficulty);
-    }
-
-    const scored = filtered.map(recipe => {
-      const matched = matchIngredients(selectedIngredients, recipe.ingredients);
-      const matchPercent = Math.round((matched.length / recipe.ingredients.length) * 100);
-      return { ...recipe, matched, missing: recipe.ingredients.filter(i => !matched.includes(i)), matchPercent };
-    }).filter(r => r.matchPercent > 0);
-
-    scored.sort((a, b) => {
-      if (b.matchPercent !== a.matchPercent) return b.matchPercent - a.matchPercent;
-      return b.matched.length - a.matched.length;
-    });
-
-    setResults(scored);
-    setSearched(true);
-    setShowIngredientPicker(false);
   };
 
   const clearAll = () => {
@@ -359,8 +351,8 @@ export default function RecipesPage() {
             </div>
 
             <div className="flex gap-2 sticky bottom-0 bg-white dark:bg-gray-800 pt-3 border-t border-gray-100 dark:border-gray-700">
-              <button onClick={searchRecipes} className="neo-btn-primary flex-1" disabled={selectedIngredients.length === 0}>
-                <span className="material-symbols-outlined text-sm align-text-bottom">search</span> {t('recipes.searchRecipes')}
+              <button onClick={() => setShowIngredientPicker(false)} className="neo-btn-primary flex-1">
+                <span className="material-symbols-outlined text-sm align-text-bottom">check</span> Hecho
               </button>
               <button onClick={() => setShowIngredientPicker(false)} className="neo-btn !bg-gray-100 dark:!bg-gray-700 flex-1">
                 {t('recipes.close')}
@@ -403,9 +395,6 @@ export default function RecipesPage() {
             <select className="neo-input !py-2 !text-xs !px-3" value={filterDifficulty} onChange={e => setFilterDifficulty(e.target.value)}>
               {difficulties.map(d => <option key={d} value={d}>{d === 'Todas' ? t('recipes.allDifficulties') : d}</option>)}
             </select>
-            <button onClick={searchRecipes} className="neo-btn-primary !py-2 !px-4 !text-xs whitespace-nowrap">
-              <span className="material-symbols-outlined text-sm align-text-bottom">search</span> {t('common.search')}
-            </button>
           </div>
 
           {results.length === 0 && (
