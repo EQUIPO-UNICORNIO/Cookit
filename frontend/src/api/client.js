@@ -73,4 +73,7 @@ export const api = {
   // Scanner
   processTicket: (image, media_type) => request('/scanner/process-ticket', { method: 'POST', body: JSON.stringify({ image, media_type }) }),
   saveMerged: (items) => request('/scanner/save-merged', { method: 'POST', body: JSON.stringify({ items }) }),
+
+  // YouTube
+  searchYoutube: (q) => request(`/youtube/search?q=${encodeURIComponent(q)}`),
 };

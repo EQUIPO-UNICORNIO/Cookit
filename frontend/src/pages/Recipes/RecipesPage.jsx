@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import RECIPE_DB from '../../data/recipeDb';
@@ -6,7 +6,7 @@ import RECIPE_DB from '../../data/recipeDb';
 const recipesWithIds = RECIPE_DB.map((r, i) => ({
   ...r,
   id: `r${i}`,
-  videoUrl: r.videoUrl || `https://www.youtube.com/embed?listType=search&hl=es&query=receta+${encodeURIComponent(r.name)}`,
+  videoUrl: r.videoUrl || null,
 }));
 
 const ingredientCategories = {
@@ -73,7 +73,37 @@ export default function RecipesPage() {
   const [filterDifficulty, setFilterDifficulty] = useState('Todas');
   const [showIngredientPicker, setShowIngredientPicker] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(null);
+  const [loadingVideo, setLoadingVideo] = useState(null);
   const [toast, setToast] = useState(null);
+  const videoIdCache = useRef({});
+
+  const openVideo = useCallback(async (recipe) => {
+    if (loadingVideo) return;
+    setLoadingVideo(recipe.id);
+
+    let embedUrl = recipe.videoUrl;
+
+    if (!embedUrl) {
+      const cacheKey = recipe.id;
+      if (videoIdCache.current[cacheKey]) {
+        embedUrl = `https://www.youtube.com/embed/${videoIdCache.current[cacheKey]}`;
+      } else {
+        try {
+          const res = await api.searchYoutube('receta ' + recipe.name);
+          if (res.videoId) {
+            videoIdCache.current[cacheKey] = res.videoId;
+            embedUrl = `https://www.youtube.com/embed/${res.videoId}`;
+          }
+        } catch (e) {
+          console.error('YouTube search error', e);
+        }
+      }
+    }
+
+    setLoadingVideo(null);
+    if (embedUrl) setShowVideoModal(embedUrl);
+    else showToast('No se encontró vídeo');
+  }, [loadingVideo]);
 
   useEffect(() => {
     loadPantry();
@@ -241,11 +271,9 @@ export default function RecipesPage() {
           <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
         </button>
 
-        {selectedRecipe.videoUrl && (
-          <button onClick={() => setShowVideoModal(selectedRecipe.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2">
-            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
-          </button>
-        )}
+        <button onClick={() => openVideo(selectedRecipe)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2" disabled={loadingVideo === selectedRecipe.id}>
+            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {loadingVideo === selectedRecipe.id ? 'Buscando...' : t('common.watchVideo')}
+        </button>
       </div>
     );
   }
@@ -458,11 +486,9 @@ export default function RecipesPage() {
                   <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600">
                     <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
                   </button>
-                  {recipe.videoUrl && (
-                    <button onClick={(e) => { e.stopPropagation(); setShowVideoModal(recipe.videoUrl); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300">
+                  <button onClick={(e) => { e.stopPropagation(); openVideo(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300" disabled={loadingVideo === recipe.id}>
                       <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
                     </button>
-                  )}
                 </div>
               </div>
             ))}

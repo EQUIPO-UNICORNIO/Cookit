@@ -358,6 +358,9 @@ export default function MealsPage() {
               )}
             </div>
             <div className="flex gap-2 mt-2 pt-2 border-t border-gray-100">
+              <button onClick={(e) => { e.stopPropagation(); setShowVideo(meal.videoUrl || `https://www.youtube.com/embed?listType=search&hl=es&query=receta+${encodeURIComponent(meal.name)}`); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300">
+                <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
+              </button>
               <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo, videoUrl: meal.videoUrl || '' }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
                 <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
               </button>

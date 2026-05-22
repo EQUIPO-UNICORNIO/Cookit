@@ -15,6 +15,7 @@ app.use('/api/impact', require('./routes/impact'));
 app.use('/api/cooking', require('./routes/cooking'));
 app.use('/api/substitutions', require('./routes/substitutions'));
 app.use('/api/scanner', require('./routes/scanner'));
+app.use('/api/youtube', require('./routes/youtube'));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', app: 'CookIt API' });
