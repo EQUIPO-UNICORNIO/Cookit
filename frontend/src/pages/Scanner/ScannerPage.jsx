@@ -592,7 +592,7 @@ export default function ScannerPage() {
                         const isMatch = meal.matched.includes(ing);
                         return (
                           <span key={j} className={`text-xs px-2 py-0.5 rounded-full border ${isMatch ? 'bg-green-100 border-green-300 text-green-700' : 'bg-gray-100 dark:bg-gray-600 border-gray-200 dark:border-gray-500 text-gray-400'}`}>
-                            {isMatch ? '? ' : ''}{ing}
+                            {isMatch ? <span className="material-symbols-outlined text-xs align-text-bottom mr-0.5">check</span> : ''}{ing}
                           </span>
                         );
                       })}
