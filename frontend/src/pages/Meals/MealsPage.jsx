@@ -271,7 +271,12 @@ export default function MealsPage() {
 
       <div className="space-y-3">
         {dayMeals.map(meal => (
-          <div key={meal.id} className="neo-card cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedMeal(meal)}>
+          <div key={meal.id} className="neo-card relative cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedMeal(meal)}>
+            {meal.day && (
+              <span className="absolute top-2 right-2 text-[10px] font-bold uppercase bg-gray-800 text-white px-2 py-0.5 rounded-lg border border-black">
+                {t(`meals.days.${meal.day}`)}
+              </span>
+            )}
             <div className="flex gap-3">
               <div className="flex-1 min-w-0">
                 <span className="text-xs font-bold text-primary-600 uppercase bg-primary-50 px-2 py-0.5 rounded-lg border border-primary-200">
