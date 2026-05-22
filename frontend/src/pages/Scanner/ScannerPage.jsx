@@ -19,14 +19,40 @@ const SUGGESTED_MEALS = [
 
 const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-const ignoreKeywords = ['total', 'iva', 'subtotal', 'efectivo', 'tarjeta', 'cambio', 'nif', 'cif', 'caja', 'sup', 'op', 'telefono', 'paseo', 'calle', 'gracias', 'ticket', 'factura', 'cliente', 'importe', 'descuento', 'redondo', 'base', 'unidades', 'euros', 'centimos'];
+const ignoreKeywords = [
+  'total', 'iva', 'subtotal', 'efectivo', 'tarjeta', 'cambio', 'nif', 'cif', 'caja', 'sup', 'op',
+  'telefono', 'paseo', 'calle', 'gracias', 'ticket', 'factura', 'cliente', 'importe', 'descuento',
+  'redondo', 'base', 'unidades', 'euros', 'centimos', 'neto', 'bruto', 'iva incluido', 'iva al',
+  'resto', 'pagado', 'cobrado', 'devuelta', 'vuelta', 'a pagar', 'articulos', 'unidades vendidas',
+  'le atendio', 'atendido', 'cajero', 'dependiente', 'fecha', 'hora', 'numer', 'ticket num',
+  'factura num', 'compra', 'op', 'referencia', 'codigo', 'bultos', 'peso', 'valor', 'pagas',
+  'socio', 'tarjeta regalo', 'gastos', 'envio', 'portes', 'recargo', 'fin ticket', 'inicio ticket',
+  'promocion', 'ahorro', 'ahorras', 'dto', 'descuento aplicado', 'bono', 'cupon', 'cheque',
+  'regalo', 'puntos', 'saldo', 'disponible', 'consumicion', 'camara', 'carnet', 'nº', 'numero',
+  'telf', 'movil', 'email', 'web', 'www', 'direccion', 'poblacion', 'provincia', 'cod postal',
+  'c.p', 'cpostal', 'tienda', 'local', 'comercio', 'supermercado', 'market', 'mercadona',
+  'carrefour', 'alcampo', 'dia', 'lidl', 'aldi', 'consum', 'eroski', 'caprabo', 'bonpreu',
+  'esclat', 'condis', 'socio', 'tarjeta', 'visa', 'mastercard', 'bizum', 'contado', 'metalico',
+];
+
+function isNoProductLine(text) {
+  const lower = normalize(text);
+  if (ignoreKeywords.some(k => lower.includes(k))) return true;
+  if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda|travesia|carretera)/i.test(text)) return true;
+  if (/^(l |m |x |j |v |s |d )/.test(lower)) return true;
+  if (/^\d{1,2}[/-]\d{1,2}[/-]\d{2,4}$/.test(text)) return true;
+  if (/^\d{1,2}:\d{2}/.test(text)) return true;
+  if (/^[\d\s]+$/.test(text)) return true;
+  if (/^\d{10,}$/.test(text.replace(/\s/g, ''))) return true;
+  if (/[<>@#]/.test(text)) return true;
+  if (/^.{1,3}$/.test(text.trim())) return true;
+  return false;
+}
 
 function parseLineToProduct(line) {
   let clean = line.replace(/\s+/g, ' ').trim();
   if (!clean || clean.length < 5) return null;
-  const lower = normalize(clean);
-  if (ignoreKeywords.some(k => lower.includes(k))) return null;
-  if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda|travesia)/i.test(clean)) return null;
+  if (isNoProductLine(clean)) return null;
   const numbers = clean.match(/[\d.,]+/g);
   if (!numbers || numbers.length === 0) return null;
   let rawPrice = numbers[numbers.length - 1].replace(/\./g, '').replace(',', '.');
@@ -35,9 +61,7 @@ function parseLineToProduct(line) {
   let name = clean.substring(0, clean.lastIndexOf(numbers[numbers.length - 1])).trim();
   name = name.replace(/^\d+\s*[xX*]?\s*/, '').trim();
   if (!name || name.length < 2) return null;
-  const nameLower = normalize(name);
-  if (ignoreKeywords.some(k => nameLower.includes(k))) return null;
-  if (/^[\d\s]+$/.test(name)) return null;
+  if (isNoProductLine(name)) return null;
   if (!/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/.test(name)) return null;
   let quantity = '1';
   let unit = 'unidad';
@@ -59,14 +83,12 @@ function fallbackParseLines(text) {
   for (const line of lines) {
     let clean = line.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
     if (!clean || clean.length < 4) continue;
-    const lower = normalize(clean);
-    if (ignoreKeywords.some(k => lower.includes(k))) continue;
-    if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda)/i.test(clean)) continue;
-    if (/^[\d\s]+$/.test(clean)) continue;
+    if (isNoProductLine(clean)) continue;
     const words = clean.split(/\s+/).filter(w => w.length >= 3);
     if (words.length === 0) continue;
     const hasVowel = /[aeiouáéíóú]/i.test(clean);
     if (!hasVowel) continue;
+    if (words.length === 1 && words[0].length > 12) continue;
     const key = normalize(clean);
     if (seen.has(key)) continue;
     seen.add(key);
