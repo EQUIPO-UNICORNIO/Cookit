@@ -166,6 +166,16 @@ export default function MealsPage() {
     }
   };
 
+  const handleStepClick = (steps) => {
+    if (cookingStep < steps.length - 1) {
+      setCookingStep(cookingStep + 1);
+    } else {
+      showToast('¡Menú completado!');
+      setSelectedMeal(null);
+      setCookingStep(0);
+    }
+  };
+
   const parseInstructions = (text) => text?.split('\n').filter(l => l.trim()) || [];
 
   const dayMeals = selectedDay === 'todas'
@@ -222,7 +232,7 @@ export default function MealsPage() {
           <div className="flex gap-2">
             <button onClick={() => setCookingStep(Math.max(0, cookingStep - 1))} disabled={cookingStep <= 0}
               className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">Anterior</button>
-            <button onClick={() => cookingStep < steps.length - 1 ? setCookingStep(cookingStep + 1) : null}
+            <button onClick={() => handleStepClick(steps)}
               className="neo-btn-primary flex-1">
               {cookingStep >= steps.length - 1 ? '¡Completado!' : 'Siguiente'}
             </button>
