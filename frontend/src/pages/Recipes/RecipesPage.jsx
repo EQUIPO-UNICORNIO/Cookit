@@ -109,7 +109,6 @@ export default function RecipesPage() {
       if (items?.length) {
         const names = items.map(i => i.name).filter(Boolean);
         setPantryItems(names);
-        setSelectedIngredients(names);
       }
     } catch (e) { console.error(e); }
   };
@@ -331,6 +330,7 @@ export default function RecipesPage() {
                   <div className="flex flex-wrap gap-2">
                     {ings.map((ing, i) => {
                       const isSelected = selectedIngredients.includes(ing);
+                      const inPantry = pantryItems.some(p => normalize(p).includes(normalize(ing)) || normalize(ing).includes(normalize(p)));
                       return (
                         <button
                           key={i}
@@ -338,7 +338,9 @@ export default function RecipesPage() {
                           className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-all ${
                             isSelected
                               ? 'bg-primary-600 text-white border-primary-700'
-                              : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-primary-300'
+                              : inPantry
+                                ? 'bg-green-50 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-400 dark:border-green-700'
+                                : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-primary-300'
                           }`}
                         >
                           {isSelected ? '✓ ' : ''}{ing}
