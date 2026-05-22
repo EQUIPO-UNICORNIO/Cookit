@@ -6,7 +6,7 @@ import RECIPE_DB from '../../data/recipeDb';
 const recipesWithIds = RECIPE_DB.map((r, i) => ({
   ...r,
   id: `r${i}`,
-  videoUrl: r.videoUrl || `https://www.youtube.com/embed/videoseries?listType=search&hl=es&query=receta+${encodeURIComponent(r.name)}`,
+  videoUrl: r.videoUrl || `https://www.youtube.com/embed?listType=search&hl=es&query=receta+${encodeURIComponent(r.name)}`,
 }));
 
 const ingredientCategories = {

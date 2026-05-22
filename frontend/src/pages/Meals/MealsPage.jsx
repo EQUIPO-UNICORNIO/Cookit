@@ -204,12 +204,9 @@ export default function MealsPage() {
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
           {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">Día: {DAY_NAMES[selectedMeal.day] || selectedMeal.day}</p>}
 
-          {selectedMeal.videoUrl && (
-            <button onClick={() => setShowVideo(selectedMeal.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-3">
-              <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> Ver vídeo
-            </button>
-          )}
-
+          <button onClick={() => setShowVideo(selectedMeal.videoUrl || `https://www.youtube.com/embed?listType=search&hl=es&query=receta+${encodeURIComponent(selectedMeal.name)}`)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-3">
+            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> Ver vídeo
+          </button>
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
               <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-1">Ingredientes</p>
@@ -217,9 +214,9 @@ export default function MealsPage() {
                 {selectedMeal.ingredients.map((ing, i) => (
                   <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{ing}</span>
                 ))}
-          </div>
-        </div>
-        )}
+              </div>
+            </div>
+          )}
 
         {steps.length > 0 && (
           <div className="neo-card !bg-primary-600 !text-white !border-primary-800 mb-3 mt-4">
