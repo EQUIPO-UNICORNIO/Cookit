@@ -95,25 +95,6 @@ export default function MealsPage() {
     setTimeout(() => setToast(null), 2500);
   };
 
-  const generateShoppingList = async () => {
-    const withDay = meals.filter(m => m.day);
-    if (withDay.length === 0) { showToast('No hay comidas planificadas en días'); return; }
-    try {
-      const allIngredients = new Set();
-      withDay.forEach(m => {
-        (m.ingredients || []).forEach(i => { if (i.trim()) allIngredients.add(i.trim()); });
-      });
-      const pantry = await api.getPantry();
-      const pantryNames = new Set(pantry.map(p => p.name.toLowerCase()));
-      const missing = [...allIngredients].filter(i => ![...pantryNames].some(pn => i.toLowerCase().includes(pn) || pn.includes(i.toLowerCase())));
-      if (missing.length === 0) { showToast('Ya tienes todos los ingredientes'); return; }
-      for (const name of missing) {
-        await api.addShoppingItem({ name, category: 'Otros', quantity: '1', unit: 'unidad' });
-      }
-      showToast(`${missing.length} ingredientes añadidos a la compra`);
-    } catch (e) { showToast('Error: ' + e.message); }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -270,15 +251,10 @@ export default function MealsPage() {
           <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Mis Menús</h1>
           <p className="text-sm text-gray-500 font-medium">{meals.length} comidas planificadas</p>
         </div>
-        <div className="flex gap-2">
-          <button onClick={generateShoppingList} className="neo-btn !py-2 !px-3 !text-xs flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">shopping_cart</span> Generar compra
-          </button>
-          <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' }); }}
-            className="neo-btn-primary !p-3 !rounded-xl">
-            <span className="material-symbols-outlined">add</span>
-          </button>
-        </div>
+        <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' }); }}
+          className="neo-btn-primary !p-3 !rounded-xl">
+          <span className="material-symbols-outlined">add</span>
+        </button>
       </div>
 
       <div className="flex gap-1 mb-4 overflow-x-auto pb-1">

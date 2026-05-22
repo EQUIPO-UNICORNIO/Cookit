@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
-import RECIPE_DB from '../../data/recipeDb';
+
+const RECIPE_DB = [
+  { id: 'r1', name: 'Tortilla francesa', category: 'desayuno', time: '5 min', difficulty: 'Fácil', ingredients: ['Huevos', 'Sal', 'Aceite de oliva'], instructions: '1. Bate los huevos con sal.\n2. Calienta aceite en una sartén antiadherente.\n3. Vierte los huevos y deja cuajar.\n4. Cuando la base esté firme, dobla por la mitad.\n5. Sirve inmediatamente.', videoUrl: 'https://www.youtube.com/embed/weFUTzk1nJE' },
+  { id: 'r2', name: 'Huevos revueltos', category: 'desayuno', time: '5 min', difficulty: 'Fácil', ingredients: ['Huevos', 'Leche', 'Mantequilla', 'Sal', 'Pimienta'], instructions: '1. Bate los huevos con un poco de leche.\n2. Derrite la mantequilla en una sartén.\n3. Vierte los huevos y remueve suavemente.\n4. Cocina a fuego bajo hasta que cuajen.\n5. Sazona con sal y pimienta.', videoUrl: 'https://www.youtube.com/embed/o1JGxbhAGeA' },
+  { id: 'r3', name: 'Tostada con tomate', category: 'desayuno', time: '5 min', difficulty: 'Fácil', ingredients: ['Pan', 'Tomate', 'Aceite de oliva', 'Sal', 'Jamón'], instructions: '1. Tuesta las rebanadas de pan.\n2. Corta un tomate por la mitad.\n3. Restriega el tomate sobre el pan tostado.\n4. Añade aceite de oliva y sal.\n5. Coloca una loncha de jamón encima.', videoUrl: 'https://www.youtube.com/embed/T3ZRoZOh7Jc' },
+  { id: 'r4', name: 'Ensalada César', category: 'almuerzo', time: '20 min', difficulty: 'Fácil', ingredients: ['Lechuga', 'Pollo', 'Pan', 'Queso parmesano', 'Aceite de oliva', 'Limón', 'Ajo', 'Mostaza'], instructions: '1. Cocina el pollo a la plancha y corta en tiras.\n2. Corta el pan en cubos y tuéstalos en el horno.\n3. Prepara el aliño con aceite, limón, ajo y mostaza.\n4. Mezcla la lechuga con el pollo y los crutones.\n5. Añade el aliño y queso parmesano rallado.', videoUrl: 'https://www.youtube.com/embed/D_oiRz1AFGM' },
+  { id: 'r5', name: 'Arroz blanco', category: 'comida', time: '20 min', difficulty: 'Fácil', ingredients: ['Arroz', 'Agua', 'Aceite de oliva', 'Sal', 'Ajo'], instructions: '1. Sofríe el ajo picado en aceite.\n2. Añade el arroz y remueve 1 minuto.\n3. Agrega el doble de agua que de arroz.\n4. Cocina a fuego bajo 18 minutos.\n5. Deja reposar 5 minutos antes de servir.', videoUrl: 'https://www.youtube.com/embed/f1_MW-K6HF8' },
+  { id: 'r6', name: 'Lentejas estofadas', category: 'comida', time: '45 min', difficulty: 'Media', ingredients: ['Lentejas', 'Zanahoria', 'Patata', 'Cebolla', 'Ajo', 'Tomate', 'Pimentón', 'Aceite de oliva', 'Sal'], instructions: '1. Sofríe la cebolla, ajo y zanahoria picados.\n2. Añade el tomate y el pimentón.\n3. Incorpora las lentejas lavadas y la patata.\n4. Cubre con agua y sazona con sal.\n5. Cocina 40 minutos a fuego medio.', videoUrl: 'https://www.youtube.com/embed/mSg3O3DkodI' },
+  { id: 'r7', name: 'Puré de patatas', category: 'comida', time: '30 min', difficulty: 'Fácil', ingredients: ['Patatas', 'Leche', 'Mantequilla', 'Sal', 'Nuez moscada', 'Pimienta'], instructions: '1. Pela y corta las patatas en trozos.\n2. Hiérvelas en agua con sal hasta que estén tiernas.\n3. Escurre y aplasta las patatas.\n4. Añade mantequilla y leche caliente.\n5. Sazona con nuez moscada y pimienta.', videoUrl: 'https://www.youtube.com/embed/ZSN2upXOYPg' },
+];
 
 const ingredientCategories = {
   'Proteínas': [
@@ -68,7 +77,6 @@ export default function RecipesPage() {
   const [showIngredientPicker, setShowIngredientPicker] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(null);
   const [toast, setToast] = useState(null);
-  const [textSearch, setTextSearch] = useState('');
 
   useEffect(() => {
     loadPantry();
@@ -259,51 +267,15 @@ export default function RecipesPage() {
       </div>
 
       {!showIngredientPicker && !searched && (
-        <div>
-          <div className="flex gap-2 mb-4">
-            <input
-              className="neo-input flex-1"
-              placeholder="Buscar recetas..."
-              value={textSearch}
-              onChange={e => setTextSearch(e.target.value)}
-            />
-            <button onClick={() => setShowIngredientPicker(true)} className="neo-btn-primary !py-2 !px-4 !text-xs whitespace-nowrap">
-              <span className="material-symbols-outlined text-sm align-text-bottom">kitchen</span> {t('recipes.chooseIngredients')}
-            </button>
+        <div className="text-center py-8">
+          <div className="w-28 h-28 mx-auto rounded-3xl bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-300 flex items-center justify-center mb-5">
+            <span className="material-symbols-outlined text-5xl text-primary-500">restaurant_menu</span>
           </div>
-
-          {textSearch.length >= 2 && (
-            <div className="space-y-2 mb-4">
-              {recipes.filter(r => normalize(r.name).includes(normalize(textSearch))).slice(0, 20).map(recipe => (
-                <div key={recipe.name} className="neo-card flex items-center gap-3 !p-3 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedRecipe(recipe)}>
-                  <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0 border-2 border-black">
-                    <span className="material-symbols-outlined text-primary-600">restaurant_menu</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm">{recipe.name}</p>
-                    <p className="text-xs text-gray-500">{recipe.ingredients?.length || 0} ingredientes</p>
-                  </div>
-                  <span className="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-                </div>
-              ))}
-              {textSearch.length >= 2 && recipes.filter(r => normalize(r.name).includes(normalize(textSearch))).length === 0 && (
-                <p className="text-sm text-gray-400 text-center py-4">No se encontraron recetas para "{textSearch}"</p>
-              )}
-            </div>
-          )}
-
-          {textSearch.length < 2 && (
-            <div className="text-center py-8">
-              <div className="w-28 h-28 mx-auto rounded-3xl bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-300 flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-5xl text-primary-500">restaurant_menu</span>
-              </div>
-              <h2 className="text-lg font-extrabold text-gray-700 dark:text-gray-200 mb-2">{t('recipes.whatInKitchen')}</h2>
-              <p className="text-sm text-gray-400 mb-6 max-w-xs mx-auto">{t('recipes.kitchenDesc')}</p>
-              <button onClick={() => setShowIngredientPicker(true)} className="neo-btn-primary !py-3 !px-6">
-                <span className="material-symbols-outlined align-text-bottom">kitchen</span> {t('recipes.chooseIngredients')}
-              </button>
-            </div>
-          )}
+          <h2 className="text-lg font-extrabold text-gray-700 dark:text-gray-200 mb-2">{t('recipes.whatInKitchen')}</h2>
+          <p className="text-sm text-gray-400 mb-6 max-w-xs mx-auto">{t('recipes.kitchenDesc')}</p>
+          <button onClick={() => setShowIngredientPicker(true)} className="neo-btn-primary !py-3 !px-6">
+            <span className="material-symbols-outlined align-text-bottom">kitchen</span> {t('recipes.chooseIngredients')}
+          </button>
         </div>
       )}
 

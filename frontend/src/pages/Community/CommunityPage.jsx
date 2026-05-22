@@ -160,21 +160,6 @@ export default function CommunityPage() {
     setSaving(prev => ({ ...prev, [id]: false }));
   };
 
-  const handleAddToMeals = async (post) => {
-    try {
-      const ingredients = normalizeIngredients(post.ingredients);
-      await api.addMeal({
-        name: post.content?.slice(0, 50),
-        day: '',
-        meal_type: 'comida',
-        recipe: post.content?.slice(0, 50),
-        ingredients,
-        instructions: post.instructions || '',
-      });
-      showToast('Añadido a tus menús');
-    } catch (e) { showToast('Error: ' + e.message); }
-  };
-
   const openEdit = (post) => {
     setEditingPost(post);
     setEditContent(post.content);
@@ -300,16 +285,10 @@ export default function CommunityPage() {
                 <span className="material-symbols-outlined text-sm">chat_bubble_outline</span> {post.comments?.length || 0}
               </button>
               {user && (
-                <>
-                  <button onClick={e => { e.stopPropagation(); handleAddToMeals(post); }}
-                    className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-green-50 !text-green-700 !border-green-300">
-                    <span className="material-symbols-outlined text-sm">playlist_add</span> Menús
-                  </button>
-                  <button onClick={e => { e.stopPropagation(); handleSave(post.id); }} disabled={saving[post.id]}
-                    className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-primary-50 !text-primary-600 !border-primary-300 ml-auto disabled:opacity-30">
-                    <span className="material-symbols-outlined text-sm">bookmark_add</span> {saving[post.id] ? t('community.saving') : t('community.save')}
-                  </button>
-                </>
+                <button onClick={e => { e.stopPropagation(); handleSave(post.id); }} disabled={saving[post.id]}
+                  className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-primary-50 !text-primary-600 !border-primary-300 ml-auto disabled:opacity-30">
+                  <span className="material-symbols-outlined text-sm">bookmark_add</span> {saving[post.id] ? t('community.saving') : t('community.save')}
+                </button>
               )}
             </div>
 
