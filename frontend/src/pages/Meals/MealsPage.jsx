@@ -7,6 +7,11 @@ const mealTypes = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
 
 const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
+const DAY_NAMES = {
+  monday: 'Lunes', tuesday: 'Martes', wednesday: 'Miércoles',
+  thursday: 'Jueves', friday: 'Viernes', saturday: 'Sábado', sunday: 'Domingo'
+};
+
 const suggestions = [
   { name: 'Tortilla francesa', meal_type: 'desayuno', recipe: 'Tortilla francesa', ingredients: ['Huevos', 'Sal', 'Aceite de oliva'], instructions: '1. Bate los huevos con sal.\n2. Calienta aceite en una sartén antiadherente.\n3. Vierte los huevos y deja cuajar.\n4. Cuando la base esté firme, dobla por la mitad.\n5. Sirve inmediatamente.' },
   { name: 'Huevos revueltos', meal_type: 'desayuno', recipe: 'Huevos revueltos', ingredients: ['Huevos', 'Leche', 'Mantequilla', 'Sal', 'Pimienta'], instructions: '1. Bate los huevos con un poco de leche.\n2. Derrite la mantequilla en una sartén.\n3. Vierte los huevos y remueve suavemente.\n4. Cocina a fuego bajo hasta que cuajen.\n5. Sazona con sal y pimienta.' },
@@ -262,7 +267,7 @@ export default function MealsPage() {
       {dayMeals.length === 0 && (
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
-          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? 'seleccionado' : t(`meals.days.${selectedDay}`)}</p>
+          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? 'seleccionado' : DAY_NAMES[selectedDay]}</p>
           <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); generateSuggestion(); }} className="neo-btn-primary !py-2 !px-4 !text-sm mt-3">
             Sugerir comida
           </button>
@@ -280,7 +285,7 @@ export default function MealsPage() {
                 ${meal.meal_type === 'merienda' ? 'bg-purple-100 text-purple-800 border-purple-400' : ''}
                 ${meal.meal_type === 'cena' ? 'bg-indigo-100 text-indigo-800 border-indigo-400' : ''}
                 ${!['desayuno','almuerzo','comida','merienda','cena'].includes(meal.meal_type) ? 'bg-gray-800 text-white border-black' : ''}`}>
-                {t(`meals.days.${meal.day}`)}
+                {DAY_NAMES[meal.day] || meal.day}
               </span>
             )}
             <div className="flex gap-3 items-start">
@@ -343,13 +348,12 @@ export default function MealsPage() {
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.day} onChange={e => setForm({...form, day: e.target.value})}>
                   <option value="">{t('meals.noDay')}</option>
-                  {dayKeys.map(key => <option key={key} value={key}>{t(`meals.days.${key}`)}</option>)}
+                  {dayKeys.map(key => <option key={key} value={key}>{DAY_NAMES[key]}</option>)}
                 </select>
                 <select className="neo-input flex-1" value={form.meal_type} onChange={e => setForm({...form, meal_type: e.target.value})}>
                   {mealTypes.map(m => <option key={m}>{m}</option>)}
                 </select>
               </div>
-              <input className="neo-input" placeholder="Nombre de receta" value={form.recipe} onChange={e => setForm({...form, recipe: e.target.value})} />
               <input className="neo-input" placeholder="Ingredientes (separados por coma)" value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />
               <textarea className="neo-input min-h-[80px]" placeholder="Instrucciones (un paso por línea)" value={form.instructions} onChange={e => setForm({...form, instructions: e.target.value})} />
               <div className="flex gap-2 sticky bottom-0 bg-white pt-2">
