@@ -237,20 +237,29 @@ export default function ScannerPage() {
       }
 
       const lines = text.split('\n').filter(l => l.trim());
-      const matchedLines = new Set();
       let items = [];
+      const seenNames = new Set();
       for (const line of lines) {
         const product = parseLineToProduct(line);
         if (product) {
-          items.push(product);
-          matchedLines.add(normalize(line));
+          const pn = normalize(product.name);
+          if (!seenNames.has(pn)) {
+            seenNames.add(pn);
+            items.push(product);
+          }
         }
         if (items.length >= 50) break;
       }
 
       const fallbackItems = fallbackParseLines(text);
       for (const fb of fallbackItems) {
-        if (!items.some(i => normalize(i.name) === normalize(fb.name))) {
+        const fn = normalize(fb.name);
+        const dup = seenNames.has(fn) || items.some(i => {
+          const iname = normalize(i.name);
+          return iname.includes(fn) || fn.includes(iname);
+        });
+        if (!dup) {
+          seenNames.add(fn);
           items.push(fb);
         }
         if (items.length >= 50) break;
