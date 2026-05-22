@@ -66,7 +66,7 @@ Responde UNICAMENTE con JSON valido, sin texto extra:
   }
 });
 
-router.post('/save-merged', async (req, res) => {
+router.post('/save-merged', authMiddleware, async (req, res) => {
   try {
     const { items } = req.body;
     if (!Array.isArray(items)) return res.status(400).json({ error: 'Items requeridos' });
