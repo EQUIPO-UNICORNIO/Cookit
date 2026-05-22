@@ -3,19 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import { createWorker } from 'tesseract.js';
+import RECIPE_DB from '../../data/recipeDb';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
 const categoryOptions = ['proteina', 'carbohidrato', 'verdura', 'fruta', 'lacteo', 'grasa', 'otro'];
-
-const SUGGESTED_MEALS = [
-  { name: 'Tortilla francesa', recipe: 'Tortilla francesa', ingredients: ['Huevos', 'Sal', 'Aceite de oliva'], instructions: '1. Bate los huevos con sal.\n2. Calienta aceite en una sartén antiadherente.\n3. Vierte los huevos y deja cuajar.\n4. Cuando la base esté firme, dobla por la mitad.\n5. Sirve inmediatamente.' },
-  { name: 'Huevos revueltos', recipe: 'Huevos revueltos', ingredients: ['Huevos', 'Leche', 'Mantequilla', 'Sal', 'Pimienta'], instructions: '1. Bate los huevos con un poco de leche.\n2. Derrite la mantequilla en una sartén.\n3. Vierte los huevos y remueve suavemente.\n4. Cocina a fuego bajo hasta que cuajen.\n5. Sazona con sal y pimienta.' },
-  { name: 'Tostada con tomate', recipe: 'Tostada con tomate', ingredients: ['Pan', 'Tomate', 'Aceite de oliva', 'Sal', 'Jamón'], instructions: '1. Tuesta las rebanadas de pan.\n2. Corta un tomate por la mitad.\n3. Restriega el tomate sobre el pan tostado.\n4. Añade aceite de oliva y sal.\n5. Coloca una loncha de jamón encima.' },
-  { name: 'Ensalada César', recipe: 'Ensalada César', ingredients: ['Lechuga', 'Pollo', 'Pan', 'Queso parmesano', 'Aceite de oliva', 'Limón', 'Ajo', 'Mostaza'], instructions: '1. Cocina el pollo a la plancha y corta en tiras.\n2. Corta el pan en cubos y tuéstalos en el horno.\n3. Prepara el aliño con aceite, limón, ajo y mostaza.\n4. Mezcla la lechuga con el pollo y los crutones.\n5. Añade el aliño y queso parmesano rallado.' },
-  { name: 'Arroz blanco', recipe: 'Arroz blanco', ingredients: ['Arroz', 'Agua', 'Aceite de oliva', 'Sal', 'Ajo'], instructions: '1. Sofríe el ajo picado en aceite.\n2. Añade el arroz y remueve 1 minuto.\n3. Agrega el doble de agua que de arroz.\n4. Cocina a fuego bajo 18 minutos.\n5. Deja reposar 5 minutos antes de servir.' },
-  { name: 'Lentejas estofadas', recipe: 'Lentejas estofadas', ingredients: ['Lentejas', 'Zanahoria', 'Patata', 'Cebolla', 'Ajo', 'Tomate', 'Pimentón', 'Aceite de oliva', 'Sal'], instructions: '1. Sofríe la cebolla, ajo y zanahoria picados.\n2. Añade el tomate y el pimentón.\n3. Incorpora las lentejas lavadas y la patata.\n4. Cubre con agua y sazona con sal.\n5. Cocina 40 minutos a fuego medio.' },
-  { name: 'Puré de patatas', recipe: 'Puré de patatas', ingredients: ['Patatas', 'Leche', 'Mantequilla', 'Sal', 'Nuez moscada', 'Pimienta'], instructions: '1. Pela y corta las patatas en trozos.\n2. Hiérvelas en agua con sal hasta que estén tiernas.\n3. Escurre y aplasta las patatas.\n4. Añade mantequilla y leche caliente.\n5. Sazona con nuez moscada y pimienta.' },
-];
 
 const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
@@ -321,7 +312,7 @@ export default function ScannerPage() {
       const allMeals = (await api.getMeals()) || [];
       const scored = [];
       const seen = new Set();
-      for (const meal of [...allMeals, ...SUGGESTED_MEALS]) {
+      for (const meal of [...allMeals, ...RECIPE_DB]) {
         if (seen.has(meal.name)) continue;
         seen.add(meal.name);
         const ingList = meal.ingredients || [];
@@ -333,7 +324,7 @@ export default function ScannerPage() {
         }
       }
       scored.sort((a, b) => b.matchCount / b.totalIngredients - a.matchCount / a.totalIngredients);
-      setRecommendations(scored.slice(0, 5));
+      setRecommendations(scored);
     } catch { }
     setLoadingRecommendations(false);
   };
@@ -580,8 +571,11 @@ export default function ScannerPage() {
               <div className="flex items-center gap-2 mb-3">
                 <span className="material-symbols-outlined text-secondary-600">restaurant</span>
                 <h2 className="font-extrabold text-sm text-secondary-800">{t('scanner.dishesYouCanMake')}</h2>
+                {!loadingRecommendations && recommendations.length > 0 && (
+                  <span className="text-xs font-bold text-secondary-500 ml-auto">{recommendations.length} platos</span>
+                )}
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 max-h-96 overflow-y-auto">
                 {recommendations.map((meal, i) => (
                   <div key={i} className="bg-white dark:bg-gray-700 rounded-xl border border-secondary-200 dark:border-gray-600 p-3">
                     <div className="flex items-center justify-between mb-1">
