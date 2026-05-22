@@ -43,7 +43,7 @@ export default function MealsPage() {
   const [meals, setMeals] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: '', day: '', meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' });
+  const [form, setForm] = useState({ name: '', day: '', meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '', videoUrl: '' });
   const [selectedDay, setSelectedDay] = useState(dayKeys[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1]);
   const [ocrLoading, setOcrLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -51,6 +51,7 @@ export default function MealsPage() {
   const [cookingStep, setCookingStep] = useState(0);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [fullPhoto, setFullPhoto] = useState(null);
+  const [showVideoModal, setShowVideoModal] = useState(null);
   const [toast, setToast] = useState(null);
 
   useEffect(() => { loadMeals(); }, []);
@@ -113,7 +114,7 @@ export default function MealsPage() {
       }
       setShowForm(false);
       setEditing(null);
-      setForm({ name: '', day: '', meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' });
+      setForm({ name: '', day: '', meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '', videoUrl: '' });
       loadMeals();
       showToast('Receta guardada en tus menús');
     } catch (e) { showToast('Error al guardar: ' + e.message); }
@@ -200,10 +201,14 @@ export default function MealsPage() {
                 {selectedMeal.ingredients.map((ing, i) => (
                   <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{ing}</span>
                 ))}
-              </div>
-            </div>
-          )}
+          </div>
         </div>
+
+        {selectedMeal.videoUrl && (
+          <button onClick={() => setShowVideoModal(selectedMeal.videoUrl)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mb-3">
+            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> Ver vídeo
+          </button>
+        )}
 
         {steps.length > 0 && (
           <div className="neo-card !bg-primary-600 !text-white !border-primary-800 mb-3">
@@ -241,7 +246,7 @@ export default function MealsPage() {
           <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Mis Menús</h1>
           <p className="text-sm text-gray-500 font-medium">{meals.length} comidas planificadas</p>
         </div>
-        <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '' }); }}
+        <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '', videoUrl: '' }); }}
           className="neo-btn-primary !p-3 !rounded-xl">
           <span className="material-symbols-outlined">add</span>
         </button>
@@ -311,7 +316,7 @@ export default function MealsPage() {
               )}
             </div>
             <div className="flex gap-2 mt-2 pt-2 border-t border-gray-100">
-              <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
+              <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo, videoUrl: meal.videoUrl || '' }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
                 <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
               </button>
               <button onClick={(e) => { e.stopPropagation(); confirmDelete(meal.id); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-red-300 text-red-500">
@@ -356,6 +361,7 @@ export default function MealsPage() {
               </div>
               <input className="neo-input" placeholder="Ingredientes (separados por coma)" value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />
               <textarea className="neo-input min-h-[80px]" placeholder="Instrucciones (un paso por línea)" value={form.instructions} onChange={e => setForm({...form, instructions: e.target.value})} />
+              <input className="neo-input" placeholder="URL del vídeo (YouTube Embed)" value={form.videoUrl} onChange={e => setForm({...form, videoUrl: e.target.value})} />
               <div className="flex gap-2 sticky bottom-0 bg-white pt-2">
                 <button type="submit" className="neo-btn-primary flex-1">{editing ? 'Guardar' : 'Agregar'}</button>
                 <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
@@ -381,6 +387,31 @@ export default function MealsPage() {
             <div className="flex gap-2">
               <button onClick={cancelDelete} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
               <button onClick={() => handleDelete(confirmDeleteId)} className="neo-btn !bg-red-500 !text-white flex-1">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showVideoModal && (
+        <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => setShowVideoModal(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-red-500">play_circle</span> Vídeo tutorial
+              </h3>
+              <button onClick={() => setShowVideoModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="aspect-video">
+              <iframe
+                src={showVideoModal}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Vídeo tutorial"
+              />
             </div>
           </div>
         </div>
