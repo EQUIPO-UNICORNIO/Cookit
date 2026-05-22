@@ -380,7 +380,7 @@ export default function RecipesPage() {
                   <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
                 </button>
                 <button onClick={clearAll} className="text-xs font-bold neo-btn !py-1 !px-2 !border-red-300 text-red-500">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">close</span> {t('meals.clear')}
+                  <span className="material-symbols-outlined text-sm align-text-bottom">close</span> Eliminar
                 </button>
               </div>
             </div>
