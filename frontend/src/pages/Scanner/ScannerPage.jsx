@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
+import { createWorker } from 'tesseract.js';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
 const categoryOptions = ['proteina', 'carbohidrato', 'verdura', 'fruta', 'lacteo', 'grasa', 'otro'];
@@ -15,6 +16,91 @@ const SUGGESTED_MEALS = [
   { name: 'Lentejas estofadas', recipe: 'Lentejas estofadas', ingredients: ['Lentejas', 'Zanahoria', 'Patata', 'Cebolla', 'Ajo', 'Tomate', 'Pimentón', 'Aceite de oliva', 'Sal'], instructions: '1. Sofríe la cebolla, ajo y zanahoria picados.\n2. Añade el tomate y el pimentón.\n3. Incorpora las lentejas lavadas y la patata.\n4. Cubre con agua y sazona con sal.\n5. Cocina 40 minutos a fuego medio.' },
   { name: 'Puré de patatas', recipe: 'Puré de patatas', ingredients: ['Patatas', 'Leche', 'Mantequilla', 'Sal', 'Nuez moscada', 'Pimienta'], instructions: '1. Pela y corta las patatas en trozos.\n2. Hiérvelas en agua con sal hasta que estén tiernas.\n3. Escurre y aplasta las patatas.\n4. Añade mantequilla y leche caliente.\n5. Sazona con nuez moscada y pimienta.' },
 ];
+
+const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+const ignoreKeywords = ['total', 'iva', 'subtotal', 'efectivo', 'tarjeta', 'cambio', 'nif', 'cif', 'caja', 'sup', 'op', 'telefono', 'paseo', 'calle', 'gracias', 'ticket', 'factura', 'cliente', 'importe', 'descuento', 'redondo', 'base', 'unidades', 'euros', 'centimos'];
+
+function parseLineToProduct(line) {
+  let clean = line.replace(/\s+/g, ' ').trim();
+  if (!clean || clean.length < 5) return null;
+  const lower = normalize(clean);
+  if (ignoreKeywords.some(k => lower.includes(k))) return null;
+  if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda|travesia)/i.test(clean)) return null;
+  const numbers = clean.match(/[\d.,]+/g);
+  if (!numbers || numbers.length === 0) return null;
+  let rawPrice = numbers[numbers.length - 1].replace(/\./g, '').replace(',', '.');
+  let price = parseFloat(rawPrice);
+  if (isNaN(price) || price <= 0 || price > 9999) return null;
+  let name = clean.substring(0, clean.lastIndexOf(numbers[numbers.length - 1])).trim();
+  name = name.replace(/^\d+\s*[xX*]?\s*/, '').trim();
+  if (!name || name.length < 2) return null;
+  const nameLower = normalize(name);
+  if (ignoreKeywords.some(k => nameLower.includes(k))) return null;
+  if (/^[\d\s]+$/.test(name)) return null;
+  if (!/[a-zA-ZáéíóúñüÁÉÍÓÚÑÜ]/.test(name)) return null;
+  let quantity = '1';
+  let unit = 'unidad';
+  const qtyMatch = name.match(/^(\d+)\s*(kg|g|l|ml|ud|unidad|unidades|paq|pack|lata|botella|bolsa|pieza|tarro)?\s+/i);
+  if (qtyMatch) {
+    quantity = qtyMatch[1];
+    if (qtyMatch[2]) unit = qtyMatch[2].toLowerCase();
+    name = name.substring(qtyMatch[0].length).trim();
+  }
+  name = name.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
+  if (!name || name.length < 2) return null;
+  return { name, quantity, unit };
+}
+
+function fallbackParseLines(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const items = [];
+  const seen = new Set();
+  for (const line of lines) {
+    let clean = line.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
+    if (!clean || clean.length < 4) continue;
+    const lower = normalize(clean);
+    if (ignoreKeywords.some(k => lower.includes(k))) continue;
+    if (/^(avda|calle|c\/|plaza|ctra|camino|paseo|ronda)/i.test(clean)) continue;
+    if (/^[\d\s]+$/.test(clean)) continue;
+    const words = clean.split(/\s+/).filter(w => w.length >= 3);
+    if (words.length === 0) continue;
+    const hasVowel = /[aeiouáéíóú]/i.test(clean);
+    if (!hasVowel) continue;
+    const key = normalize(clean);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    items.push({ name: clean, quantity: '1', unit: 'unidad' });
+  }
+  return items.slice(0, 50);
+}
+
+function preprocessImage(canvas) {
+  const MIN_HEIGHT = 2000;
+  let w = canvas.width, h = canvas.height;
+  if (h < MIN_HEIGHT) {
+    const scale = MIN_HEIGHT / h;
+    w = Math.round(w * scale);
+    h = MIN_HEIGHT;
+    const scaled = document.createElement('canvas');
+    scaled.width = w;
+    scaled.height = h;
+    scaled.getContext('2d').drawImage(canvas, 0, 0, w, h);
+    canvas = scaled;
+  }
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, w, h);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    const gray = Math.round(r * 0.299 + g * 0.587 + b * 0.114);
+    const light = gray > 180 ? 255 : gray;
+    const dark = light < 40 ? 0 : light;
+    data[i] = data[i + 1] = data[i + 2] = dark;
+  }
+  ctx.putImageData(imageData, 0, 0);
+  return canvas;
+}
 
 const matchIngredients = (itemNames, mealIngredients) => {
   const lowerItems = itemNames.map(n => n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
@@ -60,27 +146,57 @@ export default function ScannerPage() {
 
   const processImage = async (canvas) => {
     setProcessing(true);
+    setOcrProgress('Preprocesando imagen...');
     setError('');
-    setOcrProgress('Leyendo texto del ticket...');
-    const base64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-
     try {
-      const result = await api.processTicket(base64);
-      const items = (result.items || []).filter(i => i.name?.trim());
+      const processed = preprocessImage(canvas);
+      setOcrProgress('Leyendo texto con OCR...');
+      const worker = await createWorker('spa+eng', 1, {
+        logger: m => {
+          if (m.status) setOcrProgress(m.status + (m.progress ? ` ${Math.round(m.progress * 100)}%` : ''));
+        },
+      });
+      await worker.setParameters({
+        tessedit_pageseg_mode: '6',
+        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúñüÁÉÍÓÚÑÜ0123456789., ',
+        preserve_interword_spaces: '1',
+      });
+      const { data } = await worker.recognize(processed);
+      const text = data.text.trim();
+      worker.terminate();
+      setRawText(text);
 
-      if (items.length === 0) {
-        setError(t('scanner.errorDetectProducts'));
+      if (!text || text.length < 5) {
+        setError('No se pudo leer el ticket. Asegurate de que este bien iluminado y enfocado.');
         setStep('initial');
         setProcessing(false);
         return;
       }
 
-      setParsedItems(items);
-      setRawText(items.map(i => `${i.name} (${i.quantity} ${i.unit})`).join('\n'));
+      const lines = text.split('\n').filter(l => l.trim());
+      let items = [];
+      for (const line of lines) {
+        const product = parseLineToProduct(line);
+        if (product) items.push(product);
+        if (items.length >= 50) break;
+      }
+
+      if (items.length === 0) {
+        items = fallbackParseLines(text);
+      }
+
+      if (items.length === 0) {
+        setError('No se detectaron productos en el ticket. Intenta con una foto mas clara.');
+        setStep('initial');
+        setProcessing(false);
+        return;
+      }
+
+      setParsedItems(items.map(i => ({ ...i, category: 'otro' })));
       setStep('review');
       findRecommendations(items);
     } catch (e) {
-      setError('Error al procesar: ' + e.message);
+      setError('Error al procesar la imagen: ' + e.message);
       setStep('initial');
     }
     setProcessing(false);
