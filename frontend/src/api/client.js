@@ -17,6 +17,7 @@ export const api = {
   register: (name, email, password) => request('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
   me: () => request('/auth/me'),
   updateAvatar: (avatar) => request('/auth/avatar', { method: 'PUT', body: JSON.stringify({ avatar }) }),
+  updateUser: (data) => request('/auth/update', { method: 'PUT', body: JSON.stringify(data) }),
   resetDev: (email, password) => request('/auth/reset-dev', { method: 'POST', body: JSON.stringify({ email, password }) }),
 
   // Pantry

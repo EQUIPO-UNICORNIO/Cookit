@@ -28,6 +28,8 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const currentAvatar = user?.avatar || '';
   const [builtIn, setBuiltIn] = useState(currentAvatar);
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState(user?.name || '');
 
   const saveAvatar = async (data) => {
     try {
@@ -61,6 +63,15 @@ export default function ProfilePage() {
     setLanguage(lng);
   };
 
+  const saveName = async () => {
+    if (!newName.trim() || newName.trim() === user?.name) { setEditingName(false); return; }
+    try {
+      await api.updateUser({ name: newName.trim() });
+      await refreshUser();
+      setEditingName(false);
+    } catch (e) { console.error(e); }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-6">{t('profile.title')}</h1>
@@ -84,7 +95,23 @@ export default function ProfilePage() {
           )}
         </div>
 
-        <h2 className="text-xl font-extrabold mt-3">{user?.name || 'Usuario'}</h2>
+        <div className="flex items-center justify-center gap-2 mt-3">
+          {editingName ? (
+            <input
+              className="neo-input text-center !py-1 !text-base !w-48"
+              value={newName}
+              onChange={e => setNewName(e.target.value)}
+              onBlur={saveName}
+              onKeyDown={e => { if (e.key === 'Enter') saveName(); if (e.key === 'Escape') { setEditingName(false); setNewName(user?.name || ''); } }}
+              autoFocus
+            />
+          ) : (
+            <h2 className="text-xl font-extrabold cursor-pointer hover:text-primary-600 transition-colors" onClick={() => { setEditingName(true); setNewName(user?.name || ''); }}>
+              {user?.name || 'Usuario'}
+              <span className="material-symbols-outlined text-base align-text-bottom ml-1 text-gray-400">edit</span>
+            </h2>
+          )}
+        </div>
         <p className="text-sm text-gray-500 font-medium">{user?.email || ''}</p>
 
         <p className="text-xs font-bold text-gray-500 mt-4 mb-2">{t('profile.chooseAvatar')}</p>

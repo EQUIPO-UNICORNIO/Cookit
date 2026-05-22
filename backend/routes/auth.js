@@ -69,6 +69,17 @@ router.put('/avatar', authMiddleware, async (req, res) => {
   }
 });
 
+router.put('/update', authMiddleware, async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name || !name.trim()) return res.status(400).json({ error: 'Nombre requerido' });
+    await updateById('users', req.userId, { name: name.trim() });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 router.post('/sync-password', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;

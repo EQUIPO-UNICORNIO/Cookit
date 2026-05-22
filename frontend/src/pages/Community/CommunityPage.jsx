@@ -155,7 +155,7 @@ export default function CommunityPage() {
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
       await api.savePost(id);
-      showToast(t('community.savedToMealPlan'));
+      showToast('Guardado en tus menús');
     } catch (e) { showToast(t('community.errorSave')); }
     setSaving(prev => ({ ...prev, [id]: false }));
   };
