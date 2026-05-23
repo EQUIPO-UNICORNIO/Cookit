@@ -15,18 +15,20 @@ function getFallbackColor(name) {
   return fallbackColors[Math.abs(hash) % fallbackColors.length];
 }
 
+const parseIngredients = (str) => str.split(/[\s,]+/).filter(Boolean);
+
 function normalizeIngredients(data) {
   if (!data) return [];
   if (Array.isArray(data)) {
     const flat = data.flatMap(i => {
-      if (typeof i === 'string') return i.split(',').map(s => s.trim()).filter(Boolean);
+      if (typeof i === 'string') return parseIngredients(i);
       return [];
     });
     return flat;
   }
   if (typeof data === 'string') {
     try { return JSON.parse(data); } catch {}
-    return data.split(',').map(i => i.trim()).filter(Boolean);
+    return parseIngredients(data);
   }
   return [];
 }
@@ -115,7 +117,7 @@ export default function CommunityPage() {
     e.preventDefault();
     if (!newPost.trim()) return;
     try {
-      const data = { content: newPost, photo: newPhoto, ingredients: newIngredients.split(',').map(i => i.trim()).filter(Boolean), instructions: newInstructions };
+      const data = { content: newPost, photo: newPhoto, ingredients: parseIngredients(newIngredients), instructions: newInstructions };
       await api.createPost(data);
       setNewPost('');
       setNewPhoto('');
@@ -164,7 +166,7 @@ export default function CommunityPage() {
     setEditingPost(post);
     setEditContent(post.content);
     setEditPhoto(post.photo || '');
-    setEditIngredients((post.ingredients || []).join(', '));
+    setEditIngredients((post.ingredients || []).join(' '));
     setEditInstructions(post.instructions || '');
   };
 
@@ -175,7 +177,7 @@ export default function CommunityPage() {
       await api.updatePost(editingPost.id, {
         content: editContent,
         photo: editPhoto,
-        ingredients: editIngredients.split(',').map(i => i.trim()).filter(Boolean),
+        ingredients: parseIngredients(editIngredients),
         instructions: editInstructions
       });
       setEditingPost(null);
