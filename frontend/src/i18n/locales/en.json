@@ -31,14 +31,30 @@
     "notes": "Notes",
     "quantity": "Quantity",
     "expiry": "Expires",
+    "expired": "Expired",
+    "expiringSoon": "Expiring soon",
     "addedOn": "Added on",
     "videoTutorial": "Video tutorial",
-    "watchVideo": "Watch video tutorial",
+    "watchVideo": "Watch video",
     "addToMealPlan": "Add to meal plan",
-    "addedToMealPlan": "Recipe added to your meal plan",
+    "addedToMealPlan": "Added to your meal plan",
     "errorAdding": "Error adding: ",
     "errorSaving": "Error saving: ",
-    "savedToMealPlan": "Recipe saved to your meal plan"
+    "savedToMealPlan": "Saved to your meal plan",
+    "done": "Done",
+    "apply": "Apply",
+    "finish": "Finish",
+    "start": "Start",
+    "next": "Next",
+    "previous": "Previous",
+    "clear": "Clear",
+    "saveToPantry": "Save to Pantry",
+    "saveToShopping": "Save to Shopping",
+    "convert": "Convert",
+    "view": "View",
+    "addToShopping": "Add to shopping list",
+    "video": "Video",
+    "searching": "Searching..."
   },
   "access": {
     "welcome": "Welcome back",
@@ -87,7 +103,16 @@
     "language": "Language",
     "languageDesc": "Select the app language",
     "spanish": "Español",
-    "english": "English"
+    "english": "English",
+    "changePassword": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password (min. 6 characters)",
+    "passwordChanged": "Password changed successfully",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "deleteAccount": "Delete account",
+    "deleteAccountDesc": "Delete all your data",
+    "confirmDeleteTitle": "Delete account?",
+    "confirmDeleteDesc": "All your data will be permanently deleted. This action cannot be undone."
   },
   "meals": {
     "title": "My Meals",
@@ -113,6 +138,10 @@
     "noStepsDefined": "This dish has no defined steps",
     "readingImage": "Reading image...",
     "deleteMenu": "Delete this meal?",
+    "allDays": "All",
+    "selectedDay": "selected",
+    "completedMeal": "Meal completed!",
+    "videoNoFound": "No video found",
     "days": {
       "monday": "Monday",
       "tuesday": "Tuesday",
@@ -147,7 +176,9 @@
     "breakfast": "breakfast",
     "lunch": "lunch",
     "dinner": "dinner",
-    "supper": "supper"
+    "supper": "supper",
+    "videoNoFound": "No video found",
+    "searching": "Searching..."
   },
   "pantry": {
     "title": "Your Pantry",
@@ -159,10 +190,18 @@
     "optionalNotes": "Notes (optional)",
     "emptyPantry": "Your pantry is empty",
     "addFirstItems": "Add your first items",
-    "expiredProduct": "Expired product!",
+    "expiredProduct": "Expired!",
     "consumeSoon": "Consume soon!",
     "deleteItem": "Delete this item?",
     "byExpiry": "By expiry",
+    "convert": "Convert",
+    "convertTitle": "Convert {name}",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "converted": "Converted: {qty} {from} = {result} {to}",
+    "addedToShopping": "Added to shopping list",
+    "expiringProducts": "products expiring soon",
+    "suggestedRecipes": "Recipes you can make:",
     "categories": {
       "proteins": "Proteins",
       "fruitsVeggies": "Fruits & Vegetables",
@@ -170,7 +209,10 @@
       "carbs": "Carbs",
       "canned": "Canned Goods",
       "condiments": "Condiments",
-      "others": "Others"
+      "others": "Others",
+      "seafood": "Seafood",
+      "frozen": "Frozen",
+      "drinks": "Drinks"
     }
   },
   "shopping": {
@@ -182,7 +224,12 @@
     "pending": "Pending",
     "completed": "Completed",
     "emptyList": "Empty list",
-    "addShoppingItems": "Add items for your shopping"
+    "addShoppingItems": "Add items for your shopping",
+    "newProduct": "New Product",
+    "productName": "Product name",
+    "add": "Add",
+    "cancel": "Cancel",
+    "addedToList": "Added to the list"
   },
   "scanner": {
     "title": "Receipt Scanner",
@@ -204,6 +251,7 @@
     "saving": "Saving...",
     "scanAnother": "Scan another receipt",
     "goToPantry": "Go to pantry",
+    "goToShopping": "Go to shopping",
     "ticketScanned": "Receipt scanned!",
     "productsSaved": "product(s) saved to your pantry",
     "errorReadTicket": "Could not read the receipt. Make sure it is well lit and focused.",
@@ -213,7 +261,15 @@
     "errorOpenCamera": "Could not open the camera. Use the upload photo option.",
     "errorFlash": "Error changing the flash",
     "flashUnavailable": "Flash not available on this device",
-    "addToMealPlan": "Add to meal plan"
+    "addToMealPlan": "Add to meal plan",
+    "saveToShopping": "Save to shopping ({count})",
+    "preprocessing": "Preprocessing image...",
+    "readingOCR": "Reading text with OCR...",
+    "addedToShopping": "Added to shopping",
+    "productsOnList": "products on the list",
+    "scanOther": "Scan another",
+    "dishes": "dishes",
+    "ingredients": "ingredients"
   },
   "substitution": {
     "title": "Ingredient Substitution",
@@ -252,7 +308,8 @@
     "errorLike": "Error liking",
     "errorSave": "Error saving",
     "errorDelete": "Error deleting",
-    "error": "Error: "
+    "error": "Error: ",
+    "savedToMealPlan": "Saved to your meal plan"
   },
   "challenges": {
     "title": "Challenges & Achievements",
@@ -287,6 +344,36 @@
     "water": "Water Saved",
     "foodSaved": "Food Saved",
     "mealsCooked": "Meals Cooked",
-    "plasticSaved": "Plastic Prevented"
+    "plasticSaved": "Plastic Prevented",
+    "dishes": "dishes"
+  },
+  "cooking": {
+    "title": "Cooking Mode",
+    "sessions": "sessions",
+    "noActiveSessions": "No active sessions",
+    "startNewRecipe": "Start a new recipe",
+    "completed": "Completed!",
+    "recipeCompleted": "Recipe Completed!",
+    "greatJob": "Great job, chef.",
+    "back": "Back",
+    "step": "Step",
+    "of": "of",
+    "steps": "steps",
+    "ready": "Done!",
+    "timer": "Timer",
+    "min": "min",
+    "start": "Start",
+    "timeUp": "Time's up!",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "recipeName": "Recipe name",
+    "stepsPlaceholder": "Steps (one per line)",
+    "startCooking": "Start cooking",
+    "cancel": "Cancel",
+    "completedSession": "Completed",
+    "newRecipe": "New Recipe",
+    "cook": "Cook",
+    "deleteSession": "Delete this session?"
   }
 }

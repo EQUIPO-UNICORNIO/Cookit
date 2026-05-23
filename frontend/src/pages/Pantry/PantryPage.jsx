@@ -133,7 +133,7 @@ export default function PantryPage() {
     const newItem = { ...item, quantity: String(result), unit: convertTo };
     handleEditSubmit(newItem);
     setShowConvert(null);
-    showToast(`Convertido: ${convertQty} ${item.unit} = ${result} ${convertTo}`);
+    showToast(t('pantry.converted', { qty: convertQty, from: item.unit, result, to: convertTo }));
   };
 
   const handleEditSubmit = async (item) => {
@@ -230,7 +230,7 @@ export default function PantryPage() {
           <button onClick={() => { handleEdit(selectedItem); setSelectedItem(null); }} className="neo-btn-primary flex-1">{t('common.edit')}</button>
           {selectedItem.unit && unitConversions[selectedItem.unit] && (
             <button onClick={() => { setShowConvert(selectedItem); setConvertQty(selectedItem.quantity); setConvertFrom(selectedItem.unit); setConvertTo(Object.keys(unitConversions[selectedItem.unit])[0]); }} className="neo-btn !bg-blue-50 !text-blue-700 !border-blue-400 flex-1">
-              <span className="material-symbols-outlined text-sm align-text-bottom">swap_horiz</span> Convertir
+              <span className="material-symbols-outlined text-sm align-text-bottom">swap_horiz</span> {t('pantry.convert')}
             </button>
           )}
           <button onClick={() => { confirmDelete(selectedItem.id); setSelectedItem(null); }} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 flex-1">{t('common.delete')}</button>
@@ -277,14 +277,14 @@ export default function PantryPage() {
           <div className="neo-card !bg-orange-50 !border-orange-400 mb-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="material-symbols-outlined text-orange-600">warning</span>
-              <p className="font-bold text-sm text-orange-800">{expiring.length} producto{expiring.length > 1 ? 's' : ''} próximo{expiring.length > 1 ? 's' : ''} a caducar</p>
+              <p className="font-bold text-sm text-orange-800">{t('pantry.expiringProducts', { count: expiring.length })}</p>
             </div>
             <div className="flex flex-wrap gap-1 mb-2">
               {expiring.map(i => <span key={i.id} className="text-xs bg-orange-100 border border-orange-300 rounded-lg px-2 py-0.5 font-medium text-orange-700">{i.name}</span>)}
             </div>
             {suggestions.length > 0 && (
               <>
-                <p className="text-xs font-bold text-orange-700 mb-1">Recetas que puedes hacer:</p>
+                <p className="text-xs font-bold text-orange-700 mb-1">{t('pantry.suggestedRecipes')}</p>
                 <div className="flex flex-wrap gap-1">
                   {suggestions.map(r => (
                     <span key={r.id} className="text-xs bg-white border border-orange-300 rounded-lg px-2 py-0.5 font-medium text-gray-700">{r.name}</span>
@@ -343,16 +343,16 @@ export default function PantryPage() {
                   </div>
                   {item.expiry_date && isExpired(item.expiry_date) && (
                     <span className="text-xs font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-lg border border-gray-400 inline-flex items-center gap-0.5 mt-0.5 line-through">
-                      <span className="material-symbols-outlined text-xs">block</span> ¡Producto caducado!
+                      <span className="material-symbols-outlined text-xs">block</span> {t('pantry.expiredProduct')}
                     </span>
                   )}
                   {item.expiry_date && !isExpired(item.expiry_date) && isExpiringSoon(item.expiry_date) && (
                     <span className="text-xs font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-lg border border-red-300 inline-flex items-center gap-0.5 mt-0.5">
-                      <span className="material-symbols-outlined text-xs">warning</span> ¡Consumir pronto!
+                      <span className="material-symbols-outlined text-xs">warning</span> {t('pantry.consumeSoon')}
                     </span>
                   )}
                 </div>
-                <button onClick={(e) => { e.stopPropagation(); api.addShoppingItem({ name: item.name, category: item.category, quantity: item.quantity, unit: item.unit }).then(() => showToast('Añadido a la compra')).catch(() => {}); }} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-500 flex-shrink-0" title="Añadir a la compra">
+                <button onClick={(e) => { e.stopPropagation(); api.addShoppingItem({ name: item.name, category: item.category, quantity: item.quantity, unit: item.unit }).then(() => showToast(t('pantry.addedToShopping'))).catch(() => {}); }} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-500 flex-shrink-0" title={t('common.addToShopping')}>
                   <span className="material-symbols-outlined text-sm">shopping_cart</span>
                 </button>
                 <button onClick={(e) => { e.stopPropagation(); confirmDelete(item.id); }} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
@@ -388,7 +388,7 @@ export default function PantryPage() {
       {showConvert && (
         <div className="fixed inset-0 bg-black/40 z-[70] flex items-end justify-center" onClick={() => setShowConvert(null)}>
           <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-14 border-t-2 border-black" onClick={e => e.stopPropagation()}>
-            <h3 className="font-extrabold text-base mb-4">Convertir {showConvert.name}</h3>
+            <h3 className="font-extrabold text-base mb-4">{t('pantry.convertTitle', { name: showConvert.name })}</h3>
             <div className="space-y-3">
               <div className="flex gap-2 items-center">
                 <input className="neo-input w-24" type="number" value={convertQty} onChange={e => setConvertQty(e.target.value)} />
@@ -404,8 +404,8 @@ export default function PantryPage() {
                 </select>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => applyConvert(showConvert)} className="neo-btn-primary flex-1">Aplicar</button>
-                <button onClick={() => setShowConvert(null)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
+                <button onClick={() => applyConvert(showConvert)} className="neo-btn-primary flex-1">{t('pantry.apply')}</button>
+                <button onClick={() => setShowConvert(null)} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
               </div>
             </div>
           </div>

@@ -34,7 +34,7 @@ export default function ShoppingPage() {
       setForm({ name: '', category: 'Otros', quantity: '1', unit: 'unidad' });
       setShowForm(false);
       loadItems();
-      showToast('Añadido a la lista');
+      showToast(t('shopping.addedToList'));
     } catch (e) { alert(e.message); }
   };
 
@@ -119,9 +119,9 @@ export default function ShoppingPage() {
       {showForm && (
         <div className="fixed inset-0 bg-black/40 z-[60] flex items-end justify-center" onClick={() => setShowForm(false)}>
           <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-20 border-t-2 border-black" onClick={e => e.stopPropagation()}>
-            <h2 className="text-lg font-extrabold mb-4">Nuevo producto</h2>
+            <h2 className="text-lg font-extrabold mb-4">{t('shopping.newProduct')}</h2>
             <form onSubmit={addItem} className="space-y-3">
-              <input className="neo-input" placeholder="Nombre del producto" value={form.name} onChange={handleNameChange} required />
+              <input className="neo-input" placeholder={t('shopping.productName')} value={form.name} onChange={handleNameChange} required />
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
                   {CATEGORIES.map(c => <option key={c}>{c}</option>)}
@@ -132,8 +132,8 @@ export default function ShoppingPage() {
                 </select>
               </div>
               <div className="flex gap-2">
-                <button type="submit" className="neo-btn-primary flex-1">Añadir</button>
-                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
+                <button type="submit" className="neo-btn-primary flex-1">{t('shopping.add')}</button>
+                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
               </div>
             </form>
           </div>

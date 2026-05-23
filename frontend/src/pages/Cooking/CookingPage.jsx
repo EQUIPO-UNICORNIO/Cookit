@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../api/client';
 
 export default function CookingPage() {
+  const { t } = useTranslation();
   const [sessions, setSessions] = useState([]);
   const [activeSession, setActiveSession] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -60,7 +62,7 @@ export default function CookingPage() {
   };
 
   const deleteSession = async (id) => {
-    if (!confirm('¿Eliminar esta sesión?')) return;
+    if (!confirm(t('cooking.deleteSession'))) return;
     try {
       await api.deleteSession(id);
       if (activeSession?.id === id) setActiveSession(null);
@@ -93,7 +95,7 @@ export default function CookingPage() {
     return (
       <div>
         <button onClick={() => setActiveSession(null)} className="neo-btn !bg-gray-100 !py-2 !px-3 !text-sm mb-4">
-          <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> Volver
+          <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> {t('cooking.back')}
         </button>
 
         <div className="neo-card mb-4">
@@ -101,42 +103,42 @@ export default function CookingPage() {
           <div className="mt-3 bg-gray-100 rounded-full h-3 border-2 border-black overflow-hidden">
             <div className="bg-primary-500 h-full transition-all duration-500 rounded-full" style={{ width: `${completed ? 100 : progress}%` }} />
           </div>
-          <p className="text-xs font-bold text-gray-500 mt-1">{completed ? '¡Completado!' : `${current_step + 1} de ${steps.length} pasos`}</p>
+          <p className="text-xs font-bold text-gray-500 mt-1">{completed ? t('cooking.completed') : `${t('cooking.step')} ${current_step + 1} ${t('cooking.of')} ${steps.length} ${t('cooking.steps')}`}</p>
         </div>
 
         {completed ? (
           <div className="text-center py-12">
             <span className="material-symbols-outlined text-6xl text-primary-500">celebration</span>
-            <h2 className="text-xl font-extrabold mt-4">¡Receta Completada!</h2>
-            <p className="text-gray-500 mt-2">Buen trabajo, chef.</p>
-            <button onClick={() => setActiveSession(null)} className="neo-btn-primary mt-6">Volver</button>
+            <h2 className="text-xl font-extrabold mt-4">{t('cooking.recipeCompleted')}</h2>
+            <p className="text-gray-500 mt-2">{t('cooking.greatJob')}</p>
+            <button onClick={() => setActiveSession(null)} className="neo-btn-primary mt-6">{t('cooking.back')}</button>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="neo-card !bg-primary-600 !text-white !border-primary-800">
-              <span className="text-xs font-bold uppercase">Paso {current_step + 1}</span>
-              <p className="text-lg font-extrabold mt-1">{steps[current_step] || '¡Listo!'}</p>
+              <span className="text-xs font-bold uppercase">{t('cooking.step')} {current_step + 1}</span>
+              <p className="text-lg font-extrabold mt-1">{steps[current_step] || t('cooking.ready')}</p>
             </div>
             <div className="neo-card">
-              <p className="text-xs font-bold text-gray-500 uppercase mb-2">Temporizador</p>
+              <p className="text-xs font-bold text-gray-500 uppercase mb-2">{t('cooking.timer')}</p>
               <div className="flex gap-2 items-center">
                 <input
                   className="neo-input !py-1.5 !text-sm w-20 text-center"
                   type="number"
-                  placeholder="min"
+                  placeholder={t('cooking.min')}
                   value={timerInputs[current_step] || ''}
                   onChange={e => setTimerInputs(prev => ({ ...prev, [current_step]: e.target.value }))}
                 />
-                <span className="text-sm font-bold text-gray-500">min</span>
+                <span className="text-sm font-bold text-gray-500">{t('cooking.min')}</span>
                 <button
                   onClick={() => { const v = parseInt(timerInputs[current_step]); if (v > 0) { startTimer(current_step, v * 60); setTimerInputs(prev => ({ ...prev, [current_step]: '' })); } }}
                   className="neo-btn !py-1.5 !px-3 !text-xs"
                 >
-                  Iniciar
+                  {t('cooking.start')}
                 </button>
                 {timers[current_step] && (
                   <span className={`text-lg font-extrabold ml-auto ${timers[current_step].done ? 'text-green-600 animate-pulse' : ''}`}>
-                    {timers[current_step].done ? '¡Tiempo!' : formatTime(timers[current_step].remaining)}
+                    {timers[current_step].done ? t('cooking.timeUp') : formatTime(timers[current_step].remaining)}
                   </span>
                 )}
                 {timers[current_step] && !timers[current_step].done && (
@@ -148,11 +150,11 @@ export default function CookingPage() {
             </div>
             <div className="flex gap-2">
               <button onClick={prevStep} disabled={current_step <= 0}
-                className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">Anterior</button>
+                className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">{t('cooking.previous')}</button>
               {current_step < steps.length - 1 ? (
-                <button onClick={nextStep} className="neo-btn-primary flex-1">Siguiente</button>
+                <button onClick={nextStep} className="neo-btn-primary flex-1">{t('cooking.next')}</button>
               ) : (
-                <button onClick={completeSession} className="neo-btn-primary flex-1">Finalizar</button>
+                <button onClick={completeSession} className="neo-btn-primary flex-1">{t('cooking.finish')}</button>
               )}
             </div>
           </div>
@@ -165,8 +167,8 @@ export default function CookingPage() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Modo Cocina</h1>
-          <p className="text-sm text-gray-500 font-medium">{sessions.length} sesiones</p>
+          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">{t('cooking.title')}</h1>
+          <p className="text-sm text-gray-500 font-medium">{sessions.length} {t('cooking.sessions')}</p>
         </div>
         <button onClick={() => setShowForm(true)} className="neo-btn-primary !p-3 !rounded-xl">
           <span className="material-symbols-outlined">add</span>
@@ -176,8 +178,8 @@ export default function CookingPage() {
       {sessions.length === 0 && !showForm && (
         <div className="text-center py-12">
           <span className="material-symbols-outlined text-5xl text-gray-300">cooking</span>
-          <p className="text-gray-400 font-bold mt-2">Sin sesiones activas</p>
-          <p className="text-gray-300 text-sm">Inicia una nueva receta</p>
+          <p className="text-gray-400 font-bold mt-2">{t('cooking.noActiveSessions')}</p>
+          <p className="text-gray-300 text-sm">{t('cooking.startNewRecipe')}</p>
         </div>
       )}
 
@@ -189,9 +191,9 @@ export default function CookingPage() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-sm">{s.recipe_name}</p>
-              <p className="text-xs text-gray-500">{s.completed ? 'Completada' : `${s.current_step + 1}/${s.steps.length} pasos`}</p>
+              <p className="text-xs text-gray-500">{s.completed ? t('cooking.completedSession') : `${s.current_step + 1}/${s.steps.length} ${t('cooking.steps')}`}</p>
             </div>
-            <button onClick={() => setActiveSession(s)} className="neo-btn-primary !py-1 !px-3 !text-xs">Cocinar</button>
+            <button onClick={() => setActiveSession(s)} className="neo-btn-primary !py-1 !px-3 !text-xs">{t('cooking.cook')}</button>
             <button onClick={() => deleteSession(s.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500">
               <span className="material-symbols-outlined text-sm">delete</span>
             </button>
@@ -202,13 +204,13 @@ export default function CookingPage() {
       {showForm && (
         <div className="fixed inset-0 bg-black/40 z-[60] flex items-end justify-center" onClick={() => setShowForm(false)}>
           <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-14 border-t-2 border-black max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <h2 className="text-lg font-extrabold mb-4">Nueva Receta</h2>
+            <h2 className="text-lg font-extrabold mb-4">{t('cooking.newRecipe')}</h2>
             <form onSubmit={createSession} className="space-y-3">
-              <input className="neo-input" placeholder="Nombre de la receta" value={recipeName} onChange={e => setRecipeName(e.target.value)} required />
-              <textarea className="neo-input min-h-[150px]" placeholder="Pasos (uno por línea)" value={stepsText} onChange={e => setStepsText(e.target.value)} required />
+              <input className="neo-input" placeholder={t('cooking.recipeName')} value={recipeName} onChange={e => setRecipeName(e.target.value)} required />
+              <textarea className="neo-input min-h-[150px]" placeholder={t('cooking.stepsPlaceholder')} value={stepsText} onChange={e => setStepsText(e.target.value)} required />
               <div className="flex gap-2 sticky bottom-0 bg-white pt-2">
-                <button type="submit" className="neo-btn-primary flex-1">Iniciar</button>
-                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
+                <button type="submit" className="neo-btn-primary flex-1">{t('cooking.start')}</button>
+                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">{t('cooking.cancel')}</button>
               </div>
             </form>
           </div>

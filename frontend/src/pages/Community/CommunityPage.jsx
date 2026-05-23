@@ -166,14 +166,14 @@ export default function CommunityPage() {
           : p
       ));
       setCommentText(prev => ({ ...prev, [postId]: '' }));
-    } catch (e) { showToast('Error: ' + e.message); }
+    } catch (e) { showToast(t('community.error') + e.message); }
   };
 
   const handleSave = async (id) => {
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
       await api.savePost(id);
-      showToast('Guardado en tus menús');
+      showToast(t('community.savedToMealPlan'));
     } catch (e) { showToast(t('community.errorSave')); }
     setSaving(prev => ({ ...prev, [id]: false }));
   };

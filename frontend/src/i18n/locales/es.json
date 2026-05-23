@@ -31,14 +31,30 @@
     "notes": "Notas",
     "quantity": "Cantidad",
     "expiry": "Vence",
+    "expired": "Caducado",
+    "expiringSoon": "Próximo a caducar",
     "addedOn": "Agregado el",
     "videoTutorial": "Vídeo tutorial",
-    "watchVideo": "Ver vídeo tutorial",
+    "watchVideo": "Ver vídeo",
     "addToMealPlan": "Añadir a menús",
-    "addedToMealPlan": "Receta añadida a tus menús",
+    "addedToMealPlan": "Añadido a tus menús",
     "errorAdding": "Error al añadir: ",
     "errorSaving": "Error al guardar: ",
-    "savedToMealPlan": "Receta guardada en tus menús"
+    "savedToMealPlan": "Guardado en tus menús",
+    "done": "Hecho",
+    "apply": "Aplicar",
+    "finish": "Finalizar",
+    "start": "Iniciar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "clear": "Limpiar",
+    "saveToPantry": "Guardar en Despensa",
+    "saveToShopping": "Guardar en Compra",
+    "convert": "Convertir",
+    "view": "Ver",
+    "addToShopping": "Añadir a la compra",
+    "video": "Video",
+    "searching": "Buscando..."
   },
   "access": {
     "welcome": "Bienvenido de nuevo",
@@ -87,7 +103,16 @@
     "language": "Idioma",
     "languageDesc": "Selecciona el idioma de la app",
     "spanish": "Español",
-    "english": "Inglés"
+    "english": "Inglés",
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña (mín. 6 caracteres)",
+    "passwordChanged": "Contraseña cambiada correctamente",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteAccountDesc": "Borrar todos tus datos",
+    "confirmDeleteTitle": "¿Eliminar cuenta?",
+    "confirmDeleteDesc": "Todos tus datos se borrarán permanentemente. Esta acción no se puede deshacer."
   },
   "meals": {
     "title": "Mis Menús",
@@ -113,6 +138,10 @@
     "noStepsDefined": "Este plato no tiene pasos definidos",
     "readingImage": "Leyendo imagen...",
     "deleteMenu": "¿Eliminar este menú?",
+    "allDays": "Todas",
+    "selectedDay": "seleccionado",
+    "completedMeal": "¡Menú completado!",
+    "videoNoFound": "No se encontró vídeo",
     "days": {
       "monday": "Lunes",
       "tuesday": "Martes",
@@ -147,7 +176,9 @@
     "breakfast": "desayuno",
     "lunch": "almuerzo",
     "dinner": "comida",
-    "supper": "cena"
+    "supper": "cena",
+    "videoNoFound": "No se encontró vídeo",
+    "searching": "Buscando..."
   },
   "pantry": {
     "title": "Tu Despensa",
@@ -159,10 +190,18 @@
     "optionalNotes": "Notas (opcional)",
     "emptyPantry": "Tu despensa está vacía",
     "addFirstItems": "Agrega tus primeros items",
-    "expiredProduct": "¡Producto caducado!",
+    "expiredProduct": "¡Caducado!",
     "consumeSoon": "¡Consumir pronto!",
     "deleteItem": "¿Eliminar este item?",
     "byExpiry": "Por caducidad",
+    "convert": "Convertir",
+    "convertTitle": "Convertir {name}",
+    "apply": "Aplicar",
+    "cancel": "Cancelar",
+    "converted": "Convertido: {qty} {from} = {result} {to}",
+    "addedToShopping": "Añadido a la compra",
+    "expiringProducts": "productos próximo(s) a caducar",
+    "suggestedRecipes": "Recetas que puedes hacer:",
     "categories": {
       "proteins": "Proteínas",
       "fruitsVeggies": "Frutas y Verduras",
@@ -170,7 +209,10 @@
       "carbs": "Hidratos",
       "canned": "Conservas",
       "condiments": "Condimentos",
-      "others": "Otros"
+      "others": "Otros",
+      "seafood": "Marisco",
+      "frozen": "Congelados",
+      "drinks": "Bebidas"
     }
   },
   "shopping": {
@@ -182,7 +224,12 @@
     "pending": "Pendientes",
     "completed": "Completadas",
     "emptyList": "Lista vacía",
-    "addShoppingItems": "Agrega items para tu compra"
+    "addShoppingItems": "Agrega items para tu compra",
+    "newProduct": "Nuevo Producto",
+    "productName": "Nombre del producto",
+    "add": "Añadir",
+    "cancel": "Cancelar",
+    "addedToList": "Añadido a la lista"
   },
   "scanner": {
     "title": "Escaner de Tickets",
@@ -204,6 +251,7 @@
     "saving": "Guardando...",
     "scanAnother": "Escanear otro ticket",
     "goToPantry": "Ir a la despensa",
+    "goToShopping": "Ir a la compra",
     "ticketScanned": "¡Ticket escaneado!",
     "productsSaved": "producto(s) guardado(s) en tu despensa",
     "errorReadTicket": "No se pudo leer el ticket. Asegurate de que este bien iluminado y enfocado.",
@@ -213,7 +261,15 @@
     "errorOpenCamera": "No se pudo abrir la camara. Usa la opcion de subir foto.",
     "errorFlash": "Error al cambiar el flash",
     "flashUnavailable": "Flash no disponible en este dispositivo",
-    "addToMealPlan": "Agregar al plan de comidas"
+    "addToMealPlan": "Agregar al plan de comidas",
+    "saveToShopping": "Guardar en compra ({count})",
+    "preprocessing": "Preprocesando imagen...",
+    "readingOCR": "Leyendo texto con OCR...",
+    "addedToShopping": "Añadido a la compra",
+    "productsOnList": "productos en la lista",
+    "scanOther": "Escanear otro",
+    "dishes": "platos",
+    "ingredients": "ingredientes"
   },
   "substitution": {
     "title": "Sustitución de Ingredientes",
@@ -252,7 +308,8 @@
     "errorLike": "Error al dar like",
     "errorSave": "Error al guardar",
     "errorDelete": "Error al eliminar",
-    "error": "Error: "
+    "error": "Error: ",
+    "savedToMealPlan": "Guardado en tus menús"
   },
   "challenges": {
     "title": "Retos y Logros",
@@ -287,6 +344,36 @@
     "water": "Agua Ahorrada",
     "foodSaved": "Comida Salvada",
     "mealsCooked": "Comidas Cocinadas",
-    "plasticSaved": "Plástico Evitado"
+    "plasticSaved": "Plástico Evitado",
+    "dishes": "platos"
+  },
+  "cooking": {
+    "title": "Modo Cocina",
+    "sessions": "sesiones",
+    "noActiveSessions": "Sin sesiones activas",
+    "startNewRecipe": "Inicia una nueva receta",
+    "completed": "¡Completado!",
+    "recipeCompleted": "¡Receta Completada!",
+    "greatJob": "Buen trabajo, chef.",
+    "back": "Volver",
+    "step": "Paso",
+    "of": "de",
+    "steps": "pasos",
+    "ready": "¡Listo!",
+    "timer": "Temporizador",
+    "min": "min",
+    "start": "Iniciar",
+    "timeUp": "¡Tiempo!",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "recipeName": "Nombre de la receta",
+    "stepsPlaceholder": "Pasos (uno por línea)",
+    "startCooking": "Cocinar",
+    "cancel": "Cancelar",
+    "completedSession": "Completada",
+    "newRecipe": "Nueva Receta",
+    "cook": "Cocinar",
+    "deleteSession": "¿Eliminar esta sesión?"
   }
 }

@@ -102,7 +102,7 @@ export default function RecipesPage() {
 
     setLoadingVideo(null);
     if (embedUrl) setShowVideoModal(embedUrl);
-    else showToast('No se encontró vídeo');
+    else showToast(t('recipes.videoNoFound'));
   }, [loadingVideo]);
 
   useEffect(() => {
@@ -272,7 +272,7 @@ export default function RecipesPage() {
         </button>
 
         <button onClick={() => openVideo(selectedRecipe)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-2" disabled={loadingVideo === selectedRecipe.id}>
-            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {loadingVideo === selectedRecipe.id ? 'Buscando...' : t('common.watchVideo')}
+            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {loadingVideo === selectedRecipe.id ? t('recipes.searching') : t('common.watchVideo')}
         </button>
       </div>
     );
@@ -382,7 +382,7 @@ export default function RecipesPage() {
 
             <div className="flex gap-2 sticky bottom-0 bg-white dark:bg-gray-800 pt-3 border-t border-gray-100 dark:border-gray-700">
               <button onClick={() => setShowIngredientPicker(false)} className="neo-btn-primary flex-1">
-                <span className="material-symbols-outlined text-sm align-text-bottom">check</span> Hecho
+                <span className="material-symbols-outlined text-sm align-text-bottom">check</span> {t('common.done')}
               </button>
               <button onClick={() => setShowIngredientPicker(false)} className="neo-btn !bg-gray-100 dark:!bg-gray-700 flex-1">
                 {t('recipes.close')}
@@ -404,7 +404,7 @@ export default function RecipesPage() {
                   <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
                 </button>
                 <button onClick={clearAll} className="text-xs font-bold neo-btn !py-1 !px-2 !border-red-300 text-red-500">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">close</span> Eliminar
+                  <span className="material-symbols-outlined text-sm align-text-bottom">close</span> {t('common.delete')}
                 </button>
               </div>
             </div>
@@ -501,7 +501,7 @@ export default function RecipesPage() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
               <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-red-500">play_circle</span> Video
+                <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.video')}
               </h3>
               <button onClick={() => setShowVideoModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
                 <span className="material-symbols-outlined">close</span>
@@ -514,7 +514,7 @@ export default function RecipesPage() {
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title="Video"
+                title={t('common.video')}
               />
             </div>
           </div>

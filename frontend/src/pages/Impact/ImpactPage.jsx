@@ -2,16 +2,15 @@ import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 
-const impactTypes = [
-  { type: 'co2', label: 'impact.co2', unit: 'kg', icon: 'cloud', color: 'text-green-600' },
-  { type: 'water', label: 'impact.water', unit: 'L', icon: 'water_drop', color: 'text-blue-600' },
-  { type: 'food_saved', label: 'impact.foodSaved', unit: 'kg', icon: 'savings', color: 'text-secondary-600' },
-  { type: 'meals_cooked', label: 'impact.mealsCooked', unit: 'platos', icon: 'restaurant', color: 'text-primary-600' },
-  { type: 'plastic_saved', label: 'impact.plasticSaved', unit: 'kg', icon: 'plastic', color: 'text-tertiary-600' },
-];
-
 export default function ImpactPage() {
   const { t } = useTranslation();
+  const impactTypes = [
+    { type: 'co2', label: 'impact.co2', unit: 'kg', icon: 'cloud', color: 'text-green-600' },
+    { type: 'water', label: 'impact.water', unit: 'L', icon: 'water_drop', color: 'text-blue-600' },
+    { type: 'food_saved', label: 'impact.foodSaved', unit: 'kg', icon: 'savings', color: 'text-secondary-600' },
+    { type: 'meals_cooked', label: 'impact.mealsCooked', unit: t('impact.dishes'), icon: 'restaurant', color: 'text-primary-600' },
+    { type: 'plastic_saved', label: 'impact.plasticSaved', unit: 'kg', icon: 'plastic', color: 'text-tertiary-600' },
+  ];
   const [impact, setImpact] = useState({ logs: [], summary: {} });
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ type: 'meals_cooked', value: '1', description: '' });

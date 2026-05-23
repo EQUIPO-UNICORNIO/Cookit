@@ -7,11 +7,6 @@ const mealTypes = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
 
 const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-const DAY_NAMES = {
-  monday: 'Lunes', tuesday: 'Martes', wednesday: 'Miércoles',
-  thursday: 'Jueves', friday: 'Viernes', saturday: 'Sábado', sunday: 'Domingo'
-};
-
 const suggestions = [
   { name: 'Tortilla francesa', meal_type: 'desayuno', recipe: 'Tortilla francesa', ingredients: ['Huevos', 'Sal', 'Aceite de oliva'], instructions: '1. Bate los huevos con sal.\n2. Calienta aceite en una sartén antiadherente.\n3. Vierte los huevos y deja cuajar.\n4. Cuando la base esté firme, dobla por la mitad.\n5. Sirve inmediatamente.' },
   { name: 'Huevos revueltos', meal_type: 'desayuno', recipe: 'Huevos revueltos', ingredients: ['Huevos', 'Leche', 'Mantequilla', 'Sal', 'Pimienta'], instructions: '1. Bate los huevos con un poco de leche.\n2. Derrite la mantequilla en una sartén.\n3. Vierte los huevos y remueve suavemente.\n4. Cocina a fuego bajo hasta que cuajen.\n5. Sazona con sal y pimienta.' },
@@ -124,7 +119,7 @@ export default function MealsPage() {
 
     setLoadingVideo(null);
     if (embedUrl && !embedUrl.includes('listType=search')) setShowVideo(embedUrl);
-    else showToast('No se encontró vídeo');
+    else showToast(t('meals.videoNoFound'));
   };
 
   const handleSubmit = async (e) => {
@@ -147,8 +142,8 @@ export default function MealsPage() {
       setEditing(null);
       setForm({ name: '', day: '', meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '', videoUrl: '' });
       loadMeals();
-      showToast('Receta guardada en tus menús');
-    } catch (e) { showToast('Error al guardar: ' + e.message); }
+      showToast(t('common.savedToMealPlan'));
+    } catch (e) { showToast(t('common.errorSaving') + ' ' + e.message); }
   };
 
   const handleDelete = async (id) => {
@@ -201,7 +196,7 @@ export default function MealsPage() {
     if (cookingStep < steps.length - 1) {
       setCookingStep(cookingStep + 1);
     } else {
-      showToast('¡Menú completado!');
+      showToast(t('meals.completedMeal'));
       setSelectedMeal(null);
       setCookingStep(0);
     }
@@ -218,10 +213,10 @@ export default function MealsPage() {
     return (
       <div>
         <button onClick={() => { setSelectedMeal(null); setCookingStep(0); }} className="neo-btn !bg-gray-100 dark:!text-black dark:!border-gray-400 !py-2 !px-3 !text-sm mb-4">
-          <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> Volver a menús
+          <span className="material-symbols-outlined text-sm align-text-bottom">arrow_back</span> {t('meals.backToMeals')}
         </button>
         <button onClick={() => { const m = selectedMeal; setSelectedMeal(null); setEditing(m.id); setForm({ name: m.name, day: m.day, meal_type: m.meal_type, recipe: m.recipe, ingredients: (m.ingredients || []).join(', '), instructions: m.instructions || '', photo: m.photo, videoUrl: m.videoUrl || '' }); setShowForm(true); }} className="neo-btn !bg-primary-50 !text-primary-600 !border-primary-300 !py-2 !px-3 !text-sm mb-4 ml-2">
-          <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
+          <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
         </button>
 
         <div className="neo-card mb-4">
@@ -232,14 +227,14 @@ export default function MealsPage() {
             <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full h-48 object-cover rounded-xl mt-3 border-2 border-black cursor-pointer" onClick={() => setFullPhoto(selectedMeal.photo)} />
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
-          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">Día: {DAY_NAMES[selectedMeal.day] || selectedMeal.day}</p>}
+          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">{t('meals.day')}: {t('meals.days.' + selectedMeal.day) || selectedMeal.day}</p>}
 
           <button onClick={() => openVideo(selectedMeal)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-3" disabled={loadingVideo === selectedMeal.id}>
-            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> Ver vídeo
+            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
           </button>
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
-              <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-1">Ingredientes</p>
+              <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-1">{t('common.ingredients')}</p>
               <div className="flex flex-wrap gap-1">
                 {selectedMeal.ingredients.map((ing, i) => (
                   <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{ing}</span>
@@ -250,7 +245,7 @@ export default function MealsPage() {
 
         {steps.length > 0 && (
           <div className="neo-card !bg-primary-600 !text-white !border-primary-800 mb-3 mt-4">
-            <span className="text-xs font-bold uppercase">Paso {cookingStep + 1} de {steps.length}</span>
+            <span className="text-xs font-bold uppercase">{t('meals.step')} {cookingStep + 1} {t('meals.of')} {steps.length}</span>
             <p className="text-lg font-extrabold mt-1">{steps[cookingStep]}</p>
           </div>
         )}
@@ -259,10 +254,10 @@ export default function MealsPage() {
         {steps.length > 0 && (
           <div className="flex gap-2">
             <button onClick={() => setCookingStep(Math.max(0, cookingStep - 1))} disabled={cookingStep <= 0}
-              className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">Anterior</button>
+              className="neo-btn !bg-gray-100 flex-1 disabled:opacity-30">{t('meals.previous')}</button>
             <button onClick={() => handleStepClick(steps)}
               className="neo-btn-primary flex-1">
-              {cookingStep >= steps.length - 1 ? '¡Completado!' : 'Siguiente'}
+              {cookingStep >= steps.length - 1 ? t('meals.completed') : t('meals.next')}
             </button>
           </div>
         )}
@@ -270,8 +265,8 @@ export default function MealsPage() {
         {steps.length === 0 && (
           <div className="text-center py-8">
             <span className="material-symbols-outlined text-4xl text-gray-300">info</span>
-            <p className="text-gray-400 font-bold mt-2">Sin instrucciones</p>
-            <p className="text-gray-300 text-sm">Este plato no tiene pasos definidos</p>
+            <p className="text-gray-400 font-bold mt-2">{t('meals.noInstructions')}</p>
+            <p className="text-gray-300 text-sm">{t('meals.noStepsDefined')}</p>
           </div>
         )}
       </div>
@@ -282,8 +277,8 @@ export default function MealsPage() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">Mis Menús</h1>
-          <p className="text-sm text-gray-500 font-medium">{meals.length} comidas planificadas</p>
+          <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">{t('meals.title')}</h1>
+          <p className="text-sm text-gray-500 font-medium">{meals.length} {t('meals.plannedMeals')}</p>
         </div>
         <button onClick={() => { setShowForm(true); setEditing(null); setForm({ name: '', day: selectedDay, meal_type: 'comida', recipe: '', ingredients: '', instructions: '', photo: '', videoUrl: '' }); }}
           className="neo-btn-primary !p-3 !rounded-xl">
@@ -297,7 +292,7 @@ export default function MealsPage() {
             onClick={() => setSelectedDay('todas')}
             className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedDay === 'todas' ? 'bg-primary-600 text-white neo-shadow-primary' : 'bg-white dark:bg-gray-300 border-2 border-black dark:text-black'}`}
           >
-            Todas
+            {t('meals.allDays')}
           </button>
           {dayKeys.map(key => (
             <button key={key}
@@ -324,7 +319,7 @@ export default function MealsPage() {
             const dayMealsFiltered = meals.filter(m => !m.day || m.day === day);
             return (
               <div key={day} className="neo-card !p-2 min-h-[100px]">
-                <p className="text-[10px] font-bold text-center uppercase text-gray-500 mb-1">{DAY_NAMES[day].slice(0, 3)}</p>
+                <p className="text-[10px] font-bold text-center uppercase text-gray-500 mb-1">{t('meals.days.' + day).slice(0, 3)}</p>
                 <div className="space-y-1">
                   {dayMealsFiltered.slice(0, 3).map(m => (
                     <div key={m.id} className="text-[10px] bg-primary-50 border border-primary-200 rounded-md px-1 py-0.5 truncate font-medium cursor-pointer" onClick={() => setSelectedMeal(m)}>
@@ -342,9 +337,9 @@ export default function MealsPage() {
       {dayMeals.length === 0 && (
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
-          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? 'seleccionado' : DAY_NAMES[selectedDay]}</p>
+          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? t('meals.selectedDay') : t('meals.days.' + selectedDay)}</p>
           <button onClick={() => { setShowForm(true); setForm({ ...form, day: selectedDay }); generateSuggestion(); }} className="neo-btn-primary !py-2 !px-4 !text-sm mt-3">
-            Sugerir comida
+            {t('meals.suggestMeal')}
           </button>
         </div>
       )}
@@ -366,12 +361,12 @@ export default function MealsPage() {
                     ${meal.meal_type === 'merienda' ? 'bg-purple-100 text-purple-800 border-purple-400' : ''}
                     ${meal.meal_type === 'cena' ? 'bg-indigo-100 text-indigo-800 border-indigo-400' : ''}
                     ${!['desayuno','almuerzo','comida','merienda','cena'].includes(meal.meal_type) ? 'bg-gray-800 text-white border-black' : ''}`}>
-                    {DAY_NAMES[meal.day] || meal.day}
+                    {t('meals.days.' + meal.day) || meal.day}
                   </span>
                 )}
                 </div>
                 <h3 className="font-extrabold text-base mt-1 truncate">{meal.name}</h3>
-                {meal.recipe && <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">Receta: {meal.recipe}</p>}
+                {meal.recipe && <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">{t('common.recipe')}: {meal.recipe}</p>}
                 {meal.ingredients && meal.ingredients.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
                     {meal.ingredients.slice(0, 3).map((ing, i) => (
@@ -392,10 +387,10 @@ export default function MealsPage() {
                 <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
               </button>
               <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo, videoUrl: meal.videoUrl || '' }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
-                <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> Editar
+                <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
               </button>
               <button onClick={(e) => { e.stopPropagation(); confirmDelete(meal.id); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-red-300 text-red-500">
-                <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Eliminar
+                <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> {t('common.delete')}
               </button>
             </div>
           </div>
@@ -406,39 +401,39 @@ export default function MealsPage() {
         <div className="fixed inset-0 bg-black/40 z-[60] flex items-end justify-center" onClick={() => setShowForm(false)}>
           <div className="bg-white rounded-t-3xl w-full max-w-lg p-6 pb-14 border-t-2 border-black max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-extrabold">{editing ? 'Editar Menú' : 'Nuevo Menú'}</h2>
+              <h2 className="text-lg font-extrabold">{editing ? t('meals.editMenu') : t('meals.newMenu')}</h2>
               <div className="flex gap-1">
                 <button onClick={generateSuggestion} className="text-xs font-bold text-primary-600 neo-btn !py-1 !px-3 !border-primary-300">
-                  Sugerencia
+                  {t('meals.suggestion')}
                 </button>
                 <button type="button" onClick={() => fileInputRef.current?.click()} disabled={ocrLoading}
                   className="text-xs font-bold neo-btn !py-1 !px-3 !border-secondary-300 text-secondary-600">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">{ocrLoading ? 'hourglass_top' : 'photo_camera'}</span> Foto
+                  <span className="material-symbols-outlined text-sm align-text-bottom">{ocrLoading ? 'hourglass_top' : 'photo_camera'}</span> {t('common.photo')}
                 </button>
                 <input ref={fileInputRef} type="file" accept="image/*" capture="environment" onChange={handleOcrPhoto} className="hidden" />
                 {form.photo && <button type="button" onClick={() => setForm(prev => ({ ...prev, photo: '' }))} className="text-xs font-bold neo-btn !py-1 !px-3 !border-red-300 text-red-500">
-                  <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> Foto
+                  <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> {t('common.photo')}
                 </button>}
               </div>
             </div>
-            {ocrLoading && <p className="text-xs text-primary-600 font-medium mb-2">Leyendo imagen...</p>}
+            {ocrLoading && <p className="text-xs text-primary-600 font-medium mb-2">{t('meals.readingImage')}</p>}
             {form.photo && <img src={form.photo} alt="Preview" className="w-full h-20 object-cover rounded-xl mb-3 border-2 border-primary-300" />}
             <form onSubmit={handleSubmit} className="space-y-3">
-              <input className="neo-input" placeholder="Nombre del plato" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required />
+              <input className="neo-input" placeholder={t('meals.dishName')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} required />
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.day} onChange={e => setForm({...form, day: e.target.value})}>
                   <option value="">{t('meals.noDay')}</option>
-                  {dayKeys.map(key => <option key={key} value={key}>{DAY_NAMES[key]}</option>)}
+                  {dayKeys.map(key => <option key={key} value={key}>{t('meals.days.' + key)}</option>)}
                 </select>
                 <select className="neo-input flex-1" value={form.meal_type} onChange={e => setForm({...form, meal_type: e.target.value})}>
                   {mealTypes.map(m => <option key={m}>{m}</option>)}
                 </select>
               </div>
-              <input className="neo-input" placeholder="Ingredientes (separados por coma)" value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />
-              <textarea className="neo-input min-h-[80px]" placeholder="Instrucciones (un paso por línea)" value={form.instructions} onChange={e => setForm({...form, instructions: e.target.value})} />
+              <input className="neo-input" placeholder={t('meals.ingredientsPlaceholder')} value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />
+              <textarea className="neo-input min-h-[80px]" placeholder={t('meals.instructionsPlaceholder')} value={form.instructions} onChange={e => setForm({...form, instructions: e.target.value})} />
               <div className="flex gap-2 sticky bottom-0 bg-white pt-2">
-                <button type="submit" className="neo-btn-primary flex-1">{editing ? 'Guardar' : 'Agregar'}</button>
-                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
+                <button type="submit" className="neo-btn-primary flex-1">{editing ? t('common.save') : t('common.add')}</button>
+                <button type="button" onClick={() => setShowForm(false)} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
               </div>
             </form>
           </div>
@@ -456,11 +451,11 @@ export default function MealsPage() {
       {confirmDeleteId !== null && (
         <div className="fixed inset-0 bg-black/40 z-[70] flex items-center justify-center p-4" onClick={cancelDelete}>
           <div className="bg-white rounded-2xl p-5 max-w-xs w-full shadow-xl" onClick={e => e.stopPropagation()}>
-            <h3 className="font-extrabold text-base text-gray-900 text-center mb-1">Eliminar este menú?</h3>
-            <p className="text-sm text-gray-500 text-center mb-5">Esta acción no se puede deshacer.</p>
+            <h3 className="font-extrabold text-base text-gray-900 text-center mb-1">{t('meals.deleteMenu')}</h3>
+            <p className="text-sm text-gray-500 text-center mb-5">{t('common.cannotUndo')}</p>
             <div className="flex gap-2">
-              <button onClick={cancelDelete} className="neo-btn !bg-gray-100 flex-1">Cancelar</button>
-              <button onClick={() => handleDelete(confirmDeleteId)} className="neo-btn !bg-red-500 !text-white flex-1">Aceptar</button>
+              <button onClick={cancelDelete} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
+              <button onClick={() => handleDelete(confirmDeleteId)} className="neo-btn !bg-red-500 !text-white flex-1">{t('common.accept')}</button>
             </div>
           </div>
         </div>
@@ -477,14 +472,14 @@ export default function MealsPage() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
               <h3 className="font-bold flex items-center gap-2">
-                <span className="material-symbols-outlined text-red-500">play_circle</span> Video
+                <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.video')}
               </h3>
               <button onClick={() => setShowVideo(null)} className="text-gray-500 hover:text-gray-700">
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
             <div className="aspect-video">
-              <iframe src={showVideo} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Video" />
+              <iframe src={showVideo} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={t('common.video')} />
             </div>
           </div>
         </div>

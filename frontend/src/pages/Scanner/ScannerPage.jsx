@@ -236,11 +236,11 @@ export default function ScannerPage() {
 
   const processImage = async (canvas) => {
     setProcessing(true);
-    setOcrProgress('Preprocesando imagen...');
+      setOcrProgress(t('scanner.preprocessing'));
     setError('');
     try {
       const processed = preprocessImage(canvas);
-      setOcrProgress('Leyendo texto con OCR...');
+      setOcrProgress(t('scanner.readingOCR'));
       const worker = await createWorker('spa+eng', 1, {
         logger: m => {
           if (m.status) setOcrProgress(m.status + (m.progress ? ` ${Math.round(m.progress * 100)}%` : ''));
@@ -257,7 +257,7 @@ export default function ScannerPage() {
       setRawText(text);
 
       if (!text || text.length < 5) {
-        setError('No se pudo leer el ticket. Asegurate de que este bien iluminado y enfocado.');
+        setError(t('scanner.errorReadTicket'));
         setStep('initial');
         setProcessing(false);
         return;
@@ -291,7 +291,7 @@ export default function ScannerPage() {
       }
 
       if (uniq.length === 0) {
-        setError('No se detectaron productos en el ticket. Intenta con una foto mas clara.');
+        setError(t('scanner.errorDetectProducts'));
         setStep('initial');
         setProcessing(false);
         return;
@@ -301,7 +301,7 @@ export default function ScannerPage() {
       setStep('review');
       findRecommendations(uniq);
     } catch (e) {
-      setError('Error al procesar la imagen: ' + e.message);
+      setError(t('scanner.errorProcessImage') + e.message);
       setStep('initial');
     }
     setProcessing(false);
@@ -609,7 +609,7 @@ export default function ScannerPage() {
                 <span className="material-symbols-outlined text-secondary-600">restaurant</span>
                 <h2 className="font-extrabold text-sm text-secondary-800">{t('scanner.dishesYouCanMake')}</h2>
                 {!loadingRecommendations && recommendations.length > 0 && (
-                  <span className="text-xs font-bold text-secondary-500 ml-auto">{recommendations.length} platos</span>
+                  <span className="text-xs font-bold text-secondary-500 ml-auto">{recommendations.length} {t('scanner.dishes')}</span>
                 )}
               </div>
               <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -618,7 +618,7 @@ export default function ScannerPage() {
                     <div className="flex items-center justify-between mb-1">
                       <h3 className="font-bold text-sm text-gray-900 dark:text-white">{meal.name}</h3>
                       <span className="text-xs font-bold text-secondary-600 bg-secondary-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">
-                        {meal.matchCount}/{meal.totalIngredients} ingredientes
+                        {meal.matchCount}/{meal.totalIngredients} {t('scanner.ingredients')}
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1 mb-2">
@@ -666,7 +666,7 @@ export default function ScannerPage() {
               disabled={saving || parsedItems.every(i => !i.name.trim())}
               className="neo-btn !bg-blue-50 !text-blue-700 !border-blue-400 flex-1 disabled:opacity-30"
             >
-              {saving ? t('scanner.saving') : `Guardar en compra (${parsedItems.filter(i => i.name.trim()).length})`}
+              {saving ? t('scanner.saving') : t('scanner.saveToShopping', { count: parsedItems.filter(i => i.name.trim()).length })}
             </button>
             <button onClick={resetAll} className="neo-btn !bg-gray-100 dark:!bg-gray-300 flex-shrink-0 !px-4 dark:!text-black">
               {t('common.cancel')}
@@ -698,17 +698,17 @@ export default function ScannerPage() {
           <div className="w-20 h-20 mx-auto rounded-3xl bg-blue-100 border-2 border-blue-500 flex items-center justify-center mb-4">
             <span className="material-symbols-outlined text-4xl text-blue-600">shopping_cart</span>
           </div>
-          <h2 className="text-xl font-extrabold dark:text-white">Añadido a la compra</h2>
-          <p className="text-gray-500 dark:text-gray-300 mt-1">{successCount} productos en la lista</p>
+          <h2 className="text-xl font-extrabold dark:text-white">{t('scanner.addedToShopping')}</h2>
+          <p className="text-gray-500 dark:text-gray-300 mt-1">{successCount} {t('scanner.productsOnList')}</p>
           <div className="flex flex-col gap-2 mt-6">
             <button onClick={resetAll} className="neo-btn-primary">
-              <span className="material-symbols-outlined text-base align-text-bottom">scan</span> Escanear otro
+              <span className="material-symbols-outlined text-base align-text-bottom">scan</span> {t('scanner.scanOther')}
             </button>
             <button onClick={() => navigate('/shopping')} className="neo-btn !bg-gray-100 dark:!bg-gray-300 dark:!text-black">
-              <span className="material-symbols-outlined text-base align-text-bottom">shopping_cart</span> Ir a la compra
+              <span className="material-symbols-outlined text-base align-text-bottom">shopping_cart</span> {t('scanner.goToShopping')}
             </button>
             <button onClick={() => navigate('/pantry')} className="neo-btn !bg-gray-100 dark:!bg-gray-300 dark:!text-black">
-              <span className="material-symbols-outlined text-base align-text-bottom">kitchen</span> Ir a la despensa
+              <span className="material-symbols-outlined text-base align-text-bottom">kitchen</span> {t('scanner.goToPantry')}
             </button>
           </div>
         </div>
