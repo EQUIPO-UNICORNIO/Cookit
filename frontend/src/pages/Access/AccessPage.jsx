@@ -190,19 +190,6 @@ export default function AccessPage() {
         </div>
 
         <div className="mt-6 text-center">
-          <button
-            type="button"
-            onClick={async () => {
-              setEmail('aronets2004@gmail.com');
-              setPassword('Cookit2026');
-              setIsLogin(true);
-              try { await api.resetDev('aronets2004@gmail.com', 'Cookit2026'); } catch {}
-              setTimeout(() => document.getElementById('login-submit')?.click(), 100);
-            }}
-            className="text-xs text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 transition-colors"
-          >
-            {t('access.developerAccess')}
-          </button>
         </div>
 
         <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4">
