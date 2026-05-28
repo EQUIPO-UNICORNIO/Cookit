@@ -236,6 +236,32 @@ export default function MealsPage() {
             <p className="text-gray-300 text-sm">{t('meals.noStepsDefined')}</p>
           </div>
         )}
+
+        {showVideo && (
+          <div className="fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4" onClick={() => setShowVideo(null)}>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+              <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="font-bold flex items-center gap-2">
+                  <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.video')}
+                </h3>
+                <button onClick={() => setShowVideo(null)} className="text-gray-500 hover:text-gray-700">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div className="aspect-video">
+                <iframe src={showVideo} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={t('common.video')} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {toast && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[80] pointer-events-none">
+            <div className="bg-primary-600 text-white font-bold text-sm px-5 py-3 rounded-2xl border-2 border-primary-800 shadow-lg whitespace-nowrap">
+              {toast}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
