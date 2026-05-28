@@ -194,7 +194,7 @@ export default function MealsPage() {
             <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full h-48 object-cover rounded-xl mt-3 border-2 border-black cursor-pointer" onClick={() => setFullPhoto(selectedMeal.photo)} />
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
-          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">{t('meals.day')}: {selectedMeal.day}</p>}
+          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">{t('meals.day')}: {t('meals.days.' + selectedMeal.day.toLowerCase()) || selectedMeal.day}</p>}
 
           <button onClick={() => openVideo(selectedMeal)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-3" disabled={loadingVideo === selectedMeal.id}>
             <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
@@ -292,7 +292,7 @@ export default function MealsPage() {
               onClick={() => setSelectedDay(key)}
               className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedDay === key ? 'bg-primary-600 text-white neo-shadow-primary' : 'bg-white dark:bg-gray-300 border-2 border-black dark:text-black'}`}
             >
-              {key}
+              {t('meals.days.' + key) || key}
             </button>
           ))}
         </div>
@@ -312,7 +312,7 @@ export default function MealsPage() {
             const dayMealsFiltered = meals.filter(m => !m.day || m.day === day);
             return (
               <div key={day} className="neo-card !p-2 min-h-[100px]">
-                <p className="text-[10px] font-bold text-center uppercase text-gray-500 mb-1">{day.slice(0, 3)}</p>
+                <p className="text-[10px] font-bold text-center uppercase text-gray-500 mb-1">{(t('meals.days.' + day) || day).slice(0, 3)}</p>
                 <div className="space-y-1">
                   {dayMealsFiltered.slice(0, 3).map(m => (
                     <div key={m.id} className="text-[10px] bg-primary-50 border border-primary-200 rounded-md px-1 py-0.5 truncate font-medium cursor-pointer" onClick={() => setSelectedMeal(m)}>
@@ -330,7 +330,7 @@ export default function MealsPage() {
       {dayMeals.length === 0 && (
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
-          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? t('meals.selectedDay') : selectedDay}</p>
+          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? t('meals.selectedDay') : (t('meals.days.' + selectedDay) || selectedDay)}</p>
         </div>
       )}
 
@@ -351,7 +351,7 @@ export default function MealsPage() {
                     ${meal.meal_type === 'merienda' ? 'bg-purple-100 text-purple-800 border-purple-400' : ''}
                     ${meal.meal_type === 'cena' ? 'bg-indigo-100 text-indigo-800 border-indigo-400' : ''}
                     ${!['desayuno','almuerzo','comida','merienda','cena'].includes(meal.meal_type) ? 'bg-gray-800 text-white border-black' : ''}`}>
-                    {meal.day}
+                    {t('meals.days.' + meal.day.toLowerCase()) || meal.day}
                   </span>
                 )}
                 </div>
@@ -410,7 +410,7 @@ export default function MealsPage() {
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.day} onChange={e => setForm({...form, day: e.target.value})}>
                   <option value="">{t('meals.noDay')}</option>
-                  {dayKeys.map(key => <option key={key} value={key}>{key}</option>)}
+                  {dayKeys.map(key => <option key={key} value={key}>{t('meals.days.' + key) || key}</option>)}
                 </select>
                 <select className="neo-input flex-1" value={form.meal_type} onChange={e => setForm({...form, meal_type: e.target.value})}>
                   {mealTypes.map(m => <option key={m}>{m}</option>)}

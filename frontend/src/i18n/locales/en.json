@@ -150,7 +150,16 @@
       "thursday": "Thursday",
       "friday": "Friday",
       "saturday": "Saturday",
-      "sunday": "Sunday"
+      "sunday": "Sunday",
+      "lunes": "Monday",
+      "martes": "Tuesday",
+      "miércoles": "Wednesday",
+      "miercoles": "Wednesday",
+      "jueves": "Thursday",
+      "viernes": "Friday",
+      "sábado": "Saturday",
+      "sabado": "Saturday",
+      "domingo": "Sunday"
     }
   },
   "recipes": {
