@@ -1,7 +1,7 @@
 export const CATEGORIES = ['Carne', 'Marisco', 'Verduras', 'Frutas', 'Lácteos', 'Hidratos', 'Conservas', 'Condimentos', 'Congelados', 'Bebidas', 'Otros'];
 
 export const CATEGORY_ICONS = {
-  'Carne': 'outdoor_grill',
+  'Carne': 'egg_alt',
   'Marisco': 'set_meal',
   'Verduras': 'eco',
   'Frutas': 'nutrition',
