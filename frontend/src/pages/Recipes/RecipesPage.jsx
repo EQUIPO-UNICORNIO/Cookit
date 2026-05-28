@@ -72,6 +72,7 @@ export default function RecipesPage() {
   const [filterCategory, setFilterCategory] = useState('Todas');
   const [filterDifficulty, setFilterDifficulty] = useState('Todas');
   const [showIngredientPicker, setShowIngredientPicker] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(null);
   const [loadingVideo, setLoadingVideo] = useState(null);
   const [toast, setToast] = useState(null);
   const videoIdCache = useRef({});
@@ -100,7 +101,7 @@ export default function RecipesPage() {
     }
 
     setLoadingVideo(null);
-    if (embedUrl) window.open(embedUrl.replace('/embed/', '/watch?v='), '_blank');
+    if (embedUrl) setShowVideoModal(embedUrl);
     else showToast(t('recipes.videoNoFound'));
   }, [loadingVideo]);
 
@@ -493,6 +494,31 @@ export default function RecipesPage() {
             ))}
           </div>
         </>
+      )}
+
+      {showVideoModal && (
+        <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => setShowVideoModal(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.video')}
+              </h3>
+              <button onClick={() => setShowVideoModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="aspect-video">
+              <iframe
+                src={showVideoModal}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={t('common.video')}
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {toast && (
