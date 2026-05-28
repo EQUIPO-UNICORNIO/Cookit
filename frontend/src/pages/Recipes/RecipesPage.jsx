@@ -382,7 +382,7 @@ export default function RecipesPage() {
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                     <span className="material-symbols-outlined text-sm">
                       {category === 'Proteínas' ? 'egg' :
-                       category === 'Frutas y Verduras' ? 'forest' :
+                       category === 'Frutas y Verduras' ? 'nutrition' :
                        category === 'Lácteos' ? 'water_drop' :
                        category === 'Hidratos' ? 'bakery_dining' :
                        category === 'Conservas' ? 'inventory_2' : 'spa'}
