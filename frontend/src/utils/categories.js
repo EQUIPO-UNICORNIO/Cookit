@@ -4,7 +4,7 @@ export const CATEGORY_ICONS = {
   'Carne': 'dinner_dining',
   'Marisco': 'set_meal',
   'Verduras': 'eco',
-  'Frutas': 'nutrition',
+  'Frutas': 'egg_alt',
   'Lácteos': 'water_drop',
   'Hidratos': 'bakery_dining',
   'Conservas': 'inventory_2',
