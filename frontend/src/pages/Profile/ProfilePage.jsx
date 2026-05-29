@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
@@ -34,6 +34,9 @@ export default function ProfilePage() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [toast, setToast] = useState('');
+
+  useEffect(() => { if (toast) { const t = setTimeout(() => setToast(''), 3000); return () => clearTimeout(t); } }, [toast]);
 
   const saveAvatar = async (data) => {
     try {
@@ -78,14 +81,14 @@ export default function ProfilePage() {
 
   const savePassword = async (e) => {
     e.preventDefault();
-    if (newPassword.length < 6) { alert(t('profile.passwordMinLength')); return; }
+    if (newPassword.length < 6) { setToast(t('profile.passwordMinLength')); return; }
     try {
       await api.changePassword(oldPassword, newPassword);
       setShowPasswordForm(false);
       setOldPassword('');
       setNewPassword('');
-      alert(t('profile.passwordChanged'));
-    } catch (e) { alert(e.message); }
+      setToast(t('profile.passwordChanged'));
+    } catch (e) { setToast(e.message); }
   };
 
   const handleDeleteAccount = async () => {
@@ -93,7 +96,7 @@ export default function ProfilePage() {
       await api.deleteAccount();
       logout();
       navigate('/access');
-    } catch (e) { alert(e.message); }
+    } catch (e) { setToast(e.message); }
   };
 
   return (
@@ -263,6 +266,15 @@ export default function ProfilePage() {
               <button onClick={() => setShowDeleteConfirm(false)} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
               <button onClick={handleDeleteAccount} className="neo-btn !bg-red-500 !text-white flex-1">{t('common.delete')}</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] animate-slide-up">
+          <div className="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-bold px-5 py-3 rounded-2xl border-2 border-black shadow-lg flex items-center gap-2">
+            <span className="material-symbols-outlined text-base">check_circle</span>
+            {toast}
           </div>
         </div>
       )}
