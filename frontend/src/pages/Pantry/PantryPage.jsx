@@ -176,7 +176,7 @@ export default function PantryPage() {
   }
 
   const grouped = sortByExpiry
-    ? { 'Por caducidad': filtered }
+    ? { '_byExpiry': filtered }
     : filtered.reduce((acc, item) => {
         if (!acc[item.category]) acc[item.category] = [];
         acc[item.category].push(item);
@@ -304,11 +304,11 @@ export default function PantryPage() {
               <input className="neo-input" placeholder={t('pantry.itemName')} value={form.name} onChange={handleNameChange} required />
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                  {CATEGORIES.map(c => <option key={c} value={c}>{t('categories.' + c) || c}</option>)}
                 </select>
                 <input className="neo-input w-20" type="number" value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} />
                 <select className="neo-input w-28" value={form.unit} onChange={e => setForm({...form, unit: e.target.value})}>
-                  {units.map(u => <option key={u}>{u}</option>)}
+                  {units.map(u => <option key={u} value={u}>{t('units.' + u) || u}</option>)}
                 </select>
               </div>
               <input className="neo-input" type="date" value={form.expiry_date} onChange={e => setForm({...form, expiry_date: e.target.value})} />
@@ -325,7 +325,7 @@ export default function PantryPage() {
       {Object.entries(grouped).map(([cat, catItems]) => (
         <div key={cat} className="mb-4">
           <h2 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">{sortByExpiry ? 'schedule' : (CATEGORY_ICONS[cat] || 'inventory_2')}</span> {cat}
+            <span className="material-symbols-outlined text-sm">{sortByExpiry ? 'schedule' : (CATEGORY_ICONS[cat] || 'inventory_2')}</span> {cat === '_byExpiry' ? t('pantry.byExpiry') : (t('categories.' + cat) || cat)}
           </h2>
           <div className="space-y-2">
             {catItems.map(item => (
@@ -337,9 +337,9 @@ export default function PantryPage() {
                   <p className="font-bold text-sm truncate">{item.name}</p>
                   <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                     <span className="text-xs text-gray-400 font-medium flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span> {item.category}
+                      <span className="material-symbols-outlined text-xs">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span> {t('categories.' + item.category) || item.category}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · Vence: ${item.expiry_date}` : ''}</span>
+                    <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · ${t('pantry.expiresOn')}${item.expiry_date}` : ''}</span>
                   </div>
                   {item.expiry_date && isExpired(item.expiry_date) && (
                     <span className="text-xs font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-lg border border-gray-400 inline-flex items-center gap-0.5 mt-0.5 line-through">

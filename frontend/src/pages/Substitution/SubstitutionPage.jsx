@@ -38,7 +38,7 @@ export default function SubstitutionPage() {
   const saveSubstitution = async () => {
     if (!ingredient || !selectedSub) return;
     try {
-      await api.addSubstitution({ ingredient: ingredient.toLowerCase(), substitute: selectedSub, reason: 'Sustitución recomendada' });
+      await api.addSubstitution({ ingredient: ingredient.toLowerCase(), substitute: selectedSub, reason: 'Recommended substitution' });
       setIngredient('');
       setSelectedSub('');
       setSuggestions([]);

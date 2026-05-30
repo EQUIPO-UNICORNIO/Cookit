@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { api } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n/i18n';
 
 const fallbackColors = ['#006e2f', '#9d4300', '#735c00', '#4f46e5', '#0891b2', '#be185d', '#7c3aed', '#db2777'];
 
@@ -277,7 +278,7 @@ export default function CommunityPage() {
               <AvatarDisplay avatar={post.user_avatar} name={post.user_name} />
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-sm truncate">{post.user_name}</p>
-                <p className="text-xs text-gray-400">{new Date(post.created_at).toLocaleString('es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                <p className="text-xs text-gray-400">{new Date(post.created_at).toLocaleString(i18n.language === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
               </div>
               {user && post.user_name === user.name && (
                 <>
@@ -440,7 +441,7 @@ export default function CommunityPage() {
               <AvatarDisplay avatar={viewingPost.user_avatar} name={viewingPost.user_name} />
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-sm truncate">{viewingPost.user_name}</p>
-                <p className="text-xs text-gray-400">{new Date(viewingPost.created_at).toLocaleString('es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                <p className="text-xs text-gray-400">{new Date(viewingPost.created_at).toLocaleString(i18n.language === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
               </div>
             </div>
             <p className="text-base font-bold mb-3">{viewingPost.content}</p>

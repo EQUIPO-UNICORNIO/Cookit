@@ -1,4 +1,29 @@
 {
+  "units": {
+    "unidad": "unit",
+    "kg": "kg",
+    "g": "g",
+    "L": "L",
+    "ml": "ml",
+    "paquete": "package",
+    "lata": "can",
+    "botella": "bottle",
+    "cucharada": "tbsp",
+    "taza": "cup"
+  },
+  "categories": {
+    "Carne": "Meat",
+    "Marisco": "Seafood",
+    "Verduras": "Vegetables",
+    "Frutas": "Fruits",
+    "Lácteos": "Dairy",
+    "Hidratos": "Carbs",
+    "Conservas": "Canned Goods",
+    "Condimentos": "Condiments",
+    "Congelados": "Frozen",
+    "Bebidas": "Drinks",
+    "Otros": "Others"
+  },
   "nav": {
     "meals": "Meals",
     "recipes": "Recipes",
@@ -222,18 +247,7 @@
     "addedToShopping": "Added to shopping list",
     "expiringProducts": "products expiring soon",
     "suggestedRecipes": "Recipes you can make:",
-    "categories": {
-      "proteins": "Proteins",
-      "fruitsVeggies": "Fruits & Vegetables",
-      "dairy": "Dairy",
-      "carbs": "Carbs",
-      "canned": "Canned Goods",
-      "condiments": "Condiments",
-      "others": "Others",
-      "seafood": "Seafood",
-      "frozen": "Frozen",
-      "drinks": "Drinks"
-    }
+    "expiresOn": "Expires: "
   },
   "shopping": {
     "title": "Shopping List",
@@ -249,7 +263,8 @@
     "productName": "Product name",
     "add": "Add",
     "cancel": "Cancel",
-    "addedToList": "Added to the list"
+    "addedToList": "Added to the list",
+    "buy": "Buy"
   },
   "scanner": {
     "title": "Receipt Scanner",
@@ -299,7 +314,8 @@
     "suggestions": "Suggestions:",
     "saveSubstitution": "Save Substitution",
     "noSubstitutions": "We didn't find substitutions for",
-    "savedSubstitutions": "Your saved substitutions"
+    "savedSubstitutions": "Your saved substitutions",
+    "recommendedReason": "Recommended substitution"
   },
   "errorBoundary": {
     "title": "Something went wrong",

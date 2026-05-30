@@ -1,4 +1,29 @@
 {
+  "units": {
+    "unidad": "unidad",
+    "kg": "kg",
+    "g": "g",
+    "L": "L",
+    "ml": "ml",
+    "paquete": "paquete",
+    "lata": "lata",
+    "botella": "botella",
+    "cucharada": "cucharada",
+    "taza": "taza"
+  },
+  "categories": {
+    "Carne": "Carne",
+    "Marisco": "Marisco",
+    "Verduras": "Verduras",
+    "Frutas": "Frutas",
+    "Lácteos": "Lácteos",
+    "Hidratos": "Hidratos",
+    "Conservas": "Conservas",
+    "Condimentos": "Condimentos",
+    "Congelados": "Congelados",
+    "Bebidas": "Bebidas",
+    "Otros": "Otros"
+  },
   "nav": {
     "meals": "Menús",
     "recipes": "Recetas",
@@ -222,18 +247,7 @@
     "addedToShopping": "Añadido a la compra",
     "expiringProducts": "productos próximo(s) a caducar",
     "suggestedRecipes": "Recetas que puedes hacer:",
-    "categories": {
-      "proteins": "Proteínas",
-      "fruitsVeggies": "Frutas y Verduras",
-      "dairy": "Lácteos",
-      "carbs": "Hidratos",
-      "canned": "Conservas",
-      "condiments": "Condimentos",
-      "others": "Otros",
-      "seafood": "Marisco",
-      "frozen": "Congelados",
-      "drinks": "Bebidas"
-    }
+    "expiresOn": "Vence: "
   },
   "shopping": {
     "title": "Lista de Compra",
@@ -249,7 +263,8 @@
     "productName": "Nombre del producto",
     "add": "Añadir",
     "cancel": "Cancelar",
-    "addedToList": "Añadido a la lista"
+    "addedToList": "Añadido a la lista",
+    "buy": "Comprar"
   },
   "scanner": {
     "title": "Escaner de Tickets",
@@ -299,7 +314,8 @@
     "suggestions": "Sugerencias:",
     "saveSubstitution": "Guardar Sustitución",
     "noSubstitutions": "No encontramos sustituciones para",
-    "savedSubstitutions": "Tus sustituciones guardadas"
+    "savedSubstitutions": "Tus sustituciones guardadas",
+    "recommendedReason": "Sustitución recomendada"
   },
   "errorBoundary": {
     "title": "Algo salió mal",

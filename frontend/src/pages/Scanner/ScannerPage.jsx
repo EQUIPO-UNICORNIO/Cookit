@@ -575,14 +575,14 @@ export default function ScannerPage() {
                         value={item.unit || 'unidad'}
                         onChange={e => updateItem(i, 'unit', e.target.value)}
                       >
-                        {units.map(u => <option key={u} value={u}>{u}</option>)}
+                        {units.map(u => <option key={u} value={u}>{t('units.' + u) || u}</option>)}
                       </select>
                       <select
                         className="text-xs bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 px-1 py-0.5 dark:text-white"
                         value={item.category || 'Otros'}
                         onChange={e => updateItem(i, 'category', e.target.value)}
                       >
-                        {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                        {CATEGORIES.map(c => <option key={c} value={c}>{t('categories.' + c) || c}</option>)}
                       </select>
                     </div>
                   </div>

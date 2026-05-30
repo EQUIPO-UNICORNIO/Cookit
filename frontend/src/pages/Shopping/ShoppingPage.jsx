@@ -124,11 +124,11 @@ export default function ShoppingPage() {
               <input className="neo-input" placeholder={t('shopping.productName')} value={form.name} onChange={handleNameChange} required />
               <div className="flex gap-2">
                 <select className="neo-input flex-1" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                  {CATEGORIES.map(c => <option key={c} value={c}>{t('categories.' + c) || c}</option>)}
                 </select>
                 <input className="neo-input w-20" type="number" value={form.quantity} onChange={e => setForm({...form, quantity: e.target.value})} />
                 <select className="neo-input w-28" value={form.unit} onChange={e => setForm({...form, unit: e.target.value})}>
-                  {units.map(u => <option key={u}>{u}</option>)}
+                  {units.map(u => <option key={u} value={u}>{t('units.' + u) || u}</option>)}
                 </select>
               </div>
               <div className="flex gap-2">
@@ -143,7 +143,7 @@ export default function ShoppingPage() {
       {Object.entries(grouped).map(([cat, catItems]) => (
         <div key={cat} className="mb-4">
           <h2 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">{CATEGORY_ICONS[cat] || 'inventory_2'}</span> {cat}
+            <span className="material-symbols-outlined text-sm">{CATEGORY_ICONS[cat] || 'inventory_2'}</span> {t('categories.' + cat) || cat}
           </h2>
           <div className="space-y-2">
             {catItems.map(item => (
@@ -158,11 +158,11 @@ export default function ShoppingPage() {
                 </button>
                 <div className="flex-1 min-w-0">
                   <p className={`font-bold text-sm dark:text-white ${item.checked ? 'line-through text-gray-400' : ''}`}>{item.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-300">{item.quantity} {item.unit} · {item.category}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-300">{item.quantity} {item.unit} · {t('categories.' + item.category) || item.category}</p>
                 </div>
                 {item.checked && (
                   <button onClick={() => markBought(item)} className="neo-btn !bg-green-50 !text-green-700 !border-green-400 !py-1.5 !px-2.5 !text-xs whitespace-nowrap flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">checklist</span> Comprar
+                    <span className="material-symbols-outlined text-sm">checklist</span> {t('shopping.buy')}
                   </button>
                 )}
                 <button onClick={() => handleDelete(item.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
