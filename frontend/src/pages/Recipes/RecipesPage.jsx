@@ -50,11 +50,25 @@ const difficulties = ['Todas', 'Fácil', 'Media', 'Difícil'];
 
 const normalize = (s) => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const wordMatch = (a, b) => {
+  if (new RegExp(`\\b${escapeRegex(a)}\\b`).test(b)) return true;
+  if (new RegExp(`\\b${escapeRegex(b)}\\b`).test(a)) return true;
+  const stripS = (s) => s.replace(/s$/, '');
+  const aS = stripS(a);
+  const bS = stripS(b);
+  if (aS !== a && new RegExp(`\\b${escapeRegex(aS)}\\b`).test(b)) return true;
+  if (bS !== b && new RegExp(`\\b${escapeRegex(bS)}\\b`).test(a)) return true;
+  if (aS !== a && bS !== b && new RegExp(`\\b${escapeRegex(aS)}\\b`).test(bS)) return true;
+  return false;
+};
+
 const matchIngredients = (haveList, recipeIngredients) => {
   const lowerHave = haveList.map(n => normalize(n));
   const matched = recipeIngredients.filter(ing => {
     const lowerIng = normalize(ing);
-    return lowerHave.some(h => h.includes(lowerIng) || lowerIng.includes(h));
+    return lowerHave.some(h => wordMatch(h, lowerIng));
   });
   return matched;
 };
@@ -255,7 +269,7 @@ export default function RecipesPage() {
             <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-2">{t('common.ingredients')}</p>
             <div className="flex flex-wrap gap-1.5">
               {selectedRecipe.ingredients.map((ing, i) => {
-                const isAvailable = selectedIngredients.some(si => normalize(si).includes(normalize(ing)) || normalize(ing).includes(normalize(si)));
+                const isAvailable = selectedIngredients.some(si => wordMatch(normalize(si), normalize(ing)));
                 return (
                   <span key={i} className={`text-xs px-2.5 py-1 rounded-lg border font-medium ${
                     isAvailable
@@ -439,7 +453,7 @@ export default function RecipesPage() {
                   <div className="flex flex-wrap gap-2">
                     {ings.map((ing, i) => {
                       const isSelected = selectedIngredients.includes(ing);
-                      const inPantry = pantryItems.some(p => normalize(p).includes(normalize(ing)) || normalize(ing).includes(normalize(p)));
+                      const inPantry = pantryItems.some(p => wordMatch(normalize(p), normalize(ing)));
                       return (
                         <button
                           key={i}
