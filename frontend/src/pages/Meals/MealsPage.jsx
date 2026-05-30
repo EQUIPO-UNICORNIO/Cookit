@@ -341,7 +341,7 @@ export default function MealsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-1">
                 <span className="text-xs font-bold text-primary-600 uppercase bg-primary-50 px-2 py-0.5 rounded-lg border border-primary-200">
-                  {meal.meal_type}
+                  {t('meals.types.' + meal.meal_type) || meal.meal_type}
                 </span>
                 {meal.day && (
                   <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-lg border-2
@@ -413,7 +413,7 @@ export default function MealsPage() {
                   {dayKeys.map(key => <option key={key} value={key}>{t('meals.days.' + key) || key}</option>)}
                 </select>
                 <select className="neo-input flex-1" value={form.meal_type} onChange={e => setForm({...form, meal_type: e.target.value})}>
-                  {mealTypes.map(m => <option key={m}>{m}</option>)}
+                  {mealTypes.map(m => <option key={m} value={m}>{t('meals.types.' + m) || m}</option>)}
                 </select>
               </div>
               <input className="neo-input" placeholder={t('meals.ingredientsPlaceholder')} value={form.ingredients} onChange={e => setForm({...form, ingredients: e.target.value})} />

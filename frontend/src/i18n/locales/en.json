@@ -143,6 +143,13 @@
     "selectedDay": "selected",
     "completedMeal": "Meal completed!",
     "videoNoFound": "No video found",
+    "types": {
+      "desayuno": "breakfast",
+      "almuerzo": "lunch",
+      "comida": "dinner",
+      "merienda": "snack",
+      "cena": "supper"
+    },
     "days": {
       "monday": "Monday",
       "tuesday": "Tuesday",
