@@ -195,7 +195,10 @@
     "dinner": "dinner",
     "supper": "supper",
     "videoNoFound": "No video found",
-    "searching": "Searching..."
+    "searching": "Searching...",
+    "history": "History",
+    "alreadyInHistory": "Already in your history",
+    "addedToHistory": "Added to your history"
   },
   "pantry": {
     "title": "Your Pantry",

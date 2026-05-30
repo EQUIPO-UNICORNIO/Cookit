@@ -75,7 +75,7 @@ const matchIngredients = (haveList, recipeIngredients) => {
 };
 
 export default function RecipesPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [pantryItems, setPantryItems] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [customIngredient, setCustomIngredient] = useState('');
@@ -213,14 +213,14 @@ export default function RecipesPage() {
 
   const markAsUsed = (recipe) => {
     if (history.some(h => h.id === recipe.id)) {
-      showToast('Ya está en tu historial');
+      showToast(t('recipes.alreadyInHistory'));
       return;
     }
-    const entry = { id: recipe.id, name: recipe.name, category: recipe.category, date: new Date().toLocaleDateString('es-ES') };
+    const entry = { id: recipe.id, name: recipe.name, category: recipe.category, date: new Date().toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES') };
     const updated = [entry, ...history];
     setHistory(updated);
     localStorage.setItem('cookit_history', JSON.stringify(updated));
-    showToast('Añadido a tu historial');
+    showToast(t('recipes.addedToHistory'));
   };
 
   const filteredSuggestions = searchIngredient
@@ -360,7 +360,7 @@ export default function RecipesPage() {
         <div className="flex items-center justify-between cursor-pointer" onClick={() => setShowHistory(!showHistory)}>
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary-600 text-sm">history</span>
-            <span className="font-bold text-sm">Historial ({history.length})</span>
+            <span className="font-bold text-sm">{t('recipes.history')} ({history.length})</span>
           </div>
           <span className="material-symbols-outlined text-sm text-gray-500">{showHistory ? 'expand_less' : 'expand_more'}</span>
         </div>

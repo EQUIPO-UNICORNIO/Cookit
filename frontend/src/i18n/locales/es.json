@@ -195,7 +195,10 @@
     "dinner": "comida",
     "supper": "cena",
     "videoNoFound": "No se encontró vídeo",
-    "searching": "Buscando..."
+    "searching": "Buscando...",
+    "history": "Historial",
+    "alreadyInHistory": "Ya está en tu historial",
+    "addedToHistory": "Añadido a tu historial"
   },
   "pantry": {
     "title": "Tu Despensa",
