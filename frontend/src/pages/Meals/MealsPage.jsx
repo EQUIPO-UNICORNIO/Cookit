@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
+import { translateIngredient } from '../../utils/ingredientTranslations';
 
 const mealTypes = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
 
@@ -204,7 +205,7 @@ export default function MealsPage() {
               <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-1">{t('common.ingredients')}</p>
               <div className="flex flex-wrap gap-1">
                 {selectedMeal.ingredients.map((ing, i) => (
-                  <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{ing}</span>
+                  <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
                 ))}
               </div>
             </div>
@@ -360,7 +361,7 @@ export default function MealsPage() {
                 {meal.ingredients && meal.ingredients.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
                     {meal.ingredients.slice(0, 3).map((ing, i) => (
-                  <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-0.5 font-medium dark:text-white">{ing}</span>
+                  <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
                     ))}
                     {meal.ingredients.length > 3 && <span className="text-xs text-gray-400 dark:text-gray-400 font-medium">+{meal.ingredients.length - 3}</span>}
                   </div>

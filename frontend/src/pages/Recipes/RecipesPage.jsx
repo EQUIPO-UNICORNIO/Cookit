@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import RECIPE_DB from '../../data/recipeDb';
+import { translateIngredient } from '../../utils/ingredientTranslations';
 
 const recipesWithIds = RECIPE_DB.map((r, i) => ({
   ...r,
@@ -276,7 +277,7 @@ export default function RecipesPage() {
                       ? 'bg-green-50 border-green-300 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400'
                       : 'bg-gray-50 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500'
                   }`}>
-                    {isAvailable ? '✓ ' : ''}{ing}
+                    {isAvailable ? '✓ ' : ''}{translateIngredient(ing)}
                   </span>
                 );
               })}
@@ -409,7 +410,7 @@ export default function RecipesPage() {
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {selectedIngredients.map((ing, i) => (
                   <span key={i} className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-700 rounded-full px-3 py-1 font-medium flex items-center gap-1">
-                    {ing}
+                    {translateIngredient(ing)}
                     <button onClick={() => removeIngredient(ing)} className="ml-0.5 hover:text-red-500">
                       <span className="material-symbols-outlined text-sm">close</span>
                     </button>
@@ -466,7 +467,7 @@ export default function RecipesPage() {
                                 : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-primary-300'
                           }`}
                         >
-                          {isSelected ? '✓ ' : ''}{ing}
+                          {isSelected ? '✓ ' : ''}{translateIngredient(ing)}
                         </button>
                       );
                     })}
@@ -505,7 +506,7 @@ export default function RecipesPage() {
             </div>
             <div className="flex flex-wrap gap-1">
               {selectedIngredients.slice(0, 8).map((ing, i) => (
-                <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{ing}</span>
+                <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
               ))}
               {selectedIngredients.length > 8 && (
                 <span className="text-xs text-gray-400 font-medium">+{selectedIngredients.length - 8}</span>
@@ -564,7 +565,7 @@ export default function RecipesPage() {
                         <span key={j} className={`text-xs px-2 py-0.5 rounded-lg border ${
                           has ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400' : 'bg-gray-50 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600'
                         }`}>
-                          {has ? '✓ ' : ''}{ing}
+                          {has ? '✓ ' : ''}{translateIngredient(ing)}
                         </span>
                       );
                     })}
