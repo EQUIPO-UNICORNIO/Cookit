@@ -48,7 +48,7 @@ const PANTRY_INGREDIENTS = Object.values(ingredientCategories).flat();
 const categories = ['Todas', 'desayuno', 'almuerzo', 'comida', 'cena'];
 const difficulties = ['Todas', 'Fácil', 'Media', 'Difícil'];
 
-const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const normalize = (s) => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 const matchIngredients = (haveList, recipeIngredients) => {
   const lowerHave = haveList.map(n => normalize(n));
@@ -142,7 +142,7 @@ export default function RecipesPage() {
     try {
       const items = await api.getPantry();
       if (items?.length) {
-        const names = items.map(i => i.name).filter(Boolean);
+        const names = items.map(i => i.name?.trim()).filter(Boolean);
         setPantryItems(names);
       }
     } catch (e) { console.error(e); }
