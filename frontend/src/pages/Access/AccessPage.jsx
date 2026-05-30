@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import ForgotPasswordModal from './ForgotPasswordModal';
 import { useTranslation } from 'react-i18next';
+import FloatingFoodAnimation from '../../components/FloatingFoodAnimation';
 
 function Toast({ message, onClose }) {
   useEffect(() => {
@@ -99,14 +100,15 @@ export default function AccessPage() {
   };
 
   return (
-    <div className="min-h-screen bg-page flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col relative overflow-hidden">
+      <FloatingFoodAnimation />
       <button onClick={() => { const newLang = i18n.language === 'es' ? 'en' : 'es'; i18n.changeLanguage(newLang); localStorage.setItem('cookit_lang', newLang); }}
         className="fixed top-4 right-4 z-50 neo-btn !py-1.5 !px-3 !text-xs !rounded-xl">
         {i18n.language === 'es' ? 'EN' : 'ES'}
       </button>
       {showForgotPassword && <ForgotPasswordModal onClose={() => setShowForgotPassword(false)} />}
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-      <div className="flex-1 flex flex-col justify-center px-6 max-w-sm mx-auto w-full">
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 max-w-sm mx-auto w-full">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-600 rounded-3xl mb-4 shadow-lg shadow-primary-600/20">
             <span className="material-symbols-outlined text-4xl text-white">restaurant</span>
