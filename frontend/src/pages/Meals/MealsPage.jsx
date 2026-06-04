@@ -44,9 +44,10 @@ export default function MealsPage() {
   const [completedMeals, setCompletedMeals] = useState(() => {
     try { return JSON.parse(localStorage.getItem('cookit_completed_meals') || '[]'); } catch { return []; }
   });
+  const [pantry, setPantry] = useState([]);
   const videoIdCache = useRef({});
 
-  useEffect(() => { loadMeals(); }, []);
+  useEffect(() => { loadMeals(); loadPantry(); }, []);
 
   useEffect(() => {
     if (!selectedMeal) { setMealVideoUrl(null); setVideoSteps(null); return; }
@@ -80,6 +81,46 @@ export default function MealsPage() {
       localIdCounter = Math.max(...local.map(m => parseInt(m.id.replace('local_', '')) || 0), 0) + 1;
     }
     setMeals(merged);
+  };
+
+  const loadPantry = async () => {
+    try { const data = await api.getPantry(); setPantry(data.map(i => i.name)); } catch {}
+  };
+
+  const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wordMatch = (a, b) => {
+    if (new RegExp(`\\b${escapeRegex(a)}\\b`).test(b)) return true;
+    if (new RegExp(`\\b${escapeRegex(b)}\\b`).test(a)) return true;
+    const stripS = (s) => s.replace(/s$/, '');
+    const aS = stripS(a), bS = stripS(b);
+    if (aS !== a && new RegExp(`\\b${escapeRegex(aS)}\\b`).test(b)) return true;
+    if (bS !== b && new RegExp(`\\b${escapeRegex(bS)}\\b`).test(a)) return true;
+    if (aS !== a && bS !== b && new RegExp(`\\b${escapeRegex(aS)}\\b`).test(bS)) return true;
+    return false;
+  };
+  const matchIngredients = (haveList, recipeIngredients) => {
+    const lowerHave = haveList.map(n => normalize(n));
+    return recipeIngredients.filter(ing => {
+      const lowerIng = normalize(ing);
+      return lowerHave.some(h => wordMatch(h, lowerIng));
+    });
+  };
+
+  const matchPercent = (ingredients) => {
+    if (!ingredients?.length) return 0;
+    const matched = matchIngredients(pantry, ingredients);
+    return Math.round((matched.length / ingredients.length) * 100);
+  };
+
+  const addToShopping = async (ingredients) => {
+    let count = 0;
+    for (const name of ingredients) {
+      try {
+        await api.addShoppingItem({ name, category: 'Otros', quantity: '1', unit: 'unidad' });
+        count++;
+      } catch {}
+    }
+    showToast(t('common.addedToShopping'));
   };
 
   const showToast = (msg) => {
@@ -230,12 +271,23 @@ export default function MealsPage() {
 
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
-              <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-1">{t('common.ingredients')}</p>
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">{t('common.ingredients')}</p>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                  matchPercent(selectedMeal.ingredients) >= 70 ? 'bg-green-100 text-green-700 border border-green-300' :
+                  matchPercent(selectedMeal.ingredients) >= 40 ? 'bg-yellow-100 text-yellow-700 border border-yellow-300' :
+                  'bg-orange-100 text-orange-700 border border-orange-300'
+                }`}>{matchPercent(selectedMeal.ingredients)}%</span>
+              </div>
               <div className="flex flex-wrap gap-1">
                 {selectedMeal.ingredients.map((ing, i) => (
                   <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
                 ))}
               </div>
+              <button onClick={() => addToShopping(selectedMeal.ingredients)}
+                className="mt-2 w-full text-xs font-bold neo-btn !py-1.5 !px-3 !bg-blue-50 !text-blue-600 !border-blue-300 flex items-center justify-center gap-1">
+                <span className="material-symbols-outlined text-sm">shopping_cart</span> {t('common.addToShopping')}
+              </button>
             </div>
           )}
 
@@ -404,6 +456,11 @@ export default function MealsPage() {
                   <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
                     ))}
                     {meal.ingredients.length > 3 && <span className="text-xs text-gray-400 dark:text-gray-400 font-medium">+{meal.ingredients.length - 3}</span>}
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ml-auto ${
+                      matchPercent(meal.ingredients) >= 70 ? 'bg-green-100 text-green-700 border border-green-300' :
+                      matchPercent(meal.ingredients) >= 40 ? 'bg-yellow-100 text-yellow-700 border border-yellow-300' :
+                      'bg-orange-100 text-orange-700 border border-orange-300'
+                    }`}>{matchPercent(meal.ingredients)}%</span>
                   </div>
                 )}
               </div>
