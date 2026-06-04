@@ -5,6 +5,12 @@ import RECIPE_DB from '../../data/recipeDb';
 import { translateIngredient } from '../../utils/ingredientTranslations';
 import { CATEGORIES, CATEGORY_EMOJI, autoCategorize } from '../../utils/categories';
 
+const recipesWithIds = RECIPE_DB.map((r, i) => ({
+  ...r,
+  id: `r${i}`,
+  videoUrl: r.videoUrl || null,
+}));
+
 const allIngredients = [
   'Pollo', 'Ternera', 'Cerdo', 'Carne picada', 'Pavo', 'Jamón', 'Salchichas',
   'Salmón', 'Pescado blanco', 'Merluza', 'Atún en lata', 'Sardinas', 'Gambas',
