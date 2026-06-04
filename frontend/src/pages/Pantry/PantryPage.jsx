@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
-import { CATEGORIES, CATEGORY_ICONS, autoCategorize } from '../../utils/categories';
+import { CATEGORIES, CATEGORY_ICONS, CATEGORY_EMOJI, autoCategorize } from '../../utils/categories';
 import RECIPE_DB from '../../data/recipeDb';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
@@ -193,7 +193,11 @@ export default function PantryPage() {
         <div className="neo-card mb-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center border-2 border-black">
-              <span className="material-symbols-outlined text-3xl text-primary-600">{CATEGORY_ICONS[selectedItem.category] || 'inventory_2'}</span>
+              {CATEGORY_EMOJI[selectedItem.category] ? (
+                <span className="text-3xl">{CATEGORY_EMOJI[selectedItem.category]}</span>
+              ) : (
+                <span className="material-symbols-outlined text-3xl text-primary-600">{CATEGORY_ICONS[selectedItem.category] || 'inventory_2'}</span>
+              )}
             </div>
             <div>
               <h2 className="text-xl font-extrabold">{selectedItem.name}</h2>
@@ -325,19 +329,19 @@ export default function PantryPage() {
       {Object.entries(grouped).map(([cat, catItems]) => (
         <div key={cat} className="mb-4">
           <h2 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">{sortByExpiry ? 'schedule' : (CATEGORY_ICONS[cat] || 'inventory_2')}</span> {cat === '_byExpiry' ? t('pantry.byExpiry') : (t('categories.' + cat) || cat)}
+            {sortByExpiry ? <span className="material-symbols-outlined text-sm">schedule</span> : (CATEGORY_EMOJI[cat] ? <span className="text-sm">{CATEGORY_EMOJI[cat]}</span> : <span className="material-symbols-outlined text-sm">{CATEGORY_ICONS[cat] || 'inventory_2'}</span>)} {cat === '_byExpiry' ? t('pantry.byExpiry') : (t('categories.' + cat) || cat)}
           </h2>
           <div className="space-y-2">
             {catItems.map(item => (
               <div key={item.id} className="neo-card flex items-center gap-3 !p-3 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedItem(item)}>
                 <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0 border-2 border-black">
-                  <span className="material-symbols-outlined text-primary-600">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span>
+                  {CATEGORY_EMOJI[item.category] ? <span className="text-lg">{CATEGORY_EMOJI[item.category]}</span> : <span className="material-symbols-outlined text-primary-600">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span>}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-sm truncate">{item.name}</p>
                   <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                     <span className="text-xs text-gray-400 font-medium flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span> {t('categories.' + item.category) || item.category}
+                      {CATEGORY_EMOJI[item.category] ? <span className="text-xs mr-0.5">{CATEGORY_EMOJI[item.category]}</span> : <span className="material-symbols-outlined text-xs">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span>} {t('categories.' + item.category) || item.category}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · ${t('pantry.expiresOn')}${item.expiry_date}` : ''}</span>
                   </div>

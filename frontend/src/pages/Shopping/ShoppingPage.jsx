@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
-import { CATEGORIES, CATEGORY_ICONS, autoCategorize } from '../../utils/categories';
+import { CATEGORIES, CATEGORY_ICONS, CATEGORY_EMOJI, autoCategorize } from '../../utils/categories';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
 
@@ -143,7 +143,7 @@ export default function ShoppingPage() {
       {Object.entries(grouped).map(([cat, catItems]) => (
         <div key={cat} className="mb-4">
           <h2 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">{CATEGORY_ICONS[cat] || 'inventory_2'}</span> {t('categories.' + cat) || cat}
+            {CATEGORY_EMOJI[cat] ? <span className="text-sm">{CATEGORY_EMOJI[cat]}</span> : <span className="material-symbols-outlined text-sm">{CATEGORY_ICONS[cat] || 'inventory_2'}</span>} {t('categories.' + cat) || cat}
           </h2>
           <div className="space-y-2">
             {catItems.map(item => (

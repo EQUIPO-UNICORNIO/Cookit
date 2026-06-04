@@ -14,6 +14,10 @@ export const CATEGORY_ICONS = {
   'Otros': 'inventory_2',
 };
 
+export const CATEGORY_EMOJI = {
+  'Carne': '🥩',
+};
+
 export function autoCategorize(name) {
   const n = name.toLowerCase().trim();
   if (/pollo|ternera|cerdo|carne|filete|chuleta|solomillo|lomo|cordero|hamburguesa|salchicha|tocino|jamón|pavo|conejo|chorizo|mortadela|salchichón|butifarra|fuet|longaniza|secreto|presa|costilla|entrecot|rabo|higado|riñón|seso/i.test(n)) return 'Carne';
