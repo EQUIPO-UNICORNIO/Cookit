@@ -16,6 +16,16 @@ export const CATEGORY_ICONS = {
 
 export const CATEGORY_EMOJI = {
   'Carne': '🥩',
+  'Marisco': '🦐',
+  'Verduras': '🥦',
+  'Frutas': '🍎',
+  'Lácteos': '🧀',
+  'Hidratos': '🍞',
+  'Conservas': '🥫',
+  'Condimentos': '🧂',
+  'Congelados': '🧊',
+  'Bebidas': '🥤',
+  'Otros': '📦',
 };
 
 export function autoCategorize(name) {
