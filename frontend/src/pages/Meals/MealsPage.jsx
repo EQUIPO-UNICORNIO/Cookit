@@ -213,15 +213,6 @@ export default function MealsPage() {
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
           {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">{t('meals.day')}: {t('meals.days.' + selectedMeal.day.toLowerCase()) || selectedMeal.day}</p>}
 
-          {mealVideoUrl && (
-            <div className="mt-3 aspect-video rounded-xl overflow-hidden border-2 border-black">
-              <iframe src={mealVideoUrl} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={t('common.video')} />
-            </div>
-          )}
-
-          <button onClick={() => openVideo(selectedMeal)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-3" disabled={loadingVideo === selectedMeal.id}>
-            <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
-          </button>
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
               <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase mb-1">{t('common.ingredients')}</p>
@@ -234,9 +225,16 @@ export default function MealsPage() {
           )}
 
         {steps.length > 0 && (
-          <div className="neo-card !bg-primary-600 !text-white !border-primary-800 mb-3 mt-4">
-            <span className="text-xs font-bold uppercase">{t('meals.step')} {cookingStep + 1} {t('meals.of')} {steps.length}</span>
-            <p className="text-lg font-extrabold mt-1">{steps[cookingStep]}</p>
+          <div className="mb-3 mt-4">
+            {mealVideoUrl && (
+              <div className="aspect-video rounded-xl overflow-hidden border-2 border-black mb-3">
+                <iframe src={mealVideoUrl} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={t('common.video')} />
+              </div>
+            )}
+            <div className="neo-card !bg-primary-600 !text-white !border-primary-800">
+              <span className="text-xs font-bold uppercase">{t('meals.step')} {cookingStep + 1} {t('meals.of')} {steps.length}</span>
+              <p className="text-lg font-extrabold mt-1">{steps[cookingStep]}</p>
+            </div>
           </div>
         )}
         </div>
