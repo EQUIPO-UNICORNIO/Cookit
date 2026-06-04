@@ -112,15 +112,11 @@ export default function MealsPage() {
     return Math.round((matched.length / ingredients.length) * 100);
   };
 
-  const addToShopping = async (ingredients) => {
-    let count = 0;
+  const addToShopping = async (ingredients, mealName) => {
     for (const name of ingredients) {
-      try {
-        await api.addShoppingItem({ name, category: 'Otros', quantity: '1', unit: 'unidad' });
-        count++;
-      } catch {}
+      try { await api.addShoppingItem({ name, category: 'Otros', quantity: '1', unit: 'unidad' }); } catch {}
     }
-    showToast(t('common.addedToShopping'));
+    showToast(t('common.mealAddedToShopping', { name: mealName }));
   };
 
   const showToast = (msg) => {
@@ -291,7 +287,7 @@ export default function MealsPage() {
                   );
                 })}
               </div>
-              <button onClick={() => addToShopping(selectedMeal.ingredients)}
+              <button onClick={() => addToShopping(selectedMeal.ingredients, selectedMeal.name)}
                 className="mt-2 w-full text-xs font-bold neo-btn !py-1.5 !px-3 !bg-blue-50 !text-blue-600 !border-blue-300 flex items-center justify-center gap-1">
                 <span className="material-symbols-outlined text-sm">shopping_cart</span> {t('common.addToShopping')}
               </button>

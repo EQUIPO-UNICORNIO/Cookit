@@ -247,6 +247,7 @@
     "cancel": "Cancelar",
     "converted": "Convertido: {qty} {from} = {result} {to}",
     "addedToShopping": "Añadido a la compra",
+    "mealAddedToShopping": "{name} añadido a la compra",
     "expiringProducts": "productos próximo(s) a caducar",
     "suggestedRecipes": "Recetas que puedes hacer:",
     "expiresOn": "Vence: "
