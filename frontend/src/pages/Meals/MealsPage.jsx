@@ -39,9 +39,25 @@ export default function MealsPage() {
   const [viewMode, setViewMode] = useState('list');
   const [showVideo, setShowVideo] = useState(null);
   const [loadingVideo, setLoadingVideo] = useState(null);
+  const [mealVideoUrl, setMealVideoUrl] = useState(null);
   const videoIdCache = useRef({});
 
   useEffect(() => { loadMeals(); }, []);
+
+  useEffect(() => {
+    if (!selectedMeal) { setMealVideoUrl(null); return; }
+    const cacheKey = selectedMeal.id;
+    if (videoIdCache.current[cacheKey]) {
+      setMealVideoUrl(`https://www.youtube.com/embed/${videoIdCache.current[cacheKey]}`);
+      return;
+    }
+    api.searchYoutube('receta ' + selectedMeal.name).then(res => {
+      if (res.videoId) {
+        videoIdCache.current[cacheKey] = res.videoId;
+        setMealVideoUrl(`https://www.youtube.com/embed/${res.videoId}`);
+      }
+    }).catch(() => {});
+  }, [selectedMeal]);
 
   const loadMeals = async () => {
     let apiMeals = [];
@@ -196,6 +212,12 @@ export default function MealsPage() {
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
           {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">{t('meals.day')}: {t('meals.days.' + selectedMeal.day.toLowerCase()) || selectedMeal.day}</p>}
+
+          {mealVideoUrl && (
+            <div className="mt-3 aspect-video rounded-xl overflow-hidden border-2 border-black">
+              <iframe src={mealVideoUrl} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={t('common.video')} />
+            </div>
+          )}
 
           <button onClick={() => openVideo(selectedMeal)} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 w-full mt-3" disabled={loadingVideo === selectedMeal.id}>
             <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span> {t('common.watchVideo')}
