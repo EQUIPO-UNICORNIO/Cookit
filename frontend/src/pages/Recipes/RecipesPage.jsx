@@ -3,48 +3,29 @@ import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import RECIPE_DB from '../../data/recipeDb';
 import { translateIngredient } from '../../utils/ingredientTranslations';
+import { CATEGORIES, CATEGORY_EMOJI, autoCategorize } from '../../utils/categories';
 
-const recipesWithIds = RECIPE_DB.map((r, i) => ({
-  ...r,
-  id: `r${i}`,
-  videoUrl: r.videoUrl || null,
-}));
-
-const ingredientCategories = {
-  'Proteínas': [
-    'Pollo', 'Ternera', 'Cerdo', 'Carne picada', 'Pavo', 'Jamón', 'Salchichas',
-    'Salmón', 'Pescado blanco', 'Merluza', 'Atún en lata', 'Sardinas', 'Gambas',
-    'Huevos',
-  ],
-  'Frutas y Verduras': [
-    'Tomate', 'Cebolla', 'Ajo', 'Pimiento', 'Zanahoria', 'Calabacín', 'Berenjena', 'Calabaza',
-    'Lechuga', 'Espinacas', 'Col', 'Judías verdes', 'Champiñones', 'Pepino', 'Brócoli',
-    'Patatas', 'Aguacate',
-    'Plátano', 'Manzana', 'Fresas', 'Limón', 'Naranja', 'Uvas', 'Pera', 'Melón', 'Sandía', 'Kiwi',
-  ],
-  'Lácteos': [
-    'Leche', 'Yogur natural', 'Queso', 'Queso cheddar', 'Queso parmesano', 'Queso mozzarella',
-    'Nata', 'Mantequilla', 'Crema agria', 'Requesón',
-  ],
-  'Hidratos': [
-    'Arroz', 'Pasta', 'Macarrones', 'Espaguetis', 'Pan', 'Pan de hamburguesa', 'Pan rallado',
-    'Tortillas de trigo', 'Tortillas de maíz', 'Harina', 'Avena', 'Granola',
-    'Lentejas', 'Garbanzos', 'Alubias', 'Garrofón', 'Quinoa', 'Cuscús',
-    'Maíz dulce',
-  ],
-  'Conservas': [
-    'Tomate triturado', 'Tomate frito', 'Caldo de pollo', 'Caldo de verduras',
-    'Aceitunas', 'Pimientos asados', 'Alcachofas en conserva',
-  ],
-  'Condimentos': [
-    'Aceite de oliva', 'Sal', 'Pimienta', 'Vinagre', 'Mostaza', 'Ketchup', 'Mayonesa', 'Miel',
-    'Perejil', 'Albahaca', 'Cilantro', 'Eneldo', 'Azafrán', 'Comino', 'Pimentón', 'Pimentón picante',
-    'Orégano', 'Nuez moscada', 'Jengibre', 'Canela', 'Laurel', 'Tomillo', 'Romero', 'Curry',
-    'Semillas de sésamo', 'Frutos secos', 'Mantequilla de cacahuete', 'Cacao',
-  ],
-};
-
-const PANTRY_INGREDIENTS = Object.values(ingredientCategories).flat();
+const allIngredients = [
+  'Pollo', 'Ternera', 'Cerdo', 'Carne picada', 'Pavo', 'Jamón', 'Salchichas',
+  'Salmón', 'Pescado blanco', 'Merluza', 'Atún en lata', 'Sardinas', 'Gambas',
+  'Huevos',
+  'Tomate', 'Cebolla', 'Ajo', 'Pimiento', 'Zanahoria', 'Calabacín', 'Berenjena', 'Calabaza',
+  'Lechuga', 'Espinacas', 'Col', 'Judías verdes', 'Champiñones', 'Pepino', 'Brócoli',
+  'Patatas', 'Aguacate',
+  'Plátano', 'Manzana', 'Fresas', 'Limón', 'Naranja', 'Uvas', 'Pera', 'Melón', 'Sandía', 'Kiwi',
+  'Leche', 'Yogur natural', 'Queso', 'Queso cheddar', 'Queso parmesano', 'Queso mozzarella',
+  'Nata', 'Mantequilla', 'Crema agria', 'Requesón',
+  'Arroz', 'Pasta', 'Macarrones', 'Espaguetis', 'Pan', 'Pan de hamburguesa', 'Pan rallado',
+  'Tortillas de trigo', 'Tortillas de maíz', 'Harina', 'Avena', 'Granola',
+  'Lentejas', 'Garbanzos', 'Alubias', 'Garrofón', 'Quinoa', 'Cuscús',
+  'Maíz dulce',
+  'Tomate triturado', 'Tomate frito', 'Caldo de pollo', 'Caldo de verduras',
+  'Aceitunas', 'Pimientos asados', 'Alcachofas en conserva',
+  'Aceite de oliva', 'Sal', 'Pimienta', 'Vinagre', 'Mostaza', 'Ketchup', 'Mayonesa', 'Miel',
+  'Perejil', 'Albahaca', 'Cilantro', 'Eneldo', 'Azafrán', 'Comino', 'Pimentón', 'Pimentón picante',
+  'Orégano', 'Nuez moscada', 'Jengibre', 'Canela', 'Laurel', 'Tomillo', 'Romero', 'Curry',
+  'Semillas de sésamo', 'Frutos secos', 'Mantequilla de cacahuete', 'Cacao',
+];
 
 const categories = ['Todas', 'desayuno', 'almuerzo', 'comida', 'cena'];
 const difficulties = ['Todas', 'Fácil', 'Media', 'Difícil'];
@@ -443,13 +424,7 @@ export default function RecipesPage() {
               {Object.entries(filteredSuggestions).map(([category, ings]) => (
                 <div key={category}>
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">
-                      {category === 'Proteínas' ? 'egg' :
-                       category === 'Frutas y Verduras' ? 'egg_alt' :
-                       category === 'Lácteos' ? 'water_drop' :
-                       category === 'Hidratos' ? 'bakery_dining' :
-                       category === 'Conservas' ? 'inventory_2' : 'spa'}
-                    </span> {category}
+                    {CATEGORY_EMOJI[category] && <span className="text-sm">{CATEGORY_EMOJI[category]}</span>} {t('categories.' + category) || category}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {ings.map((ing, i) => {
