@@ -78,9 +78,4 @@ export const api = {
   searchYoutube: (q) => request(`/youtube/search?q=${encodeURIComponent(q)}`),
   getYoutubeDetails: (videoId) => request(`/youtube/details?videoId=${videoId}`),
 
-  // History
-  getHistory: () => request('/history'),
-  addHistory: (entry) => request('/history', { method: 'POST', body: JSON.stringify(entry) }),
-  deleteHistory: (id) => request(`/history/${id}`, { method: 'DELETE' }),
-
 };

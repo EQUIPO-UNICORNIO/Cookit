@@ -110,16 +110,6 @@ CREATE TABLE ingredient_substitutions (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE recipe_history (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  recipe_id TEXT DEFAULT '',
-  name TEXT NOT NULL,
-  category TEXT DEFAULT '',
-  date TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
 CREATE TABLE post_likes (
   id SERIAL PRIMARY KEY,
   post_id INTEGER NOT NULL REFERENCES community_posts(id) ON DELETE CASCADE,
@@ -161,15 +151,3 @@ CREATE INDEX IF NOT EXISTS idx_substitution_user ON ingredient_substitutions(use
 CREATE INDEX IF NOT EXISTS idx_post_user ON community_posts(user_id);
 CREATE INDEX IF NOT EXISTS idx_likes_post ON post_likes(post_id);
 CREATE INDEX IF NOT EXISTS idx_comments_post ON post_comments(post_id);
-CREATE INDEX IF NOT EXISTS idx_history_user ON recipe_history(user_id);
-
--- Migration 2026-06-04 (safe to re-run): Add recipe_history table
-CREATE TABLE IF NOT EXISTS recipe_history (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  recipe_id TEXT DEFAULT '',
-  name TEXT NOT NULL,
-  category TEXT DEFAULT '',
-  date TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
