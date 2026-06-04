@@ -40,21 +40,27 @@ export default function MealsPage() {
   const [showVideo, setShowVideo] = useState(null);
   const [loadingVideo, setLoadingVideo] = useState(null);
   const [mealVideoUrl, setMealVideoUrl] = useState(null);
+  const [videoSteps, setVideoSteps] = useState(null);
   const videoIdCache = useRef({});
 
   useEffect(() => { loadMeals(); }, []);
 
   useEffect(() => {
-    if (!selectedMeal) { setMealVideoUrl(null); return; }
+    if (!selectedMeal) { setMealVideoUrl(null); setVideoSteps(null); return; }
     const cacheKey = selectedMeal.id;
     if (videoIdCache.current[cacheKey]) {
       setMealVideoUrl(`https://www.youtube.com/embed/${videoIdCache.current[cacheKey]}`);
       return;
     }
-    api.searchYoutube('receta ' + selectedMeal.name).then(res => {
+    api.searchYoutube('receta ' + selectedMeal.name).then(async (res) => {
       if (res.videoId) {
         videoIdCache.current[cacheKey] = res.videoId;
         setMealVideoUrl(`https://www.youtube.com/embed/${res.videoId}`);
+        const details = await api.getYoutubeDetails(res.videoId).catch(() => ({ description: '' }));
+        if (details.description) {
+          const steps = details.description.split('\n').filter(l => /^\d+[\.\)]/.test(l.trim()));
+          if (steps.length >= 2) setVideoSteps(steps.map(s => s.replace(/^\d+[\.\)]\s*/, '').trim()).filter(Boolean));
+        }
       }
     }).catch(() => {});
   }, [selectedMeal]);
@@ -193,7 +199,7 @@ export default function MealsPage() {
     : meals.filter(m => !m.day || m.day === selectedDay);
 
   if (selectedMeal) {
-    const steps = parseInstructions(selectedMeal.instructions);
+    const steps = videoSteps || parseInstructions(selectedMeal.instructions);
     return (
       <div>
         <button onClick={() => { setSelectedMeal(null); setCookingStep(0); }} className="neo-btn !bg-gray-100 dark:!text-black dark:!border-gray-400 !py-2 !px-3 !text-sm mb-4">

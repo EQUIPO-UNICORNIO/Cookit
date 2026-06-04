@@ -36,4 +36,20 @@ router.get('/search', async (req, res) => {
   }
 });
 
+router.get('/details', async (req, res) => {
+  const { videoId } = req.query;
+  if (!videoId) return res.status(400).json({ error: 'Falta videoId' });
+  try {
+    if (process.env.YOUTUBE_API_KEY) {
+      const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${process.env.YOUTUBE_API_KEY}`;
+      const data = await fetch(url).then(r => r.json());
+      const description = data.items?.[0]?.snippet?.description || '';
+      return res.json({ description });
+    }
+    return res.json({ description: '' });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;

@@ -76,5 +76,6 @@ export const api = {
 
   // YouTube
   searchYoutube: (q) => request(`/youtube/search?q=${encodeURIComponent(q)}`),
+  getYoutubeDetails: (videoId) => request(`/youtube/details?videoId=${videoId}`),
 
 };
