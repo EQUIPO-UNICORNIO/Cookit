@@ -168,6 +168,7 @@
     "allDays": "All",
     "selectedDay": "selected",
     "completedMeal": "Meal completed!",
+    "completed": "Completed!",
     "videoNoFound": "No video found",
     "types": {
       "desayuno": "breakfast",

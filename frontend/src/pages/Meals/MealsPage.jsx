@@ -41,6 +41,9 @@ export default function MealsPage() {
   const [loadingVideo, setLoadingVideo] = useState(null);
   const [mealVideoUrl, setMealVideoUrl] = useState(null);
   const [videoSteps, setVideoSteps] = useState(null);
+  const [completedMeals, setCompletedMeals] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cookit_completed_meals') || '[]'); } catch { return []; }
+  });
   const videoIdCache = useRef({});
 
   useEffect(() => { loadMeals(); }, []);
@@ -186,6 +189,12 @@ export default function MealsPage() {
     if (cookingStep < steps.length - 1) {
       setCookingStep(cookingStep + 1);
     } else {
+      const id = selectedMeal.id;
+      if (!completedMeals.includes(id)) {
+        const updated = [...completedMeals, id];
+        setCompletedMeals(updated);
+        localStorage.setItem('cookit_completed_meals', JSON.stringify(updated));
+      }
       showToast(t('meals.completedMeal'));
       setSelectedMeal(null);
       setCookingStep(0);
@@ -342,8 +351,8 @@ export default function MealsPage() {
                 <p className="text-[10px] font-bold text-center uppercase text-gray-500 mb-1">{(t('meals.days.' + day) || day).slice(0, 3)}</p>
                 <div className="space-y-1">
                   {dayMealsFiltered.slice(0, 3).map(m => (
-                    <div key={m.id} className="text-[10px] bg-primary-50 border border-primary-200 rounded-md px-1 py-0.5 truncate font-medium cursor-pointer" onClick={() => setSelectedMeal(m)}>
-                      {m.name}
+                    <div key={m.id} className={`text-[10px] rounded-md px-1 py-0.5 truncate font-medium cursor-pointer ${completedMeals.includes(m.id) ? 'bg-green-100 border border-green-300 line-through text-green-600' : 'bg-primary-50 border border-primary-200'}`} onClick={() => setSelectedMeal(m)}>
+                      {completedMeals.includes(m.id) && <span className="material-symbols-outlined text-[8px] align-text-bottom">check_circle</span>} {m.name}
                     </div>
                   ))}
                   {dayMealsFiltered.length > 3 && <p className="text-[10px] text-gray-400 text-center">+{dayMealsFiltered.length - 3}</p>}
@@ -383,6 +392,11 @@ export default function MealsPage() {
                 )}
                 </div>
                 <h3 className="font-extrabold text-base mt-1 truncate">{meal.name}</h3>
+                {completedMeals.includes(meal.id) && (
+                  <span className="text-[10px] font-bold text-green-700 bg-green-100 border border-green-400 px-1.5 py-0.5 rounded-lg inline-flex items-center gap-0.5 mt-0.5">
+                    <span className="material-symbols-outlined text-xs">check_circle</span> {t('meals.completed')}
+                  </span>
+                )}
                 {meal.recipe && <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">{t('common.recipe')}: {meal.recipe}</p>}
                 {meal.ingredients && meal.ingredients.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
