@@ -114,7 +114,9 @@ export default function MealsPage() {
   };
 
   const addToShopping = async (ingredients, mealName) => {
-    for (const name of ingredients) {
+    const toAdd = ingredients.filter(ing => matchIngredients(pantry, [ing]).length === 0);
+    if (toAdd.length === 0) return;
+    for (const name of toAdd) {
       try { await api.addShoppingItem({ name, category: autoCategorize(name), quantity: '1', unit: 'unidad' }); } catch {}
     }
     showToast(t('recipes.addedToShopping'));

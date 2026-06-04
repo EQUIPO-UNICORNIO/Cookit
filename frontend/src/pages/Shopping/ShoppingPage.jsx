@@ -5,6 +5,8 @@ import { CATEGORIES, CATEGORY_ICONS, CATEGORY_EMOJI, autoCategorize } from '../.
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
 
+const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
 export default function ShoppingPage() {
   const { t } = useTranslation();
   const [items, setItems] = useState([]);
@@ -44,6 +46,10 @@ export default function ShoppingPage() {
       await api.updateShoppingItem(item.id, { checked: !wasChecked });
       if (!wasChecked) {
         await api.addPantryItem({ name: item.name, category: item.category || 'Otros', quantity: item.quantity || '1', unit: item.unit || 'unidad' });
+      } else {
+        const pantryItems = await api.getPantry();
+        const pantryItem = pantryItems.find(p => normalize(p.name) === normalize(item.name));
+        if (pantryItem) await api.deletePantryItem(pantryItem.id);
       }
       loadItems();
     } catch (e) { alert(e.message); }
