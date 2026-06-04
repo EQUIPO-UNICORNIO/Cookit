@@ -43,6 +43,6 @@ export function autoCategorize(name) {
   if (/arroz|pasta|macarrón|macarrones|espagueti|pan|bollo|barra|baguette|molde|integral|tostada|harina|avena|granola|legumbre|lenteja|garbanzo|alubia|judía|garrofón|quinoa|cuscús|trigo|maíz|galleta|bizcocho|magdalena|cereal|mijo|bulgur|sémola|fideo|tallarín|lasaña|canelón|ravioli|gnocchi/i.test(n)) return 'Hidratos';
   if (/lata|conserva|aceituna|encurtido|maíz dulce|tomate frito|tomate triturado|pimiento asado|caldo|sopa|pate|puré|anchoa en lata/i.test(n)) return 'Conservas';
   if (/congelado|helado|hielo|pizza congelada/i.test(n)) return 'Congelados';
-  if (/agua|refresco|zumo|vino|cerveza|café|té|infusión|leche vegetal|bebida|cola|gaseosa|sidra|\bron\b|whisky|vodka|licor/i.test(n)) return 'Bebidas';
+  if (/agua|refresco|zumo|vino|cerveza|café|cafe|té|infusión|leche vegetal|bebida|cola|gaseosa|sidra|\bron\b|whisky|vodka|licor/i.test(n)) return 'Bebidas';
   return 'Otros';
 }
