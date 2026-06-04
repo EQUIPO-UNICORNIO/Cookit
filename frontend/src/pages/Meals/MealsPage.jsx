@@ -117,7 +117,7 @@ export default function MealsPage() {
     for (const name of ingredients) {
       try { await api.addShoppingItem({ name, category: autoCategorize(name), quantity: '1', unit: 'unidad' }); } catch {}
     }
-    showToast(t('common.mealAddedToShopping', { name: mealName }));
+    showToast(t('recipes.addedToShopping'));
   };
 
   const showToast = (msg) => {

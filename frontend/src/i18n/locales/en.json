@@ -249,7 +249,6 @@
     "converted": "Converted: {qty} {from} = {result} {to}",
     "addedToShopping": "Added to shopping list",
     "addedToPantry": "Added to pantry",
-    "mealAddedToShopping": "{name} added to shopping",
     "expiringProducts": "products expiring soon",
     "suggestedRecipes": "Recipes you can make:",
     "expiresOn": "Expires: "
