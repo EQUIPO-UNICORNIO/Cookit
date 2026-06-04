@@ -88,10 +88,7 @@ export default function RecipesPage() {
   const [showVideoModal, setShowVideoModal] = useState(null);
   const [loadingVideo, setLoadingVideo] = useState(null);
   const [toast, setToast] = useState(null);
-  const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('cookit_history');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const videoIdCache = useRef({});
 
@@ -125,6 +122,7 @@ export default function RecipesPage() {
 
   useEffect(() => {
     loadPantry();
+    loadHistory();
     setRecipes(recipesWithIds);
   }, []);
 
@@ -159,6 +157,20 @@ export default function RecipesPage() {
         setPantryItems(names);
       }
     } catch (e) { console.error(e); }
+  };
+
+  const loadHistory = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const items = await api.getHistory();
+        setHistory(items);
+        localStorage.setItem('cookit_history', JSON.stringify(items));
+        return;
+      } catch (e) { console.error(e); }
+    }
+    const saved = localStorage.getItem('cookit_history');
+    if (saved) try { setHistory(JSON.parse(saved)); } catch {}
   };
 
   const showToast = (msg) => {
@@ -210,14 +222,29 @@ export default function RecipesPage() {
   };
 
   const markAsUsed = (recipe) => {
-    if (history.some(h => h.id === recipe.id)) {
+    if (history.some(h => h.id === recipe.id || h.recipe_id === recipe.id)) {
       showToast(t('recipes.alreadyInHistory'));
       return;
     }
-    const entry = { id: recipe.id, name: recipe.name, category: recipe.category, date: new Date().toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES') };
-    const updated = [entry, ...history];
-    setHistory(updated);
-    localStorage.setItem('cookit_history', JSON.stringify(updated));
+    const entry = { recipe_id: recipe.id, name: recipe.name, category: recipe.category, date: new Date().toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES') };
+    const token = localStorage.getItem('token');
+    if (token) {
+      api.addHistory(entry).then(saved => {
+        const updated = [saved, ...history];
+        setHistory(updated);
+        localStorage.setItem('cookit_history', JSON.stringify(updated));
+      }).catch(() => {
+        const localEntry = { ...entry, id: Date.now().toString() };
+        const updated = [localEntry, ...history];
+        setHistory(updated);
+        localStorage.setItem('cookit_history', JSON.stringify(updated));
+      });
+    } else {
+      const localEntry = { ...entry, id: Date.now().toString() };
+      const updated = [localEntry, ...history];
+      setHistory(updated);
+      localStorage.setItem('cookit_history', JSON.stringify(updated));
+    }
     showToast(t('recipes.addedToHistory'));
   };
 
@@ -366,7 +393,7 @@ export default function RecipesPage() {
           <div className="mt-3 space-y-2 border-t border-gray-100 pt-3">
             {history.length === 0 && <p className="text-xs text-gray-400 text-center py-2">No has usado ninguna receta aún</p>}
             {history.map((entry, i) => {
-              const found = recipesWithIds.find(r => r.id === entry.id);
+              const found = recipesWithIds.find(r => r.id === (entry.recipe_id || entry.id));
               return (
                 <div key={`${entry.id}-${i}`} className="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2 -mx-2 py-1.5" onClick={() => found && setSelectedRecipe(found)}>
                   <div>

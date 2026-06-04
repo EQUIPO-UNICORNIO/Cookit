@@ -75,11 +75,21 @@ export default function MealsPage() {
     const before = local.length;
     local = local.filter(m => m.day);
     if (local.length !== before) saveLocalMeals(local);
-    const merged = [...local, ...apiMeals];
-    if (local.length > 0) {
-      localIdCounter = Math.max(...local.map(m => parseInt(m.id.replace('local_', '')) || 0), 0) + 1;
+    const token = localStorage.getItem('token');
+    if (token && local.length > 0) {
+      for (const meal of local) {
+        try { await api.addMeal({ ...meal, ingredients: Array.isArray(meal.ingredients) ? meal.ingredients : [] }); } catch {}
+      }
+      saveLocalMeals([]);
+      try { apiMeals = await api.getMeals(); } catch {}
+      setMeals(apiMeals);
+    } else {
+      const merged = [...local, ...apiMeals];
+      if (local.length > 0) {
+        localIdCounter = Math.max(...local.map(m => parseInt(m.id.replace('local_', '')) || 0), 0) + 1;
+      }
+      setMeals(merged);
     }
-    setMeals(merged);
   };
 
   const showToast = (msg) => {
@@ -119,6 +129,7 @@ export default function MealsPage() {
     e.preventDefault();
     try {
       const data = { ...form, ingredients: form.ingredients.split(',').map(i => i.trim()).filter(Boolean) };
+      const token = localStorage.getItem('token');
       if (editing) {
         if (typeof editing === 'string' && editing.startsWith('local_')) {
           const local = getLocalMeals().map(m => m.id === editing ? { ...m, ...data } : m);
@@ -126,6 +137,8 @@ export default function MealsPage() {
         } else {
           await api.updateMeal(editing, data);
         }
+      } else if (token) {
+        await api.addMeal(data);
       } else {
         const id = `local_${localIdCounter++}`;
         const local = getLocalMeals();
