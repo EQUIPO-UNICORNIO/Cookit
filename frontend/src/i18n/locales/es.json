@@ -225,7 +225,8 @@
     "searching": "Buscando...",
     "history": "Historial",
     "alreadyInHistory": "Ya está en tu historial",
-    "addedToHistory": "Añadido a tu historial"
+    "addedToHistory": "Añadido a tu historial",
+    "addedToShopping": "Tus ingredientes han sido añadidos a la compra"
   },
   "pantry": {
     "title": "Tu Despensa",

@@ -221,6 +221,13 @@ export default function RecipesPage() {
     showToast(t('recipes.addedToHistory'));
   };
 
+  const addToShopping = async (ingredients) => {
+    for (const name of ingredients) {
+      try { await api.addShoppingItem({ name, category: autoCategorize(name), quantity: '1', unit: 'unidad' }); } catch {}
+    }
+    showToast(t('recipes.addedToShopping'));
+  };
+
   const filteredSuggestions = searchIngredient
     ? Object.fromEntries(
         Object.entries(ingredientCategories).map(([cat, ings]) => [
@@ -297,7 +304,11 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        <button onClick={() => addToMealPlan(selectedRecipe)} className="neo-btn-primary w-full">
+        <button onClick={() => addToShopping(selectedRecipe.ingredients)} className="neo-btn !bg-blue-50 !text-blue-600 !border-blue-300 w-full mt-2">
+          <span className="material-symbols-outlined text-sm align-text-bottom">shopping_cart</span> {t('common.addToShopping')}
+        </button>
+
+        <button onClick={() => addToMealPlan(selectedRecipe)} className="neo-btn-primary w-full mt-2">
           <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
         </button>
 

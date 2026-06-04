@@ -225,7 +225,8 @@
     "searching": "Searching...",
     "history": "History",
     "alreadyInHistory": "Already in your history",
-    "addedToHistory": "Added to your history"
+    "addedToHistory": "Added to your history",
+    "addedToShopping": "Your ingredients have been added to shopping"
   },
   "pantry": {
     "title": "Your Pantry",
