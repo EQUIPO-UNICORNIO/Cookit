@@ -19,7 +19,7 @@ const allIngredients = [
   'Huevos',
   'Tomate', 'Cebolla', 'Ajo', 'Pimiento', 'Zanahoria', 'Calabacín', 'Berenjena', 'Calabaza',
   'Lechuga', 'Espinacas', 'Col', 'Judías verdes', 'Champiñones', 'Pepino', 'Brócoli',
-  'Patatas', 'Aguacate', 'Espárragos', 'Alcachofas', 'Remolacha', 'Apio', 'Puero', 'Rábanos',
+  'Patatas', 'Aguacate', 'Espárragos', 'Alcachofas', 'Remolacha', 'Apio', 'Puerro', 'Rábanos',
   'Plátano', 'Manzana', 'Fresas', 'Limón', 'Naranja', 'Uvas', 'Pera', 'Melón', 'Sandía', 'Kiwi',
   'Piña', 'Mango', 'Papaya', 'Cerezas', 'Ciruelas', 'Melocotón', 'Arándanos', 'Frambuesas', 'Higos', 'Mandarina',
   'Leche', 'Yogur natural', 'Yogur griego', 'Queso', 'Queso cheddar', 'Queso parmesano', 'Queso mozzarella',
