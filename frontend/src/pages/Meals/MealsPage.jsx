@@ -272,7 +272,7 @@ export default function MealsPage() {
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
               <div className="flex items-center justify-between mb-1">
-                <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">{t('common.ingredients')}</p>
+                <p className="text-xs font-bold text-gray-600 dark:text-gray-300 uppercase">{t('common.ingredients')} ({matchIngredients(pantry, selectedMeal.ingredients).length}/{selectedMeal.ingredients.length})</p>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                   matchPercent(selectedMeal.ingredients) >= 70 ? 'bg-green-100 text-green-700 border border-green-300' :
                   matchPercent(selectedMeal.ingredients) >= 40 ? 'bg-yellow-100 text-yellow-700 border border-yellow-300' :
@@ -280,9 +280,16 @@ export default function MealsPage() {
                 }`}>{matchPercent(selectedMeal.ingredients)}%</span>
               </div>
               <div className="flex flex-wrap gap-1">
-                {selectedMeal.ingredients.map((ing, i) => (
-                  <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
-                ))}
+                {selectedMeal.ingredients.map((ing, i) => {
+                  const has = matchIngredients(pantry, [ing]).length > 0;
+                  return (
+                    <span key={i} className={`text-xs px-2 py-0.5 rounded-lg border font-medium ${
+                      has ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400' : 'bg-gray-50 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600'
+                    }`}>
+                      {has ? '✓ ' : ''}{translateIngredient(ing)}
+                    </span>
+                  );
+                })}
               </div>
               <button onClick={() => addToShopping(selectedMeal.ingredients)}
                 className="mt-2 w-full text-xs font-bold neo-btn !py-1.5 !px-3 !bg-blue-50 !text-blue-600 !border-blue-300 flex items-center justify-center gap-1">
@@ -452,9 +459,16 @@ export default function MealsPage() {
                 {meal.recipe && <p className="text-xs text-gray-500 font-medium mt-0.5 truncate">{t('common.recipe')}: {meal.recipe}</p>}
                 {meal.ingredients && meal.ingredients.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {meal.ingredients.slice(0, 3).map((ing, i) => (
-                  <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
-                    ))}
+                    {meal.ingredients.slice(0, 3).map((ing, i) => {
+                      const has = matchIngredients(pantry, [ing]).length > 0;
+                      return (
+                        <span key={i} className={`text-xs px-2 py-0.5 rounded-lg border font-medium ${
+                          has ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400' : 'bg-gray-50 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600'
+                        }`}>
+                          {has ? '✓ ' : ''}{translateIngredient(ing)}
+                        </span>
+                      );
+                    })}
                     {meal.ingredients.length > 3 && <span className="text-xs text-gray-400 dark:text-gray-400 font-medium">+{meal.ingredients.length - 3}</span>}
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ml-auto ${
                       matchPercent(meal.ingredients) >= 70 ? 'bg-green-100 text-green-700 border border-green-300' :
