@@ -39,8 +39,12 @@ export default function ShoppingPage() {
   };
 
   const toggleCheck = async (item) => {
+    const wasChecked = item.checked;
     try {
-      await api.updateShoppingItem(item.id, { checked: !item.checked });
+      await api.updateShoppingItem(item.id, { checked: !wasChecked });
+      if (!wasChecked) {
+        await api.addPantryItem({ name: item.name, category: item.category || 'Otros', quantity: item.quantity || '1', unit: item.unit || 'unidad' });
+      }
       loadItems();
     } catch (e) { alert(e.message); }
   };
