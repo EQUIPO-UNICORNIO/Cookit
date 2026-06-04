@@ -27,6 +27,10 @@ const allIngredients = [
   'Semillas de sésamo', 'Frutos secos', 'Mantequilla de cacahuete', 'Cacao',
 ];
 
+const ingredientCategories = Object.fromEntries(
+  CATEGORIES.map(cat => [cat, allIngredients.filter(ing => autoCategorize(ing) === cat)])
+);
+
 const categories = ['Todas', 'desayuno', 'almuerzo', 'comida', 'cena'];
 const difficulties = ['Todas', 'Fácil', 'Media', 'Difícil'];
 
