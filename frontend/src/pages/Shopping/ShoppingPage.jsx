@@ -63,7 +63,7 @@ export default function ShoppingPage() {
       });
       await api.deleteShoppingItem(item.id);
       loadItems();
-      showToast('Añadido a la despensa');
+      showToast(t('pantry.addedToPantry'));
     } catch (e) { alert(e.message); }
   };
 
