@@ -3,9 +3,6 @@ import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import RECIPE_DB from '../../data/recipeDb';
 import { translateIngredient } from '../../utils/ingredientTranslations';
-import { autoCategorize, CATEGORY_EMOJI } from '../../utils/categories';
-
-const getIngredientEmoji = (ing) => CATEGORY_EMOJI[autoCategorize(ing)] || '📦';
 
 const recipesWithIds = RECIPE_DB.map((r, i) => ({
   ...r,
@@ -280,7 +277,7 @@ export default function RecipesPage() {
                       ? 'bg-green-50 border-green-300 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400'
                       : 'bg-gray-50 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500'
                   }`}>
-                    {isAvailable ? '✓ ' : ''}{getIngredientEmoji(ing)} {translateIngredient(ing)}
+                    {isAvailable ? '✓ ' : ''}{translateIngredient(ing)}
                   </span>
                 );
               })}
@@ -413,7 +410,7 @@ export default function RecipesPage() {
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {selectedIngredients.map((ing, i) => (
                   <span key={i} className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-700 rounded-full px-3 py-1 font-medium flex items-center gap-1">
-                    {getIngredientEmoji(ing)} {translateIngredient(ing)}
+                    {translateIngredient(ing)}
                     <button onClick={() => removeIngredient(ing)} className="ml-0.5 hover:text-red-500">
                       <span className="material-symbols-outlined text-sm">close</span>
                     </button>
@@ -446,12 +443,12 @@ export default function RecipesPage() {
               {Object.entries(filteredSuggestions).map(([category, ings]) => (
                 <div key={category}>
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                    <span className="text-sm">
-                      {category === 'Proteínas' ? '🥩' :
-                       category === 'Frutas y Verduras' ? '🥦' :
-                       category === 'Lácteos' ? '🧀' :
-                       category === 'Hidratos' ? '🍞' :
-                       category === 'Conservas' ? '🥫' : '🧂'}
+                    <span className="material-symbols-outlined text-sm">
+                      {category === 'Proteínas' ? 'egg' :
+                       category === 'Frutas y Verduras' ? 'egg_alt' :
+                       category === 'Lácteos' ? 'water_drop' :
+                       category === 'Hidratos' ? 'bakery_dining' :
+                       category === 'Conservas' ? 'inventory_2' : 'spa'}
                     </span> {category}
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -470,7 +467,7 @@ export default function RecipesPage() {
                                 : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-primary-300'
                           }`}
                         >
-                          {isSelected ? '✓ ' : ''}{getIngredientEmoji(ing)} {translateIngredient(ing)}
+                          {isSelected ? '✓ ' : ''}{translateIngredient(ing)}
                         </button>
                       );
                     })}
@@ -509,7 +506,7 @@ export default function RecipesPage() {
             </div>
             <div className="flex flex-wrap gap-1">
               {selectedIngredients.slice(0, 8).map((ing, i) => (
-                <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{getIngredientEmoji(ing)} {translateIngredient(ing)}</span>
+                <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-0.5 font-medium dark:text-white">{translateIngredient(ing)}</span>
               ))}
               {selectedIngredients.length > 8 && (
                 <span className="text-xs text-gray-400 font-medium">+{selectedIngredients.length - 8}</span>
@@ -568,11 +565,29 @@ export default function RecipesPage() {
                         <span key={j} className={`text-xs px-2 py-0.5 rounded-lg border ${
                           has ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-700 dark:text-green-400' : 'bg-gray-50 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600'
                         }`}>
-                          {has ? '✓ ' : ''}{getIngredientEmoji(ing)} {translateIngredient(ing)}
+                          {has ? '✓ ' : ''}{translateIngredient(ing)}
                         </span>
                       );
                     })}
+                    {recipe.ingredients.length > 5 && (
+                      <span className="text-xs text-gray-400 font-medium">+{recipe.ingredients.length - 5}</span>
+                    )}
                   </div>
+                </div>
+
+                <div className="flex gap-2 mt-3 pt-2 border-t border-gray-100 dark:border-gray-700">
+                  <button onClick={(e) => { e.stopPropagation(); setSelectedRecipe(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1">
+                    <span className="material-symbols-outlined text-sm align-text-bottom">visibility</span> {t('recipes.viewRecipe')}
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600">
+                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); openVideo(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300" disabled={loadingVideo === recipe.id}>
+                      <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
+                    </button>
+                  <button onClick={(e) => { e.stopPropagation(); markAsUsed(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-green-50 !text-green-700 !border-green-300">
+                      <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span>
+                    </button>
                 </div>
               </div>
             ))}
