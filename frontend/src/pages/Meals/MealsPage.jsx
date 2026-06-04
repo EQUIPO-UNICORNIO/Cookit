@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import { translateIngredient } from '../../utils/ingredientTranslations';
+import { autoCategorize } from '../../utils/categories';
 
 const mealTypes = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
 
@@ -114,7 +115,7 @@ export default function MealsPage() {
 
   const addToShopping = async (ingredients, mealName) => {
     for (const name of ingredients) {
-      try { await api.addShoppingItem({ name, category: 'Otros', quantity: '1', unit: 'unidad' }); } catch {}
+      try { await api.addShoppingItem({ name, category: autoCategorize(name), quantity: '1', unit: 'unidad' }); } catch {}
     }
     showToast(t('common.mealAddedToShopping', { name: mealName }));
   };
