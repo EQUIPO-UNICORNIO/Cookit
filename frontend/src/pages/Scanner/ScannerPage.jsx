@@ -363,21 +363,6 @@ export default function ScannerPage() {
     setSaving(false);
   };
 
-  const handleSaveToShopping = async () => {
-    setSaving(true);
-    try {
-      const items = parsedItems.filter(i => i.name.trim());
-      for (const item of items) {
-        await api.addShoppingItem({ name: item.name, category: item.category, quantity: item.quantity, unit: item.unit });
-      }
-      setSuccessCount(items.length);
-      setStep('success_shopping');
-    } catch (e) {
-      setError(e.message);
-    }
-    setSaving(false);
-  };
-
   const resetAll = () => {
     if (cameraStreamRef.current) { cameraStreamRef.current.getTracks().forEach(t => t.stop()); cameraStreamRef.current = null; }
     setCameraActive(false);
@@ -661,13 +646,6 @@ export default function ScannerPage() {
             >
               {saving ? t('scanner.saving') : `${t('scanner.saveToPantry')} (${parsedItems.filter(i => i.name.trim()).length} ${t('common.items')})`}
             </button>
-            <button
-              onClick={handleSaveToShopping}
-              disabled={saving || parsedItems.every(i => !i.name.trim())}
-              className="neo-btn !bg-blue-50 !text-blue-700 !border-blue-400 flex-1 disabled:opacity-30"
-            >
-              {saving ? t('scanner.saving') : t('scanner.saveToShopping', { count: parsedItems.filter(i => i.name.trim()).length })}
-            </button>
             <button onClick={resetAll} className="neo-btn !bg-gray-100 dark:!bg-gray-300 flex-shrink-0 !px-4 dark:!text-black">
               {t('common.cancel')}
             </button>
@@ -685,27 +663,6 @@ export default function ScannerPage() {
           <div className="flex flex-col gap-2 mt-6">
             <button onClick={resetAll} className="neo-btn-primary">
               <span className="material-symbols-outlined text-base align-text-bottom">scan</span> {t('scanner.scanAnother')}
-            </button>
-            <button onClick={() => navigate('/pantry')} className="neo-btn !bg-gray-100 dark:!bg-gray-300 dark:!text-black">
-              <span className="material-symbols-outlined text-base align-text-bottom">kitchen</span> {t('scanner.goToPantry')}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {step === 'success_shopping' && (
-        <div className="text-center py-12">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-blue-100 border-2 border-blue-500 flex items-center justify-center mb-4">
-            <span className="material-symbols-outlined text-4xl text-blue-600">shopping_cart</span>
-          </div>
-          <h2 className="text-xl font-extrabold dark:text-white">{t('scanner.addedToShopping')}</h2>
-          <p className="text-gray-500 dark:text-gray-300 mt-1">{successCount} {t('scanner.productsOnList')}</p>
-          <div className="flex flex-col gap-2 mt-6">
-            <button onClick={resetAll} className="neo-btn-primary">
-              <span className="material-symbols-outlined text-base align-text-bottom">scan</span> {t('scanner.scanOther')}
-            </button>
-            <button onClick={() => navigate('/shopping')} className="neo-btn !bg-gray-100 dark:!bg-gray-300 dark:!text-black">
-              <span className="material-symbols-outlined text-base align-text-bottom">shopping_cart</span> {t('scanner.goToShopping')}
             </button>
             <button onClick={() => navigate('/pantry')} className="neo-btn !bg-gray-100 dark:!bg-gray-300 dark:!text-black">
               <span className="material-symbols-outlined text-base align-text-bottom">kitchen</span> {t('scanner.goToPantry')}
