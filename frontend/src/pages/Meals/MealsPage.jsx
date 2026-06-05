@@ -46,9 +46,20 @@ export default function MealsPage() {
     try { return JSON.parse(localStorage.getItem('cookit_completed_meals') || '[]'); } catch { return []; }
   });
   const [pantry, setPantry] = useState([]);
+  const [mealThumbs, setMealThumbs] = useState({});
   const videoIdCache = useRef({});
 
   useEffect(() => { loadMeals(); loadPantry(); }, []);
+
+  useEffect(() => {
+    if (meals.length === 0) return;
+    const results = {};
+    Promise.all(meals.map(meal =>
+      api.searchYoutube('receta ' + meal.name)
+        .then(res => { if (res.videoId) { videoIdCache.current[meal.id] = res.videoId; results[meal.id] = res.videoId; } })
+        .catch(() => {})
+    )).then(() => setMealThumbs(results));
+  }, [meals]);
 
   useEffect(() => {
     if (!selectedMeal) { setMealVideoUrl(null); setVideoSteps(null); return; }
@@ -477,9 +488,16 @@ export default function MealsPage() {
                   </div>
                 )}
               </div>
-              {meal.photo && (
-                <div className="flex-shrink-0 cursor-pointer" onClick={(e) => { e.stopPropagation(); setFullPhoto(meal.photo); }}>
-                  <img src={meal.photo} alt={meal.name} className="w-16 h-16 object-cover rounded-xl border border-gray-200" />
+              {(meal.photo || mealThumbs[meal.id]) && (
+                <div className="flex-shrink-0 flex flex-col gap-1">
+                  {meal.photo && (
+                    <div className="cursor-pointer" onClick={(e) => { e.stopPropagation(); setFullPhoto(meal.photo); }}>
+                      <img src={meal.photo} alt={meal.name} className="w-16 h-16 object-cover rounded-xl border border-gray-200" />
+                    </div>
+                  )}
+                  {mealThumbs[meal.id] && (
+                    <img src={`https://img.youtube.com/vi/${mealThumbs[meal.id]}/default.jpg`} alt="" className="w-16 h-12 object-cover rounded-lg border border-gray-200" />
+                  )}
                 </div>
               )}
             </div>
