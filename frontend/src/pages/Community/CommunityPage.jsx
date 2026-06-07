@@ -185,7 +185,7 @@ export default function CommunityPage() {
     setEditPhoto(post.photo || '');
     setEditIngredients(normalizeIngredients(post.ingredients));
     setEditIngredientInput('');
-    setEditInstructions(post.instructions || '');
+    setEditInstructions((post.instructions || '').replace(/<!--video:.*?-->/g, '').trim());
   };
 
   const handleEditSubmit = async (e) => {
@@ -309,12 +309,21 @@ export default function CommunityPage() {
               </div>
             )}
 
-            {post.instructions && (
+            {(() => { const vidMatch = (post.instructions || '').match(/<!--video:(.*?)-->/); const vidUrl = vidMatch ? vidMatch[1] : ''; const cleanInstr = (post.instructions || '').replace(/<!--video:.*?-->/g, '').trim(); return (
+            <><div className="flex gap-2 mb-2">
+              {vidUrl && (
+                <a href={vidUrl} target="_blank" rel="noopener noreferrer" className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-red-50 !text-red-600 !border-red-300">
+                  <span className="material-symbols-outlined text-sm">play_circle</span> {t('common.video')}
+                </a>
+              )}
+            </div>
+            {cleanInstr && (
               <div className="mb-3">
                 <p className="text-xs font-bold text-gray-600 dark:text-gray-200 uppercase mb-1">{t('common.instructions')}</p>
-                <p className="text-xs text-gray-600 dark:text-gray-200 whitespace-pre-line">{post.instructions}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-200 whitespace-pre-line">{cleanInstr}</p>
               </div>
-            )}
+            )}</>
+            ); })()}
 
             <div className="flex items-center gap-2 mb-2">
               <button onClick={e => { e.stopPropagation(); handleLike(post.id); }} className={`neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 ${post.liked ? '!bg-red-50 !text-red-600 !border-red-300' : '!bg-gray-50 !text-gray-500 !border-gray-300'}`}>

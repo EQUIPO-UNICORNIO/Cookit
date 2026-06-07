@@ -51,11 +51,12 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { content, photo, ingredients, instructions } = req.body;
+    const { content, photo, ingredients, instructions, video_url } = req.body;
     if (!content) return res.status(400).json({ error: 'Contenido requerido' });
+    const instrWithVideo = video_url ? (instructions || '') + '\n<!--video:' + video_url + '-->' : (instructions || '');
     const post = await create('community_posts', {
       user_id: req.userId, content, photo: photo || '',
-      ingredients: JSON.stringify(ingredients || []), instructions: instructions || ''
+      ingredients: JSON.stringify(ingredients || []), instructions: instrWithVideo
     });
     res.status(201).json({ ...post, ingredients: ingredients || [] });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -107,12 +108,16 @@ router.post('/:id/save', async (req, res) => {
       .maybeSingle();
     if (!post) return res.status(404).json({ error: 'Post no encontrado' });
     const ingredients = JSON.parse(post.ingredients || '[]');
+    const instr = post.instructions || '';
+    const vidMatch = instr.match(/<!--video:(.*?)-->/);
+    const videoUrl = vidMatch ? vidMatch[1] : '';
+    const cleanInstr = instr.replace(/<!--video:.*?-->/g, '').trim();
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     const today = days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
     await create('meal_plans', {
       user_id: req.userId, name: post.content, day: today, meal_type: 'comida',
       recipe: post.content, ingredients: JSON.stringify(ingredients),
-      instructions: post.instructions || '', photo: post.photo || ''
+      instructions: cleanInstr, photo: post.photo || '', videoUrl
     });
     res.json({ success: true, message: 'Receta guardada en tus menús' });
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -120,15 +125,16 @@ router.post('/:id/save', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   try {
-    const { content, photo, ingredients, instructions } = req.body;
+    const { content, photo, ingredients, instructions, video_url } = req.body;
     if (!content) return res.status(400).json({ error: 'Contenido requerido' });
     const { data: post } = await supabase.from('community_posts').select('id, user_id').eq('id', req.params.id).maybeSingle();
     if (!post) return res.status(404).json({ error: 'Post no encontrado' });
     if (Number(post.user_id) !== Number(req.userId)) return res.status(403).json({ error: 'No autorizado' });
+    const instrWithVideo = video_url ? (instructions || '') + '\n<!--video:' + video_url + '-->' : (instructions || '');
     const { error } = await supabase.from('community_posts').update({
       content, photo: photo || '',
       ingredients: JSON.stringify(ingredients || []),
-      instructions: instructions || ''
+      instructions: instrWithVideo
     }).eq('id', req.params.id).eq('user_id', req.userId);
     if (error) throw new Error(error.message);
     res.json({ success: true });

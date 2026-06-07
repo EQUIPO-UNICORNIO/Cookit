@@ -332,22 +332,6 @@ export default function RecipesPage() {
           <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span> Usar receta
         </button>
 
-        <button onClick={async () => {
-          try {
-            await api.createPost({
-              content: selectedRecipe.name,
-              photo: '',
-              ingredients: selectedRecipe.ingredients,
-              instructions: selectedRecipe.instructions,
-            });
-            showToast(t('community.postEdited'));
-          } catch (e) {
-            showToast(t('community.errorPublish'));
-          }
-        }} className="neo-btn !bg-purple-50 !text-purple-700 !border-purple-300 w-full mt-2">
-          <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span> {t('recipes.shareCommunity')}
-        </button>
-
         {showVideoModal && (
           <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => setShowVideoModal(null)}>
             <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
@@ -611,13 +595,10 @@ export default function RecipesPage() {
                     <span className="material-symbols-outlined text-sm align-text-bottom">visibility</span> {t('recipes.viewRecipe')}
                   </button>
                   <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600">
-                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span>
+                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
                   </button>
                   <button onClick={(e) => { e.stopPropagation(); openVideo(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300" disabled={loadingVideo === recipe.id}>
                       <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
-                    </button>
-                  <button onClick={async (e) => { e.stopPropagation(); try { await api.createPost({ content: recipe.name, photo: '', ingredients: recipe.ingredients, instructions: recipe.instructions }); showToast(t('community.postEdited')); } catch { showToast(t('community.errorPublish')); } }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-purple-50 !text-purple-700 !border-purple-300">
-                      <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span>
                     </button>
                 </div>
               </div>

@@ -508,6 +508,9 @@ export default function MealsPage() {
               <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo, videoUrl: meal.videoUrl || '' }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
                 <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
               </button>
+              <button onClick={async (e) => { e.stopPropagation(); try { await api.createPost({ content: meal.name, photo: '', ingredients: meal.ingredients || [], instructions: meal.instructions || '', video_url: meal.videoUrl || '' }); showToast(t('community.postEdited')); } catch { showToast(t('community.errorPublish')); } }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-purple-50 !text-purple-700 !border-purple-300">
+                <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span>
+              </button>
               <button onClick={(e) => { e.stopPropagation(); confirmDelete(meal.id); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-red-300 text-red-500">
                 <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> {t('common.delete')}
               </button>
