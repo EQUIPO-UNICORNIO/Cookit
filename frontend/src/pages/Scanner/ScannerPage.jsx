@@ -302,6 +302,7 @@ export default function ScannerPage() {
       // Primero intentar Gemini via backend
       const base64 = canvas.toDataURL('image/jpeg', 0.9).replace(/^data:image\/jpeg;base64,/, '');
       let geminiItems = [];
+      let geminiError = '';
       try {
         const result = await api.processTicket(base64, 'image/jpeg');
         if (result.items?.length) {
@@ -311,14 +312,21 @@ export default function ScannerPage() {
             unit: i.unidad || 'unidad',
           }));
           setScanEngine(result.engine || 'gemini');
+        } else if (result.error) {
+          geminiError = result.error;
+        } else {
+          geminiError = 'Gemini no devolvió productos';
         }
-      } catch {}
+      } catch (e) {
+        geminiError = e.message;
+      }
       if (geminiItems.length > 0) {
         setParsedItems(geminiItems.map(i => ({ ...i, category: autoCategorize(i.name) })));
         setStep('review');
         setProcessing(false);
         return;
       }
+      if (geminiError) setError('Gemini: ' + geminiError);
 
       // Fallback a Tesseract
       setOcrProgress(t('scanner.readingOCR'));
