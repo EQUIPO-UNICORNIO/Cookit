@@ -105,8 +105,8 @@ function cleanProductName(name) {
   n = n.replace(/\s+(de|con|en|sin|para)\s+\w{1,4}\s*$/i, '').trim();
   // Quitar el ultimo segmento si es 1 o 2 letras
   n = n.replace(/\s+\w{1,2}$/, '').trim();
-  // Quitar caracteres no deseados
-  n = n.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
+  // Quitar caracteres no deseados (solo letras, sin numeros)
+  n = n.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
   // Si después de limpiar quedan menos de 3 letras, descartar
   if (n.replace(/\s/g, '').length < 3) return null;
   return n || null;
