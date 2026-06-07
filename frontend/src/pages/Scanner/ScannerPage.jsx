@@ -274,6 +274,7 @@ export default function ScannerPage() {
   const [successCount, setSuccessCount] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [ocrProgress, setOcrProgress] = useState('');
+  const [scanEngine, setScanEngine] = useState('');
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -294,6 +295,7 @@ export default function ScannerPage() {
   const processImage = async (canvas) => {
     setProcessing(true);
     setOcrProgress('');
+    setScanEngine('');
     setError('');
     try {
       setOcrProgress(t('scanner.readingText'));
@@ -308,6 +310,7 @@ export default function ScannerPage() {
             quantity: i.cantidad || '1',
             unit: i.unidad || 'unidad',
           }));
+          setScanEngine(result.engine || 'gemini');
         }
       } catch {}
       if (geminiItems.length > 0) {
@@ -383,6 +386,7 @@ export default function ScannerPage() {
       }
 
       setParsedItems(uniq.map(i => ({ ...i, category: autoCategorize(i.name) })));
+      setScanEngine('tesseract');
       setStep('review');
     } catch (e) {
       setError(t('scanner.errorProcessImage') + e.message);
@@ -429,6 +433,7 @@ export default function ScannerPage() {
     setError('');
     setSuccessCount(0);
     setOcrProgress('');
+    setScanEngine('');
   };
 
   const updateItem = (index, field, value) => {
@@ -515,6 +520,11 @@ export default function ScannerPage() {
               <div>
                 <h2 className="font-extrabold text-sm">{t('scanner.detectedProducts')}</h2>
                 <p className="text-xs text-gray-500">{parsedItems.length} {t('scanner.productsReview')}</p>
+                {scanEngine && (
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5 inline-block ${scanEngine === 'tesseract' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
+                    {scanEngine}
+                  </span>
+                )}
               </div>
               <button onClick={addItem} className="neo-btn-primary !py-1.5 !px-3 !text-xs">
                 <span className="material-symbols-outlined text-sm align-text-bottom">add</span> {t('scanner.addBtn')}

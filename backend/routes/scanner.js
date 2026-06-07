@@ -14,29 +14,34 @@ router.post('/process-ticket', async (req, res) => {
     let items = [];
 
     if (geminiKey) {
-      try {
-        const mime = media_type || 'image/jpeg';
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{
-                parts: [
-                  { text: `Eres un asistente que extrae productos de tickets de supermercado.
+      const models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+      for (const model of models) {
+        try {
+          const mime = media_type || 'image/jpeg';
+          const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${geminiKey}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{
+                  parts: [
+                    { text: `Eres un asistente que extrae productos de tickets de supermercado.
 Extrae SOLO los productos comprados, en el MISMO ORDEN en que aparecen en el ticket.
-Ignora completamente: totales, subtotales, IVA, direcciones, fechas, TPV, resto a pagar, numeros de ticket, datos del establecimiento.
+Ignora: totales, subtotales, IVA, direcciones, fechas, TPV, resto a pagar, numeros de ticket, datos del establecimiento.
 Devuelve SOLO JSON valido, sin texto extra, sin usar \`\`\`:
 {"productos":[{"nombre":"NOMBRE","cantidad":"1","unidad":"unidad"}]}` },
-                  { inline_data: { mime_type: mime, data: image } }
-                ]
-              }]
-            })
+                    { inline_data: { mime_type: mime, data: image } }
+                  ]
+                }]
+              })
+            }
+          );
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            console.error(`Gemini ${model} falló:`, errData.error?.message || `HTTP ${response.status}`);
+            continue;
           }
-        );
-
-        if (response.ok) {
           const json = await response.json();
           const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
           const clean = text.replace(/```json\s*/gi, '').replace(/```/g, '').trim();
@@ -44,19 +49,17 @@ Devuelve SOLO JSON valido, sin texto extra, sin usar \`\`\`:
           if (match) {
             const parsed = JSON.parse(match[0]);
             items = (parsed.productos || []).filter(p => p.nombre?.trim());
+            if (items.length > 0) {
+              return res.json({ items, engine: model });
+            }
           }
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          return res.json({ items: [], error: errData.error?.message || `HTTP ${response.status}` });
+        } catch (e) {
+          console.error(`Gemini ${model} error:`, e.message);
         }
-      } catch (e) {
-        return res.json({ items: [], error: e.message });
       }
-    } else {
-      return res.json({ items: [] });
     }
 
-    res.json({ items });
+    res.json({ items: [], engine: 'tesseract' });
   } catch (e) {
     res.json({ items: [] });
   }
