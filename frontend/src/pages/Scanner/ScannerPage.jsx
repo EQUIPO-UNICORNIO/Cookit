@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import { createWorker } from 'tesseract.js';
-import * as pdfjsLib from 'pdfjs-dist';
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 import { CATEGORIES, autoCategorize } from '../../utils/categories';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
@@ -393,31 +391,10 @@ export default function ScannerPage() {
     setProcessing(false);
   };
 
-  const handleFileUpload = async (e) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setError('');
-    e.target.value = '';
-    if (file.type === 'application/pdf') {
-      setProcessing(true);
-      setOcrProgress(t('scanner.preprocessing'));
-      try {
-        const data = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data }).promise;
-        const page = await pdf.getPage(1);
-        const vp = page.getViewport({ scale: 2 });
-        const canvas = document.createElement('canvas');
-        canvas.width = vp.width;
-        canvas.height = vp.height;
-        const ctx = canvas.getContext('2d');
-        await page.render({ canvasContext: ctx, viewport: vp }).promise;
-        resizeAndProcess(canvas);
-      } catch {
-        setError(t('scanner.errorLoadImage'));
-        setProcessing(false);
-      }
-      return;
-    }
     const img = new Image();
     img.src = URL.createObjectURL(file);
     img.onload = () => {
@@ -430,6 +407,7 @@ export default function ScannerPage() {
       resizeAndProcess(canvas);
     };
     img.onerror = () => setError(t('scanner.errorLoadImage'));
+    e.target.value = '';
   };
 
   const handleSave = async () => {
@@ -468,7 +446,7 @@ export default function ScannerPage() {
   const openCamera = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'image/*,.pdf';
+    input.accept = 'image/*';
     input.capture = 'environment';
     input.onchange = (e) => handleFileUpload(e);
     input.click();
@@ -495,7 +473,7 @@ export default function ScannerPage() {
 
       {step === 'initial' && (
         <div>
-          <input ref={fileInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={handleFileUpload} />
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
 
           <div className="text-center pt-4">
             <div className="w-36 h-36 mx-auto rounded-3xl border-4 border-dashed border-gray-300 flex items-center justify-center mb-5">
