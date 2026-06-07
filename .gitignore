@@ -9,3 +9,6 @@ scripts/*.log
 *.bat
 *.log
 ngrok/
+
+ticket*
+*.traineddata
