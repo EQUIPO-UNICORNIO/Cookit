@@ -48,17 +48,26 @@ Devuelve SOLO JSON valido con esta estructura exacta, sin texto extra:
           }
           const json = await response.json();
           const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          if (!text) {
+            return res.json({ items: [], engine: model, debug: 'Gemini no devolvió texto' });
+          }
           const clean = text.replace(/```json\s*/gi, '').replace(/```/g, '').trim();
           const match = clean.match(/\{[\s\S]*\}/);
           if (match) {
-            const parsed = JSON.parse(match[0]);
-            items = (parsed.productos || []).filter(p => p.nombre?.trim());
-            if (items.length > 0) {
-              return res.json({ items, engine: model });
+            try {
+              const parsed = JSON.parse(match[0]);
+              items = (parsed.productos || []).filter(p => p.nombre?.trim());
+              if (items.length > 0) {
+                return res.json({ items, engine: model });
+              }
+              return res.json({ items: [], engine: model, debug: 'Gemini devolvió JSON vacío: ' + clean.slice(0, 500) });
+            } catch (e) {
+              return res.json({ items: [], engine: model, debug: 'Error parseando JSON: ' + e.message + ' | Texto: ' + clean.slice(0, 500) });
             }
           }
+          return res.json({ items: [], engine: model, debug: 'No encontró JSON en respuesta: ' + clean.slice(0, 500) });
         } catch (e) {
-          console.error(`Gemini ${model} error:`, e.message);
+          return res.json({ items: [], engine: model, debug: 'Error: ' + e.message });
         }
       }
     }

@@ -312,6 +312,8 @@ export default function ScannerPage() {
             unit: i.unidad || 'unidad',
           }));
           setScanEngine(result.engine || 'gemini');
+        } else if (result.debug) {
+          geminiError = result.debug;
         } else if (result.error) {
           geminiError = result.error;
         } else {
