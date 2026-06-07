@@ -14,27 +14,31 @@ router.post('/process-ticket', async (req, res) => {
     let items = [];
 
     if (geminiKey) {
-      const models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+      const models = ['gemini-1.5-flash', 'gemini-2.0-flash'];
       for (const model of models) {
         try {
           const mime = media_type || 'image/jpeg';
+          const body = {
+            contents: [{
+              parts: [
+                { text: `Eres un asistente que extrae productos de tickets de supermercado.
+Extrae SOLO los productos comprados, en el MISMO ORDEN en que aparecen en el ticket.
+Ignora: totales, subtotales, IVA, direcciones, fechas, TPV, resto a pagar, numeros de ticket, datos del establecimiento.
+Devuelve SOLO JSON valido con esta estructura exacta, sin texto extra:
+{"productos":[{"nombre":"NOMBRE","cantidad":"1","unidad":"unidad"}]}` },
+                { inline_data: { mime_type: mime, data: image } }
+              ]
+            }]
+          };
+          if (model === 'gemini-2.0-flash') {
+            body.generationConfig = { response_mime_type: 'application/json' };
+          }
           const response = await fetch(
             `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${geminiKey}`,
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{
-                  parts: [
-                    { text: `Eres un asistente que extrae productos de tickets de supermercado.
-Extrae SOLO los productos comprados, en el MISMO ORDEN en que aparecen en el ticket.
-Ignora: totales, subtotales, IVA, direcciones, fechas, TPV, resto a pagar, numeros de ticket, datos del establecimiento.
-Devuelve SOLO JSON valido, sin texto extra, sin usar \`\`\`:
-{"productos":[{"nombre":"NOMBRE","cantidad":"1","unidad":"unidad"}]}` },
-                    { inline_data: { mime_type: mime, data: image } }
-                  ]
-                }]
-              })
+              body: JSON.stringify(body)
             }
           );
           if (!response.ok) {
