@@ -25,7 +25,7 @@ router.post('/process-ticket', async (req, res) => {
               contents: [{
                 parts: [
                   { text: `Eres un asistente que extrae productos de tickets de supermercado.
-Extrae SOLO los productos comprados.
+Extrae SOLO los productos comprados, en el MISMO ORDEN en que aparecen en el ticket.
 Ignora completamente: totales, subtotales, IVA, direcciones, fechas, TPV, resto a pagar, numeros de ticket, datos del establecimiento.
 Devuelve SOLO JSON valido, sin texto extra, sin usar \`\`\`:
 {"productos":[{"nombre":"NOMBRE","cantidad":"1","unidad":"unidad"}]}` },
