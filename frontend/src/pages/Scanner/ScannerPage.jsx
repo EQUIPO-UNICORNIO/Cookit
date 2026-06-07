@@ -93,6 +93,10 @@ function isProductLine(line) {
 
 function cleanProductName(name) {
   let n = name.replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
+  // Quitar prefijos de 1-2 letras sueltas al inicio (OCR artifacts como "Ee", "ma", "a ")
+  n = n.replace(/^[a-zA-Záéíóúñü]{1,2}\s+/, '').trim();
+  // Quitar caracteres raros o repetidos al inicio (p.ej. "= ", "- ", "| ")
+  n = n.replace(/^[=\-|_#*~^'"`]+/, '').trim();
   // Quitar pesos/medidas al final (ej: "1k", "1kg", "200g", "1l", "500ml")
   n = n.replace(/\s+\d+\s*(kg|g|l|ml|k|gr|litro|litros|mililitro|cc|kl)\s*$/i, '').trim();
   // Quitar envases y formatos al final
@@ -103,6 +107,8 @@ function cleanProductName(name) {
   n = n.replace(/\s+\w{1,2}$/, '').trim();
   // Quitar caracteres no deseados
   n = n.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ0-9\s]/g, '').trim();
+  // Si después de limpiar quedan menos de 3 letras, descartar
+  if (n.replace(/\s/g, '').length < 3) return null;
   return n || null;
 }
 
@@ -310,7 +316,14 @@ export default function ScannerPage() {
         return;
       }
 
-      const lines = text.split('\n').filter(l => l.trim());
+      // Limpiar texto OCR antes de parsear
+      const cleanText = text.split('\n').map(l => {
+        let s = l.trim();
+        s = s.replace(/^[|=_\-*~^'"`#@]+/, '').trim();
+        s = s.replace(/[|=_\-*^'"`#@]+$/, '').trim();
+        return s;
+      }).filter(l => l.length > 2);
+      const lines = cleanText;
       const allProducts = [];
       const uniq = [];
 
