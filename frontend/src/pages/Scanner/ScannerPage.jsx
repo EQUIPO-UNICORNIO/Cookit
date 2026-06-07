@@ -95,6 +95,8 @@ function cleanProductName(name) {
   let n = name.replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
   // Quitar prefijos de 1-2 letras sueltas al inicio (OCR artifacts como "Ee", "ma", "a ")
   n = n.replace(/^[a-zA-Záéíóúñü]{1,2}\s+/, '').trim();
+  // Quitar cualquier palabra de 1 letra en toda la cadena (ej: "e ENSALADILLA" → "ENSALADILLA")
+  n = n.replace(/\s[a-zA-Záéíóúñü]\s/g, ' ').trim();
   // Quitar caracteres raros o repetidos al inicio (p.ej. "= ", "- ", "| ")
   n = n.replace(/^[=\-|_#*~^'"`]+/, '').trim();
   // Quitar pesos/medidas al final (ej: "1k", "1kg", "200g", "1l", "500ml")
@@ -107,6 +109,8 @@ function cleanProductName(name) {
   n = n.replace(/\s+\w{1,2}$/, '').trim();
   // Quitar caracteres no deseados (solo letras, sin numeros)
   n = n.replace(/[^a-zA-ZáéíóúñüÁÉÍÓÚÑÜ\s]/g, '').trim();
+  // Eliminar palabras sueltas de 1 letra que hayan quedado (ej: "e", "a")
+  n = n.split(/\s+/).filter(w => w.length > 1).join(' ');
   // Si después de limpiar quedan menos de 3 letras, descartar
   if (n.replace(/\s/g, '').length < 3) return null;
   return n || null;
