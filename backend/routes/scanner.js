@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/process-ticket', async (req, res) => {
   try {
-    const { image } = req.body;
+    const { image, media_type } = req.body;
     if (!image) return res.status(400).json({ error: 'Imagen requerida' });
 
     const geminiKey = process.env.GEMINI_KEY;
@@ -15,6 +15,7 @@ router.post('/process-ticket', async (req, res) => {
 
     if (geminiKey) {
       try {
+        const mime = media_type || 'image/jpeg';
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
           {
@@ -24,11 +25,11 @@ router.post('/process-ticket', async (req, res) => {
               contents: [{
                 parts: [
                   { text: `Eres un asistente que extrae productos de tickets de supermercado.
-Extrae SOLO los productos comprados. 
+Extrae SOLO los productos comprados.
 Ignora completamente: totales, subtotales, IVA, direcciones, fechas, TPV, resto a pagar, numeros de ticket, datos del establecimiento.
-Responde UNICAMENTE con JSON valido, sin texto extra:
+Devuelve SOLO JSON valido, sin texto extra, sin usar \`\`\`:
 {"productos":[{"nombre":"NOMBRE","cantidad":"1","unidad":"unidad"}]}` },
-                  { inline_data: { mime_type: 'image/jpeg', data: image } }
+                  { inline_data: { mime_type: mime, data: image } }
                 ]
               }]
             })
@@ -45,24 +46,19 @@ Responde UNICAMENTE con JSON valido, sin texto extra:
             items = (parsed.productos || []).filter(p => p.nombre?.trim());
           }
         } else {
-          const err = await response.json().catch(() => ({}));
-          const msg = err.error?.message || `HTTP ${response.status}`;
-          return res.status(502).json({ error: 'Gemini falló: ' + msg });
+          const errData = await response.json().catch(() => ({}));
+          return res.json({ items: [], error: errData.error?.message || `HTTP ${response.status}` });
         }
       } catch (e) {
-        return res.status(502).json({ error: 'Error llamando a Gemini: ' + e.message });
+        return res.json({ items: [], error: e.message });
       }
     } else {
-      return res.status(500).json({ error: 'Falta GEMINI_KEY en el servidor' });
-    }
-
-    if (items.length === 0) {
-      return res.json({ items: [], message: 'Gemini no detectó productos' });
+      return res.json({ items: [] });
     }
 
     res.json({ items });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.json({ items: [] });
   }
 });
 

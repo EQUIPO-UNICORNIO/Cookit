@@ -289,11 +289,33 @@ export default function ScannerPage() {
 
   const processImage = async (canvas) => {
     setProcessing(true);
-      setOcrProgress(t('scanner.preprocessing'));
+    setOcrProgress('');
     setError('');
     try {
-      const processed = preprocessImage(canvas);
+      setOcrProgress(t('scanner.readingText'));
+      // Primero intentar Gemini via backend
+      const base64 = canvas.toDataURL('image/jpeg', 0.9).replace(/^data:image\/jpeg;base64,/, '');
+      let geminiItems = [];
+      try {
+        const result = await api.processTicket(base64, 'image/jpeg');
+        if (result.items?.length) {
+          geminiItems = result.items.map(i => ({
+            name: i.nombre,
+            quantity: i.cantidad || '1',
+            unit: i.unidad || 'unidad',
+          }));
+        }
+      } catch {}
+      if (geminiItems.length > 0) {
+        setParsedItems(geminiItems.map(i => ({ ...i, category: autoCategorize(i.name) })));
+        setStep('review');
+        setProcessing(false);
+        return;
+      }
+
+      // Fallback a Tesseract
       setOcrProgress(t('scanner.readingOCR'));
+      const processed = preprocessImage(canvas);
       const worker = await createWorker('spa+eng', 1, {
         logger: m => {
           if (m.status) setOcrProgress(m.status + (m.progress ? ` ${Math.round(m.progress * 100)}%` : ''));
@@ -316,7 +338,6 @@ export default function ScannerPage() {
         return;
       }
 
-      // Limpiar texto OCR antes de parsear
       const cleanText = text.split('\n').map(l => {
         let s = l.trim();
         s = s.replace(/^[|=_\-*~^'"`#@]+/, '').trim();
