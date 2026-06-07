@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import { createWorker } from 'tesseract.js';
-import RECIPE_DB from '../../data/recipeDb';
 import { CATEGORIES, autoCategorize } from '../../utils/categories';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
@@ -254,14 +253,6 @@ function preprocessImage(canvas) {
   return canvas;
 }
 
-const matchIngredients = (itemNames, mealIngredients) => {
-  const lowerItems = itemNames.map(n => n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
-  return mealIngredients.filter(ing => {
-    const lowerIng = ing.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    return lowerItems.some(item => item.includes(lowerIng) || lowerIng.includes(item));
-  });
-};
-
 export default function ScannerPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -273,8 +264,6 @@ export default function ScannerPage() {
   const [successCount, setSuccessCount] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [ocrProgress, setOcrProgress] = useState('');
-  const [recommendations, setRecommendations] = useState([]);
-  const [loadingRecommendations, setLoadingRecommendations] = useState(false);
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -357,7 +346,6 @@ export default function ScannerPage() {
 
       setParsedItems(uniq.map(i => ({ ...i, category: autoCategorize(i.name) })));
       setStep('review');
-      findRecommendations(uniq);
     } catch (e) {
       setError(t('scanner.errorProcessImage') + e.message);
       setStep('initial');
@@ -384,31 +372,6 @@ export default function ScannerPage() {
     e.target.value = '';
   };
 
-  const findRecommendations = async (items) => {
-    setLoadingRecommendations(true);
-    const itemNames = items.map(i => i.name).filter(Boolean);
-    if (itemNames.length === 0) { setLoadingRecommendations(false); return; }
-    try {
-      const allMeals = (await api.getMeals()) || [];
-      const scored = [];
-      const seen = new Set();
-      for (const meal of [...allMeals, ...RECIPE_DB]) {
-        if (seen.has(meal.name)) continue;
-        seen.add(meal.name);
-        const ingList = meal.ingredients || [];
-        if (ingList.length === 0) continue;
-        const matched = matchIngredients(itemNames, ingList);
-        const score = matched.length;
-        if (score > 0) {
-          scored.push({ ...meal, matched, matchCount: score, totalIngredients: ingList.length });
-        }
-      }
-      scored.sort((a, b) => b.matchCount / b.totalIngredients - a.matchCount / a.totalIngredients);
-      setRecommendations(scored);
-    } catch { }
-    setLoadingRecommendations(false);
-  };
-
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -428,7 +391,6 @@ export default function ScannerPage() {
     setError('');
     setSuccessCount(0);
     setOcrProgress('');
-    setRecommendations([]);
   };
 
   const updateItem = (index, field, value) => {
@@ -569,56 +531,6 @@ export default function ScannerPage() {
               </details>
             )}
           </div>
-
-          {recommendations.length > 0 && (
-            <div className="neo-card mb-4 !border-secondary-300 !bg-secondary-50">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="material-symbols-outlined text-secondary-600">restaurant</span>
-                <h2 className="font-extrabold text-sm text-secondary-800">{t('scanner.dishesYouCanMake')}</h2>
-                {!loadingRecommendations && recommendations.length > 0 && (
-                  <span className="text-xs font-bold text-secondary-500 ml-auto">{recommendations.length} {t('scanner.dishes')}</span>
-                )}
-              </div>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {recommendations.map((meal, i) => (
-                  <div key={i} className="bg-white dark:bg-gray-700 rounded-xl border border-secondary-200 dark:border-gray-600 p-3">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-bold text-sm text-gray-900 dark:text-white">{meal.name}</h3>
-                      <span className="text-xs font-bold text-secondary-600 bg-secondary-100 dark:bg-gray-600 px-2 py-0.5 rounded-full">
-                        {meal.matchCount}/{meal.totalIngredients} {t('scanner.ingredients')}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-1 mb-2">
-                      {meal.ingredients.map((ing, j) => {
-                        const isMatch = meal.matched.includes(ing);
-                        return (
-                          <span key={j} className={`text-xs px-2 py-0.5 rounded-full border ${isMatch ? 'bg-green-100 border-green-300 text-green-700' : 'bg-gray-100 dark:bg-gray-600 border-gray-200 dark:border-gray-500 text-gray-400'}`}>
-                            {isMatch ? <span className="material-symbols-outlined text-xs align-text-bottom mr-0.5">check</span> : ''}{ing}
-                          </span>
-                        );
-                      })}
-                    </div>
-                    {meal.instructions && (
-                      <p className="text-xs text-gray-500 dark:text-gray-300 line-clamp-2">{meal.instructions.split('\n')[0]}</p>
-                    )}
-                    <button
-                      onClick={() => navigate('/meals', { state: { suggestedMeal: meal } })}
-                      className="mt-2 text-xs font-bold text-secondary-600 flex items-center gap-1"
-                    >
-                      <span className="material-symbols-outlined text-sm">add_circle</span> {t('scanner.addToMealPlan')}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {loadingRecommendations && (
-            <div className="text-center py-3 mb-4">
-              <span className="material-symbols-outlined animate-spin text-secondary-500">sync</span>
-              <span className="text-sm text-secondary-500 ml-2">{t('scanner.searchingDishes')}</span>
-            </div>
-          )}
 
           <div className="flex gap-2">
             <button
