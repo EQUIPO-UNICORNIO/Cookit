@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
@@ -275,11 +275,7 @@ export default function ScannerPage() {
   const [ocrProgress, setOcrProgress] = useState('');
   const [recommendations, setRecommendations] = useState([]);
   const [loadingRecommendations, setLoadingRecommendations] = useState(false);
-  const [flashOn, setFlashOn] = useState(false);
-  const [cameraActive, setCameraActive] = useState(false);
-  const cameraStreamRef = useRef(null);
   const fileInputRef = useRef(null);
-  const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   const resizeAndProcess = (canvas) => {
@@ -426,8 +422,6 @@ export default function ScannerPage() {
   };
 
   const resetAll = () => {
-    if (cameraStreamRef.current) { cameraStreamRef.current.getTracks().forEach(t => t.stop()); cameraStreamRef.current = null; }
-    setCameraActive(false);
     setStep('initial');
     setParsedItems([]);
     setRawText('');
@@ -449,93 +443,13 @@ export default function ScannerPage() {
     setParsedItems(prev => [...prev, { name: '', quantity: '1', unit: 'unidad', category: 'Otros' }]);
   };
 
-  useEffect(() => () => { cameraStreamRef.current?.getTracks().forEach(t => t.stop()); }, []);
-  useEffect(() => { if (step !== 'initial') { cameraStreamRef.current?.getTracks().forEach(t => t.stop()); cameraStreamRef.current = null; setCameraActive(false); } }, [step]);
-
-  const startCamera = async () => {
-    setCameraActive(true);
-    try {
-      let stream;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 4096 }, height: { ideal: 2160 } },
-        });
-      } catch {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      }
-      cameraStreamRef.current = stream;
-      const video = videoRef.current;
-      if (video) {
-        video.srcObject = stream;
-        await new Promise((resolve, reject) => {
-          video.onloadedmetadata = () => { video.play().then(resolve).catch(reject); };
-          video.onerror = reject;
-        });
-      }
-    } catch {
-      setCameraActive(false);
-      setError(t('scanner.errorOpenCamera'));
-    }
-  };
-
-  const stopCamera = () => {
-    setCameraActive(false);
-    if (cameraStreamRef.current) {
-      cameraStreamRef.current.getTracks().forEach(t => t.stop());
-      cameraStreamRef.current = null;
-    }
-  };
-
-  const toggleFlash = async () => {
-    if (!cameraStreamRef.current) return;
-    const track = cameraStreamRef.current.getVideoTracks()[0];
-    if (!track || !track.getCapabilities().torch) {
-      setError(t('scanner.flashUnavailable'));
-      return;
-    }
-    try {
-      await track.applyConstraints({ advanced: [{ torch: !flashOn }] });
-      setFlashOn(!flashOn);
-    } catch {
-      setError(t('scanner.errorFlash'));
-    }
-  };
-
-  const capturePhoto = async () => {
-    if (!videoRef.current || !canvasRef.current) return;
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const track = cameraStreamRef.current?.getVideoTracks()[0];
-    if (track && 'ImageCapture' in window) {
-      try {
-        const imageCapture = new ImageCapture(track);
-        const blob = await imageCapture.takePhoto();
-        const img = await new Promise((res, rej) => {
-          const i = new Image();
-          i.onload = () => res(i);
-          i.onerror = rej;
-          i.src = URL.createObjectURL(blob);
-        });
-        canvas.width = img.width;
-        canvas.height = img.height;
-        canvas.getContext('2d').drawImage(img, 0, 0);
-        URL.revokeObjectURL(img.src);
-        cameraStreamRef.current?.getTracks().forEach(t => t.stop());
-        cameraStreamRef.current = null;
-        setCameraActive(false);
-        setFlashOn(false);
-        resizeAndProcess(canvas);
-        return;
-      } catch {}
-    }
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
-    cameraStreamRef.current?.getTracks().forEach(t => t.stop());
-    cameraStreamRef.current = null;
-    setCameraActive(false);
-    setFlashOn(false);
-    resizeAndProcess(canvas);
+  const openCamera = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    input.onchange = (e) => handleFileUpload(e);
+    input.click();
   };
 
   return (
@@ -561,43 +475,26 @@ export default function ScannerPage() {
         <div>
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
 
-          {!cameraActive ? (
-            <div className="text-center pt-4">
-              <div className="w-36 h-36 mx-auto rounded-3xl border-4 border-dashed border-gray-300 flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-5xl text-gray-300">receipt_long</span>
-              </div>
-                <p className="text-gray-500 font-medium mb-6">
-                  {t('scanner.ticketDesc')}
-                </p>
-
-                <button onClick={startCamera} className="neo-btn-primary text-base w-full mb-3">
-                  <span className="material-symbols-outlined text-base align-text-bottom">photo_camera</span> {t('scanner.openCamera')}
-                </button>
-
-                <button onClick={() => fileInputRef.current?.click()} className="neo-btn w-full mb-6">
-                  <span className="material-symbols-outlined text-base align-text-bottom">add_a_photo</span> {t('scanner.uploadPhoto')}
-                </button>
-
-                <p className="text-xs text-gray-400">
-                  {t('scanner.photoPrivacy')}
-                </p>
+          <div className="text-center pt-4">
+            <div className="w-36 h-36 mx-auto rounded-3xl border-4 border-dashed border-gray-300 flex items-center justify-center mb-5">
+              <span className="material-symbols-outlined text-5xl text-gray-300">receipt_long</span>
             </div>
-          ) : (
-            <div className="relative -mx-4 rounded-none overflow-hidden border-0 bg-black mb-4" style={{ height: 'calc(100vh - 220px)' }}>
-              <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
-              <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center">
-                <button onClick={capturePhoto} className="w-20 h-20 rounded-full border-[5px] border-white bg-white/20 flex items-center justify-center hover:bg-white/30 active:scale-90 transition-all">
-                  <div className="w-14 h-14 rounded-full bg-white shadow-md" />
-                </button>
-              </div>
-              <button onClick={toggleFlash} className={`absolute top-4 right-4 p-2.5 rounded-full transition-colors ${flashOn ? 'bg-yellow-400 text-yellow-900' : 'bg-black/40 text-white hover:bg-black/60'}`}>
-                <span className="material-symbols-outlined text-xl">{flashOn ? 'flash_on' : 'flash_off'}</span>
-              </button>
-              <button onClick={stopCamera} className="absolute top-4 left-4 p-2.5 rounded-full bg-black/40 text-white hover:bg-black/60 transition-colors">
-                <span className="material-symbols-outlined text-xl">close</span>
-              </button>
-            </div>
-          )}
+            <p className="text-gray-500 font-medium mb-6">
+              {t('scanner.ticketDesc')}
+            </p>
+
+            <button onClick={openCamera} className="neo-btn-primary text-base w-full mb-3">
+              <span className="material-symbols-outlined text-base align-text-bottom">photo_camera</span> {t('scanner.openCamera')}
+            </button>
+
+            <button onClick={() => fileInputRef.current?.click()} className="neo-btn w-full mb-6">
+              <span className="material-symbols-outlined text-base align-text-bottom">add_a_photo</span> {t('scanner.uploadPhoto')}
+            </button>
+
+            <p className="text-xs text-gray-400">
+              {t('scanner.photoPrivacy')}
+            </p>
+          </div>
         </div>
       )}
 
