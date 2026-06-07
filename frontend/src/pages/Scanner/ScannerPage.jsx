@@ -458,7 +458,7 @@ export default function ScannerPage() {
       let stream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
+          video: { facingMode: 'environment', width: { ideal: 4096 }, height: { ideal: 2160 } },
         });
       } catch {
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -501,10 +501,33 @@ export default function ScannerPage() {
     }
   };
 
-  const capturePhoto = () => {
+  const capturePhoto = async () => {
     if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
     const canvas = canvasRef.current;
+    const track = cameraStreamRef.current?.getVideoTracks()[0];
+    if (track && 'ImageCapture' in window) {
+      try {
+        const imageCapture = new ImageCapture(track);
+        const blob = await imageCapture.takePhoto();
+        const img = await new Promise((res, rej) => {
+          const i = new Image();
+          i.onload = () => res(i);
+          i.onerror = rej;
+          i.src = URL.createObjectURL(blob);
+        });
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+        URL.revokeObjectURL(img.src);
+        cameraStreamRef.current?.getTracks().forEach(t => t.stop());
+        cameraStreamRef.current = null;
+        setCameraActive(false);
+        setFlashOn(false);
+        resizeAndProcess(canvas);
+        return;
+      } catch {}
+    }
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
