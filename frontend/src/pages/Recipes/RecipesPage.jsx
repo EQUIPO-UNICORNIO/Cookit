@@ -7,7 +7,7 @@ import { CATEGORIES, CATEGORY_EMOJI, autoCategorize } from '../../utils/categori
 
 const recipesWithIds = RECIPE_DB.map((r, i) => ({
   ...r,
-  id: `r${i}`,
+  id: i,
   videoUrl: r.videoUrl || null,
 }));
 
