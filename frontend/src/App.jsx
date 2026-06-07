@@ -1,7 +1,9 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import AccessPage from './pages/Access/AccessPage';
+import AuthCallbackPage from './pages/Access/AuthCallbackPage';
 import ResetPasswordPage from './pages/Access/ResetPasswordPage';
 import PantryPage from './pages/Pantry/PantryPage';
 import ShoppingPage from './pages/Shopping/ShoppingPage';
@@ -23,6 +25,18 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+function RouteTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    window.dataLayer?.push({
+      event: 'gtm.historyChange',
+      page: location.pathname + location.search,
+      title: document.title
+    });
+  }, [location]);
+  return null;
+}
+
 export default function App() {
   const { user, loading } = useAuth();
 
@@ -38,8 +52,11 @@ export default function App() {
   }
 
   return (
-    <Routes>
+    <>
+      <RouteTracker />
+      <Routes>
       <Route path="/access" element={user ? <Navigate to="/" replace /> : <AccessPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={<MealsPage />} />
@@ -59,5 +76,6 @@ export default function App() {
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }

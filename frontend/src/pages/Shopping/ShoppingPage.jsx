@@ -168,7 +168,7 @@ export default function ShoppingPage() {
                 </button>
                 <div className="flex-1 min-w-0">
                   <p className={`font-bold text-sm dark:text-white ${item.checked ? 'line-through text-gray-400' : ''}`}>{item.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-300">{item.quantity} {item.unit} · {t('categories.' + item.category) || item.category}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-300">{item.quantity} {item.unit} · {t('categories.' + item.category) || item.category}{item.created_at ? ` · ${t('common.addedOn')} ${new Date(item.created_at).toLocaleDateString()}` : ''}</p>
                 </div>
                 {item.checked && (
                   <button onClick={() => markBought(item)} className="neo-btn !bg-green-50 !text-green-700 !border-green-400 !py-1.5 !px-2.5 !text-xs whitespace-nowrap flex items-center gap-1">

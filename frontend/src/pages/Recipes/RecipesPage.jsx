@@ -14,28 +14,28 @@ const recipesWithIds = RECIPE_DB.map((r, i) => ({
 const allIngredients = [
   'Pollo', 'Ternera', 'Cerdo', 'Carne picada', 'Pavo', 'Jamón', 'Salchichas',
   'Cordero', 'Conejo', 'Chorizo', 'Mortadela', 'Bacon', 'Costillas', 'Hamburguesa',
-  'Salmón', 'Pescado blanco', 'Merluza', 'Atún en lata', 'Sardinas', 'Gambas',
+  'Salmón', 'Pescado blanco', 'Merluza', 'Atún en lata', 'Atún fresco', 'Sardinas', 'Gambas',
   'Calamares', 'Pulpo', 'Mejillones', 'Almejas', 'Langostinos', 'Caballa', 'Trucha', 'Dorada', 'Lubina',
   'Huevos',
-  'Tomate', 'Cebolla', 'Ajo', 'Pimiento', 'Zanahoria', 'Calabacín', 'Berenjena', 'Calabaza',
-  'Lechuga', 'Espinacas', 'Col', 'Judías verdes', 'Champiñones', 'Pepino', 'Brócoli',
+  'Tomate', 'Cebolla', 'Cebolleta', 'Ajo', 'Pimiento', 'Zanahoria', 'Calabacín', 'Berenjena', 'Calabaza',
+  'Lechuga', 'Espinacas', 'Col', 'Col china', 'Judías verdes', 'Champiñones', 'Pepino', 'Brócoli', 'Brotes de soja', 'Bambú', 'Alga nori', 'Alga wakame',
   'Patatas', 'Aguacate', 'Espárragos', 'Alcachofas', 'Remolacha', 'Apio', 'Puerro', 'Rábanos',
   'Plátano', 'Manzana', 'Fresas', 'Limón', 'Naranja', 'Uvas', 'Pera', 'Melón', 'Sandía', 'Kiwi',
-  'Piña', 'Mango', 'Papaya', 'Cerezas', 'Ciruelas', 'Melocotón', 'Arándanos', 'Frambuesas', 'Higos', 'Mandarina',
-  'Leche', 'Yogur natural', 'Yogur griego', 'Queso', 'Queso cheddar', 'Queso parmesano', 'Queso mozzarella',
+  'Piña', 'Mango', 'Papaya', 'Lima', 'Cerezas', 'Ciruelas', 'Melocotón', 'Arándanos', 'Frambuesas', 'Higos', 'Mandarina',
+  'Leche', 'Leche de coco', 'Yogur natural', 'Yogur griego', 'Queso', 'Queso cheddar', 'Queso parmesano', 'Queso mozzarella',
   'Queso ricotta', 'Queso cottage', 'Queso gouda', 'Nata', 'Nata líquida', 'Mantequilla', 'Crema agria', 'Requesón', 'Kéfir',
-  'Arroz', 'Pasta', 'Macarrones', 'Espaguetis', 'Pan', 'Pan de hamburguesa', 'Pan rallado',
+  'Arroz', 'Arroz sushi', 'Arroz jazmín', 'Arroz glutinoso', 'Fideos ramen', 'Fideos de arroz', 'Pasta', 'Macarrones', 'Espaguetis', 'Pan', 'Pan de hamburguesa', 'Pan rallado',
   'Pan de molde', 'Pan integral', 'Pan de centeno', 'Pan baguette',
   'Tortillas de trigo', 'Tortillas de maíz', 'Harina', 'Harina de maíz', 'Avena', 'Granola',
-  'Lentejas', 'Garbanzos', 'Alubias', 'Garrofón', 'Quinoa', 'Cuscús',
+  'Lentejas', 'Garbanzos', 'Alubias', 'Garrofón', 'Quinoa', 'Cuscús', 'Tofu', 'Edamame',
   'Maíz dulce', 'Galletas', 'Bizcocho',
-  'Tomate triturado', 'Tomate frito', 'Caldo de pollo', 'Caldo de verduras', 'Caldo de pescado',
+  'Tomate triturado', 'Tomate frito', 'Caldo de pollo', 'Caldo de verduras', 'Caldo de pescado', 'Caldo dashi',
   'Aceitunas', 'Pimientos asados', 'Alcachofas en conserva', 'Puré de tomate',
-  'Aceite de oliva', 'Aceite de girasol', 'Sal', 'Pimienta', 'Vinagre', 'Mostaza', 'Ketchup', 'Mayonesa', 'Miel',
+  'Aceite de oliva', 'Aceite de girasol', 'Aceite de sésamo', 'Sal', 'Pimienta', 'Vinagre', 'Vinagre de arroz', 'Mostaza', 'Ketchup', 'Mayonesa', 'Miel',
   'Perejil', 'Albahaca', 'Cilantro', 'Eneldo', 'Azafrán', 'Comino', 'Pimentón', 'Pimentón picante',
-  'Orégano', 'Nuez moscada', 'Jengibre', 'Canela', 'Laurel', 'Tomillo', 'Romero', 'Curry',
-  'Semillas de sésamo', 'Frutos secos', 'Almendras', 'Nueces', 'Avellanas', 'Anacardos', 'Pipas de calabaza',
-  'Mantequilla de cacahuete', 'Cacao', 'Salsa de soja', 'Salsa barbacoa', 'Levadura', 'Bicarbonato',
+  'Orégano', 'Nuez moscada', 'Jengibre', 'Canela', 'Laurel', 'Tomillo', 'Romero', 'Curry', 'Pasta de curry',
+  'Sésamo', 'Semillas de sésamo', 'Cacahuete', 'Frutos secos', 'Almendras', 'Nueces', 'Avellanas', 'Anacardos', 'Pipas de calabaza',
+  'Mantequilla de cacahuete', 'Cacao', 'Salsa de soja', 'Salsa de pescado', 'Salsa hoisin', 'Salsa barbacoa', 'Miso', 'Pasta de miso', 'Wasabi', 'Levadura', 'Bicarbonato',
   'Guisantes congelados', 'Verduras congeladas', 'Helado',
   'Agua', 'Refresco', 'Zumo', 'Vino', 'Cerveza', 'Café', 'Té',
 ];
@@ -92,10 +92,13 @@ export default function RecipesPage() {
   const [loadingVideo, setLoadingVideo] = useState(null);
   const [toast, setToast] = useState(null);
   const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('cookit_history');
-    return saved ? JSON.parse(saved) : [];
+    try { return JSON.parse(localStorage.getItem('cookit_history') || '[]'); } catch { return []; }
   });
   const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => {
+    api.getHistory().then(data => { setHistory(data.map(h => ({ id: h.recipe_id, name: h.recipe_name, category: h.recipe_category, date: h.date }))); }).catch(() => {});
+  }, []);
   const videoIdCache = useRef({});
 
   const openVideo = useCallback(async (recipe) => {
@@ -216,6 +219,13 @@ export default function RecipesPage() {
       });
       setMealPlanModal(null);
       showToast(t('common.addedToMealPlan'));
+      if (!history.some(h => h.id === recipe.id)) {
+        const entry = { id: recipe.id, name: recipe.name, category: recipe.category, date: new Date().toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-ES') };
+        const updated = [entry, ...history];
+        setHistory(updated);
+        localStorage.setItem('cookit_history', JSON.stringify(updated));
+        api.addHistory({ recipe_id: recipe.id, recipe_name: recipe.name, recipe_category: recipe.category, date: entry.date }).catch(() => {});
+      }
     } catch (e) {
       showToast(t('common.errorAdding') + e.message);
     }
@@ -230,6 +240,7 @@ export default function RecipesPage() {
     const updated = [entry, ...history];
     setHistory(updated);
     localStorage.setItem('cookit_history', JSON.stringify(updated));
+    api.addHistory({ recipe_id: recipe.id, recipe_name: recipe.name, recipe_category: recipe.category, date: entry.date }).catch(() => {});
     showToast(t('recipes.addedToHistory'));
   };
 

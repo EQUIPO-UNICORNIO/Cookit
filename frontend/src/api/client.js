@@ -21,6 +21,7 @@ export const api = {
   changePassword: (oldPassword, newPassword) => request('/auth/change-password', { method: 'PUT', body: JSON.stringify({ oldPassword, newPassword }) }),
   deleteAccount: () => request('/auth/account', { method: 'DELETE' }),
   resetDev: (email, password) => request('/auth/reset-dev', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  googleLogin: (accessToken) => request('/auth/google-login', { method: 'POST', body: JSON.stringify({ access_token: accessToken }) }),
 
   // Pantry
   getPantry: () => request('/pantry'),
@@ -69,6 +70,11 @@ export const api = {
   getSubstitutions: () => request('/substitutions'),
   addSubstitution: (data) => request('/substitutions', { method: 'POST', body: JSON.stringify(data) }),
   deleteSubstitution: (id) => request(`/substitutions/${id}`, { method: 'DELETE' }),
+
+  // History
+  getHistory: () => request('/history'),
+  addHistory: (entry) => request('/history', { method: 'POST', body: JSON.stringify(entry) }),
+  deleteHistory: (recipeId) => request(`/history/${recipeId}`, { method: 'DELETE' }),
 
   // Scanner
   processTicket: (image, media_type) => request('/scanner/process-ticket', { method: 'POST', body: JSON.stringify({ image, media_type }) }),

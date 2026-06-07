@@ -58,6 +58,9 @@ export default function PantryPage() {
   const [convertQty, setConvertQty] = useState('');
   const [convertFrom, setConvertFrom] = useState('');
   const [convertTo, setConvertTo] = useState('');
+  const [suggestionRecipe, setSuggestionRecipe] = useState(null);
+  const [suggestionDay, setSuggestionDay] = useState('');
+  const [suggestionType, setSuggestionType] = useState('comida');
 
   const convertUnit = (item) => {
     const conv = unitConversions[item.unit];
@@ -291,7 +294,7 @@ export default function PantryPage() {
                 <p className="text-xs font-bold text-orange-700 mb-1">{t('pantry.suggestedRecipes')}</p>
                 <div className="flex flex-wrap gap-1">
                   {suggestions.map(r => (
-                    <span key={r.id} className="text-xs bg-white border border-orange-300 rounded-lg px-2 py-0.5 font-medium text-gray-700">{r.name}</span>
+                    <button key={r.id} onClick={() => setSuggestionRecipe(r)} className="text-xs bg-white border border-orange-300 rounded-lg px-2 py-0.5 font-medium text-gray-700 hover:bg-orange-100 cursor-pointer">{r.name}</button>
                   ))}
                 </div>
               </>
@@ -343,7 +346,7 @@ export default function PantryPage() {
                     <span className="text-xs text-gray-400 font-medium flex items-center gap-0.5">
                       {CATEGORY_EMOJI[item.category] ? <span className="text-xs mr-0.5">{CATEGORY_EMOJI[item.category]}</span> : <span className="material-symbols-outlined text-xs">{CATEGORY_ICONS[item.category] || 'inventory_2'}</span>} {t('categories.' + item.category) || item.category}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · ${t('pantry.expiresOn')}${item.expiry_date}` : ''}</span>
+                    <span className="text-xs text-gray-500 dark:text-white font-medium">{item.quantity} {item.unit}{item.expiry_date ? ` · ${t('pantry.expiresOn')}${item.expiry_date}` : ''}{item.created_at ? ` · ${t('common.addedOn')} ${new Date(item.created_at).toLocaleDateString()}` : ''}</span>
                   </div>
                   {item.expiry_date && isExpired(item.expiry_date) && (
                     <span className="text-xs font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-lg border border-gray-400 inline-flex items-center gap-0.5 mt-0.5 line-through">
@@ -411,6 +414,76 @@ export default function PantryPage() {
                 <button onClick={() => applyConvert(showConvert)} className="neo-btn-primary flex-1">{t('pantry.apply')}</button>
                 <button onClick={() => setShowConvert(null)} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {suggestionRecipe && (
+        <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => { setSuggestionRecipe(null); setSuggestionDay(''); }}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-orange-500">restaurant</span> {suggestionRecipe.name}
+              </h3>
+              <button onClick={() => { setSuggestionRecipe(null); setSuggestionDay(''); }} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="p-4 space-y-3 max-h-80 overflow-y-auto">
+              {suggestionRecipe.time && <p className="text-xs text-gray-500"><span className="material-symbols-outlined text-xs align-text-bottom">schedule</span> {suggestionRecipe.time}</p>}
+              {suggestionRecipe.difficulty && <p className="text-xs text-gray-500"><span className="material-symbols-outlined text-xs align-text-bottom">signal_cellular_alt</span> {suggestionRecipe.difficulty}</p>}
+              <div>
+                <p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">{t('common.ingredients')}</p>
+                <div className="flex flex-wrap gap-1">
+                  {suggestionRecipe.ingredients?.map((ing, i) => <span key={i} className="text-xs bg-gray-100 dark:bg-gray-700 rounded-lg px-2 py-0.5">{ing}</span>)}
+                </div>
+              </div>
+              {suggestionDay ? (
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.day')}</p>
+                    <div className="grid grid-cols-4 gap-2">
+                      {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d, i) => (
+                        <button key={d} onClick={() => setSuggestionDay(d)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                          suggestionDay === d ? 'bg-primary-100 border-primary-500 text-primary-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                        }`}>
+                          {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.mealType')}</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[{key:'desayuno',label:'Desayuno'},{key:'almuerzo',label:'Almuerzo'},{key:'comida',label:'Comida'},{key:'merienda',label:'Merienda'},{key:'cena',label:'Cena'}].map(m => (
+                        <button key={m.key} onClick={() => setSuggestionType(m.key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                          suggestionType === m.key ? 'bg-primary-100 border-primary-500 text-primary-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                        }`}>
+                          {m.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={async () => {
+                      try {
+                        await api.addMeal({ name: suggestionRecipe.name, day: suggestionDay, meal_type: suggestionType, recipe: suggestionRecipe.name, ingredients: suggestionRecipe.ingredients, instructions: suggestionRecipe.instructions, videoUrl: suggestionRecipe.videoUrl || '' });
+                        showToast(t('common.addedToMealPlan'));
+                        setSuggestionRecipe(null);
+                        setSuggestionDay('');
+                      } catch (e) { showToast(t('common.errorAdding') + e.message); }
+                    }} className="neo-btn-primary flex-1">
+                      <span className="material-symbols-outlined text-sm align-text-bottom">check</span> {t('common.confirm')}
+                    </button>
+                    <button onClick={() => setSuggestionDay('')} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
+                  </div>
+                </div>
+              ) : (
+                <button onClick={() => setSuggestionDay('monday')} className="neo-btn-primary w-full">
+                  <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
+                </button>
+              )}
             </div>
           </div>
         </div>

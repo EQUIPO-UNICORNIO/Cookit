@@ -72,6 +72,7 @@ export default function CommunityPage() {
   const [viewingPost, setViewingPost] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [editingPost, setEditingPost] = useState(null);
+  const [showCommunityVideo, setShowCommunityVideo] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [editPhoto, setEditPhoto] = useState('');
   const [editIngredients, setEditIngredients] = useState([]);
@@ -294,6 +295,14 @@ export default function CommunityPage() {
 
             <p className="text-sm font-medium mb-2">{post.content}</p>
 
+            {(() => { const vidMatch = (post.instructions || '').match(/<!--video:(.*?)-->/); const vidUrl = vidMatch ? vidMatch[1] : ''; const cleanInstr = (post.instructions || '').replace(/<!--video:.*?-->/g, '').trim(); const vidId = vidUrl.match(/(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/); return (vidUrl && vidId ? (
+              <div className="flex justify-center mb-3">
+                <div onClick={() => setShowCommunityVideo(`https://www.youtube.com/embed/${vidId[1]}`)} className="cursor-pointer">
+                  <img src={`https://img.youtube.com/vi/${vidId[1]}/mqdefault.jpg`} alt="Video" className="w-full max-w-xs rounded-xl border border-gray-200 hover:opacity-80 transition-opacity" />
+                </div>
+              </div>
+            ) : null); })()}
+
             {post.photo && (
               <img src={post.photo} alt={post.content} className="w-full max-h-32 object-contain rounded-xl mb-3 border border-gray-200" />
             )}
@@ -309,21 +318,12 @@ export default function CommunityPage() {
               </div>
             )}
 
-            {(() => { const vidMatch = (post.instructions || '').match(/<!--video:(.*?)-->/); const vidUrl = vidMatch ? vidMatch[1] : ''; const cleanInstr = (post.instructions || '').replace(/<!--video:.*?-->/g, '').trim(); return (
-            <><div className="flex gap-2 mb-2">
-              {vidUrl && (
-                <a href={vidUrl} target="_blank" rel="noopener noreferrer" className="neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 !bg-red-50 !text-red-600 !border-red-300">
-                  <span className="material-symbols-outlined text-sm">play_circle</span> {t('common.video')}
-                </a>
-              )}
-            </div>
-            {cleanInstr && (
+            {(() => { const cleanInstr = (post.instructions || '').replace(/<!--video:.*?-->/g, '').trim(); return cleanInstr ? (
               <div className="mb-3">
                 <p className="text-xs font-bold text-gray-600 dark:text-gray-200 uppercase mb-1">{t('common.instructions')}</p>
                 <p className="text-xs text-gray-600 dark:text-gray-200 whitespace-pre-line">{cleanInstr}</p>
               </div>
-            )}</>
-            ); })()}
+            ) : null; })()}
 
             <div className="flex items-center gap-2 mb-2">
               <button onClick={e => { e.stopPropagation(); handleLike(post.id); }} className={`neo-btn !py-1 !px-2.5 !text-xs flex items-center gap-1 ${post.liked ? '!bg-red-50 !text-red-600 !border-red-300' : '!bg-gray-50 !text-gray-500 !border-gray-300'}`}>
@@ -454,6 +454,13 @@ export default function CommunityPage() {
               </div>
             </div>
             <p className="text-base font-bold mb-3">{viewingPost.content}</p>
+            {(() => { const vidMatch = (viewingPost.instructions || '').match(/<!--video:(.*?)-->/); const vidUrl = vidMatch ? vidMatch[1] : ''; const vidId = vidUrl.match(/(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/); return (vidUrl && vidId ? (
+              <div className="flex justify-center mb-4">
+                <div onClick={() => setShowCommunityVideo(`https://www.youtube.com/embed/${vidId[1]}`)} className="cursor-pointer">
+                  <img src={`https://img.youtube.com/vi/${vidId[1]}/mqdefault.jpg`} alt="Video" className="w-full max-w-sm rounded-xl border border-gray-200 hover:opacity-80 transition-opacity" />
+                </div>
+              </div>
+            ) : null); })()}
             {viewingPost.photo && (
               <img src={viewingPost.photo} alt={viewingPost.content} className="w-full max-h-48 object-contain rounded-xl mb-4 border border-gray-200" />
             )}
@@ -467,12 +474,12 @@ export default function CommunityPage() {
                 </div>
               </div>
             )}
-            {viewingPost.instructions && (
+            {(() => { const cleanInstr = (viewingPost.instructions || '').replace(/<!--video:.*?-->/g, '').trim(); return cleanInstr ? (
               <div className="mb-4">
                 <p className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">{t('common.instructions')}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-200 whitespace-pre-line leading-relaxed">{viewingPost.instructions}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200 whitespace-pre-line leading-relaxed">{cleanInstr}</p>
               </div>
-            )}
+            ) : null; })()}
           </div>
         </div>
       )}
@@ -481,6 +488,23 @@ export default function CommunityPage() {
           <span className="material-symbols-outlined text-5xl text-gray-300">forum</span>
           <p className="text-gray-400 font-bold mt-2">{t('community.firstToPost')}</p>
           <p className="text-gray-300 text-sm">{t('community.shareExperience')}</p>
+        </div>
+      )}
+      {showCommunityVideo && (
+        <div className="fixed inset-0 bg-black/70 z-[90] flex items-center justify-center p-4" onClick={() => setShowCommunityVideo(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="font-bold flex items-center gap-2">
+                <span className="material-symbols-outlined text-red-500">play_circle</span> {t('common.video')}
+              </h3>
+              <button onClick={() => setShowCommunityVideo(null)} className="text-gray-500 hover:text-gray-700">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="aspect-video">
+              <iframe src={showCommunityVideo} className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={t('common.video')} />
+            </div>
+          </div>
         </div>
       )}
     </div>

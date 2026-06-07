@@ -3,6 +3,7 @@ import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
 import { translateIngredient } from '../../utils/ingredientTranslations';
 import { autoCategorize } from '../../utils/categories';
+import RECIPE_DB from '../../data/recipeDb';
 
 const mealTypes = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
 
@@ -21,6 +22,14 @@ function saveLocalMeals(meals) {
 
 function normalize(s) {
   return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+const recipeLookup = Object.fromEntries(
+  RECIPE_DB.map(r => [r.name, { difficulty: r.difficulty, time: r.time }])
+);
+
+function getRecipeMeta(name) {
+  return recipeLookup[name] || {};
 }
 
 export default function MealsPage() {
@@ -43,7 +52,7 @@ export default function MealsPage() {
   const [mealVideoUrl, setMealVideoUrl] = useState(null);
   const [videoSteps, setVideoSteps] = useState(null);
   const [completedMeals, setCompletedMeals] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('cookit_completed_meals') || '[]'); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem('cookit_completed_meals') || '[]').map(id => String(id)); } catch { return []; }
   });
   const [pantry, setPantry] = useState([]);
   const [mealThumbs, setMealThumbs] = useState({});
@@ -240,8 +249,8 @@ export default function MealsPage() {
     if (cookingStep < steps.length - 1) {
       setCookingStep(cookingStep + 1);
     } else {
-      const id = selectedMeal.id;
-      if (!completedMeals.includes(id)) {
+      const id = String(selectedMeal.id);
+      if (!isCompleted(id)) {
         const updated = [...completedMeals, id];
         setCompletedMeals(updated);
         localStorage.setItem('cookit_completed_meals', JSON.stringify(updated));
@@ -254,10 +263,13 @@ export default function MealsPage() {
 
   const parseInstructions = (text) => text?.split('\n').filter(l => l.trim()) || [];
 
-  const dayMeals = selectedDay === 'todas'
-    ? meals
-    : meals.filter(m => !m.day || m.day === selectedDay);
-
+  const isCompleted = (id) => completedMeals.some(cid => String(cid) === String(id));
+  const completedDayMeals = meals.filter(m => isCompleted(m.id));
+  const dayMeals = selectedDay === 'completed'
+    ? completedDayMeals
+    : (selectedDay === 'todas'
+      ? meals
+      : meals.filter(m => !m.day || m.day === selectedDay)).filter(m => !isCompleted(m.id));
   if (selectedMeal) {
     const steps = videoSteps || parseInstructions(selectedMeal.instructions);
     return (
@@ -268,6 +280,11 @@ export default function MealsPage() {
         <button onClick={() => { const m = selectedMeal; setSelectedMeal(null); setEditing(m.id); setForm({ name: m.name, day: m.day, meal_type: m.meal_type, recipe: m.recipe, ingredients: (m.ingredients || []).join(', '), instructions: m.instructions || '', photo: m.photo, videoUrl: m.videoUrl || '' }); setShowForm(true); }} className="neo-btn !bg-primary-50 !text-primary-600 !border-primary-300 !py-2 !px-3 !text-sm mb-4 ml-2">
           <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
         </button>
+        {!isCompleted(selectedMeal.id) && (
+          <button onClick={() => { const updated = [...completedMeals, String(selectedMeal.id)]; setCompletedMeals(updated); localStorage.setItem('cookit_completed_meals', JSON.stringify(updated)); showToast(t('meals.completedMeal')); setSelectedMeal(null); }} className="neo-btn !bg-green-50 !text-green-700 !border-green-300 !py-2 !px-3 !text-sm mb-4 ml-2">
+            <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span> {t('meals.completed')}
+          </button>
+        )}
 
         <div className="neo-card mb-4">
           <span className="text-xs font-bold text-primary-600 uppercase bg-primary-50 px-2 py-0.5 rounded-lg border border-primary-200">
@@ -277,7 +294,25 @@ export default function MealsPage() {
             <img src={selectedMeal.photo} alt={selectedMeal.name} className="w-full h-48 object-cover rounded-xl mt-3 border-2 border-black cursor-pointer" onClick={() => setFullPhoto(selectedMeal.photo)} />
           )}
           <h2 className="text-xl font-extrabold mt-2">{selectedMeal.name}</h2>
-          {selectedMeal.day && <p className="text-xs text-gray-400 mt-0.5">{t('meals.day')}: {t('meals.days.' + selectedMeal.day.toLowerCase()) || selectedMeal.day}</p>}
+          {(() => { const meta = getRecipeMeta(selectedMeal.name); if (!meta.difficulty && !meta.time) return null; return (
+            <div className="flex gap-2 mt-1">
+              {meta.difficulty && (
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-lg border flex items-center gap-1 ${
+                  meta.difficulty === 'Fácil' ? 'text-green-600 bg-green-50 border-green-200' :
+                  meta.difficulty === 'Media' ? 'text-orange-600 bg-orange-50 border-orange-200' :
+                  'text-red-600 bg-red-50 border-red-200'
+                }`}>
+                  <span className="material-symbols-outlined text-xs">fitness_center</span> {meta.difficulty}
+                </span>
+              )}
+              {meta.time && (
+                <span className="text-xs font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                  <span className="material-symbols-outlined text-xs">schedule</span> {meta.time}
+                </span>
+              )}
+            </div>
+          ); })()}
+          {selectedMeal.day && <p className="text-xs text-gray-400 mt-1">{t('meals.day')}: {t('meals.days.' + selectedMeal.day.toLowerCase()) || selectedMeal.day}</p>}
 
           {selectedMeal.ingredients?.length > 0 && (
             <div className="mt-3">
@@ -400,6 +435,12 @@ export default function MealsPage() {
               {t('meals.days.' + key) || key}
             </button>
           ))}
+          <button key="completed"
+            onClick={() => setSelectedDay('completed')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${selectedDay === 'completed' ? 'bg-green-700 text-white neo-shadow-primary' : 'bg-white dark:bg-gray-300 border-2 border-green-400 text-green-700 dark:text-green-600'}`}
+          >
+            <span className="material-symbols-outlined text-xs align-text-bottom">check_circle</span> {t('meals.completed')}
+          </button>
         </div>
         <div className="flex gap-1 bg-gray-100 rounded-xl p-1 border-2 border-black flex-shrink-0">
           <button onClick={() => setViewMode('list')} className={`px-2 py-1 rounded-lg text-xs font-bold ${viewMode === 'list' ? 'bg-white text-primary-600 border-2 border-black' : 'text-gray-500'}`}>
@@ -412,36 +453,48 @@ export default function MealsPage() {
       </div>
 
       {viewMode === 'calendar' && (
-        <div className="grid grid-cols-7 gap-1 mb-4">
+        <div className="flex gap-1 mb-4 overflow-x-auto pb-2">
           {dayKeys.map(day => {
-            const dayMealsFiltered = meals.filter(m => !m.day || m.day === day);
+            const dayMealsFiltered = meals.filter(m => (!m.day || m.day === day) && !isCompleted(m.id));
             return (
-              <div key={day} className="neo-card !p-2 min-h-[100px]">
-                <p className="text-[10px] font-bold text-center uppercase text-gray-500 mb-1">{(t('meals.days.' + day) || day).slice(0, 3)}</p>
+              <div key={day} className="neo-card !p-2 min-h-[120px] min-w-[130px] flex-shrink-0">
+                <p className="text-xs font-bold text-center uppercase text-gray-500 mb-1">{(t('meals.days.' + day) || day).slice(0, 3)}</p>
                 <div className="space-y-1">
-                  {dayMealsFiltered.slice(0, 3).map(m => (
-                    <div key={m.id} className={`text-[10px] rounded-md px-1 py-0.5 truncate font-medium cursor-pointer ${completedMeals.includes(m.id) ? 'bg-green-100 border border-green-300 line-through text-green-600' : 'bg-primary-50 border border-primary-200'}`} onClick={() => setSelectedMeal(m)}>
-                      {completedMeals.includes(m.id) && <span className="material-symbols-outlined text-[8px] align-text-bottom">check_circle</span>} {m.name}
+                  {dayMealsFiltered.slice(0, 4).map(m => (
+                    <div key={m.id} className="text-xs rounded-md px-1.5 py-0.5 truncate font-medium cursor-pointer bg-primary-50 border border-primary-200" onClick={() => setSelectedMeal(m)}>
+                      {m.name}
                     </div>
                   ))}
-                  {dayMealsFiltered.length > 3 && <p className="text-[10px] text-gray-400 text-center">+{dayMealsFiltered.length - 3}</p>}
+                  {dayMealsFiltered.length > 4 && <p className="text-xs text-gray-400 text-center">+{dayMealsFiltered.length - 4}</p>}
                 </div>
               </div>
             );
           })}
+          <div className="neo-card !p-2 min-h-[120px] min-w-[130px] flex-shrink-0 !bg-green-50 !border-green-300">
+            <p className="text-xs font-bold text-center uppercase text-green-700 mb-1">{t('meals.completed')}</p>
+            <div className="space-y-1">
+              {completedDayMeals.slice(0, 4).map(m => (
+                <div key={m.id} className="text-xs rounded-md px-1.5 py-0.5 truncate font-medium cursor-pointer bg-green-100 border border-green-300 line-through text-green-700" onClick={() => setSelectedMeal(m)}>
+                  <span className="material-symbols-outlined text-[10px] align-text-bottom">check_circle</span> {m.name}
+                </div>
+              ))}
+              {completedDayMeals.length > 4 && <p className="text-xs text-green-400 text-center">+{completedDayMeals.length - 4}</p>}
+              {completedDayMeals.length === 0 && <p className="text-xs text-green-400 text-center italic">-</p>}
+            </div>
+          </div>
         </div>
       )}
 
       {dayMeals.length === 0 && (
         <div className="text-center py-8">
           <span className="material-symbols-outlined text-4xl text-gray-300">restaurant_menu</span>
-          <p className="text-gray-400 font-bold mt-2">{t('meals.noMealsForDay')} {selectedDay === 'todas' ? t('meals.selectedDay') : (t('meals.days.' + selectedDay) || selectedDay)}</p>
+          <p className="text-gray-400 font-bold mt-2">{selectedDay === 'completed' ? t('meals.noCompleted') : (t('meals.noMealsForDay') + ' ' + (selectedDay === 'todas' ? t('meals.selectedDay') : (t('meals.days.' + selectedDay) || selectedDay)))}</p>
         </div>
       )}
 
       <div className="space-y-3">
         {dayMeals.map(meal => (
-          <div key={meal.id} className="neo-card cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setSelectedMeal(meal)}>
+          <div key={meal.id} className={`neo-card cursor-pointer hover:shadow-lg transition-shadow ${selectedDay === 'completed' ? '!bg-green-50 !border-green-300' : ''}`} onClick={() => setSelectedMeal(meal)}>
             <div className="flex gap-3 items-start">
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-1">
@@ -460,8 +513,26 @@ export default function MealsPage() {
                   </span>
                 )}
                 </div>
-                <h3 className="font-extrabold text-base mt-1 truncate">{meal.name}</h3>
-                {completedMeals.includes(meal.id) && (
+                <h3 className={`font-extrabold text-base mt-1 truncate ${selectedDay === 'completed' ? 'line-through text-green-700' : ''}`}>{meal.name}</h3>
+                {(() => { const meta = getRecipeMeta(meal.name); if (!meta.difficulty && !meta.time) return null; return (
+                  <div className="flex gap-2 mt-0.5">
+                    {meta.difficulty && (
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-lg border flex items-center gap-0.5 ${
+                        meta.difficulty === 'Fácil' ? 'text-green-600 bg-green-50 border-green-200' :
+                        meta.difficulty === 'Media' ? 'text-orange-600 bg-orange-50 border-orange-200' :
+                        'text-red-600 bg-red-50 border-red-200'
+                      }`}>
+                        <span className="material-symbols-outlined text-xs">fitness_center</span> {meta.difficulty}
+                      </span>
+                    )}
+                    {meta.time && (
+                      <span className="text-[10px] font-bold text-gray-500 bg-gray-100 border border-gray-200 px-1.5 py-0.5 rounded-lg flex items-center gap-0.5">
+                        <span className="material-symbols-outlined text-xs">schedule</span> {meta.time}
+                      </span>
+                    )}
+                  </div>
+                ); })()}
+                {isCompleted(meal.id) && (
                   <span className="text-[10px] font-bold text-green-700 bg-green-100 border border-green-400 px-1.5 py-0.5 rounded-lg inline-flex items-center gap-0.5 mt-0.5">
                     <span className="material-symbols-outlined text-xs">check_circle</span> {t('meals.completed')}
                   </span>
@@ -502,22 +573,34 @@ export default function MealsPage() {
               )}
             </div>
             <div className="flex gap-2 mt-2 pt-2 border-t border-gray-100">
-              <button onClick={(e) => { e.stopPropagation(); openVideo(meal); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300" disabled={loadingVideo === meal.id}>
-                <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
-              </button>
               <button onClick={(e) => { e.stopPropagation(); setEditing(meal.id); setForm({ name: meal.name, day: meal.day, meal_type: meal.meal_type, recipe: meal.recipe, ingredients: (meal.ingredients || []).join(', '), instructions: meal.instructions || '', photo: meal.photo, videoUrl: meal.videoUrl || '' }); setShowForm(true); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-gray-300 text-gray-600">
                 <span className="material-symbols-outlined text-sm align-text-bottom">edit</span> {t('common.edit')}
               </button>
-              <button onClick={async (e) => { e.stopPropagation(); try { await api.createPost({ content: meal.name, photo: '', ingredients: meal.ingredients || [], instructions: meal.instructions || '', video_url: meal.videoUrl || '' }); showToast(t('community.postEdited')); } catch { showToast(t('community.errorPublish')); } }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-purple-50 !text-purple-700 !border-purple-300">
-                <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span>
-              </button>
               <button onClick={(e) => { e.stopPropagation(); confirmDelete(meal.id); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-red-300 text-red-500">
                 <span className="material-symbols-outlined text-sm align-text-bottom">delete</span> {t('common.delete')}
+              </button>
+              <button onClick={(e) => { e.stopPropagation(); openVideo(meal); }} className="text-xs font-bold neo-btn !py-1 !px-2.5 ml-auto !bg-red-50 !text-red-600 !border-red-300" disabled={loadingVideo === meal.id}>
+                <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
+              </button>
+              <button onClick={async (e) => {
+                e.stopPropagation();
+                let videoUrl = meal.videoUrl || '';
+                if (!videoUrl) {
+                  try {
+                    const res = await api.searchYoutube('receta ' + meal.name);
+                    if (res.videoId) videoUrl = `https://www.youtube.com/embed/${res.videoId}`;
+                  } catch {}
+                }
+                try { await api.createPost({ content: meal.name, photo: '', ingredients: meal.ingredients || [], instructions: meal.instructions || '', video_url: videoUrl }); showToast(t('community.postEdited')); } catch { showToast(t('community.errorPublish')); }
+              }} className="text-xs font-bold neo-btn !py-1 !px-2.5 !bg-purple-50 !text-purple-700 !border-purple-300">
+                <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span>
               </button>
             </div>
           </div>
         ))}
       </div>
+
+
 
       {showForm && (
         <div className="fixed inset-0 bg-black/40 z-[60] flex items-end justify-center" onClick={() => setShowForm(false)}>
