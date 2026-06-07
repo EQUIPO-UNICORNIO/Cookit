@@ -12,3 +12,4 @@ ngrok/
 
 ticket*
 *.traineddata
+.vercel

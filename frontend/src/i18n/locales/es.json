@@ -79,7 +79,10 @@
     "view": "Ver",
     "addToShopping": "Añadir a la compra",
     "video": "Video",
-    "searching": "Buscando..."
+    "searching": "Buscando...",
+    "day": "Día",
+    "mealType": "Tipo de comida",
+    "confirm": "Confirmar"
   },
   "access": {
     "slogan": "MENOS DESPERDICIO, MÁS AHORRO, MÁS CONCIENCIA",
@@ -226,7 +229,8 @@
     "history": "Historial",
     "alreadyInHistory": "Ya está en tu historial",
     "addedToHistory": "Añadido a tu historial",
-    "addedToShopping": "Tus ingredientes han sido añadidos a la compra"
+    "addedToShopping": "Tus ingredientes han sido añadidos a la compra",
+    "shareCommunity": "Compartir en comunidad"
   },
   "pantry": {
     "title": "Tu Despensa",

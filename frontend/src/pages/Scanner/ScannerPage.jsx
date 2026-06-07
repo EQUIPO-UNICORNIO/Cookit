@@ -176,89 +176,14 @@ function fallbackParseLines(text) {
   return items.slice(0, 50);
 }
 
-function buildIntegral(gray, w, h) {
-  const integral = new Uint32Array((w + 1) * (h + 1));
-  for (let y = 0; y < h; y++) {
-    let rowSum = 0;
-    const rowOff = y * w;
-    const intOff = (y + 1) * (w + 1) + 1;
-    const intPrev = y * (w + 1) + 1;
-    for (let x = 0; x < w; x++) {
-      rowSum += gray[rowOff + x];
-      integral[intOff + x] = integral[intPrev + x] + rowSum;
-    }
-  }
-  return integral;
-}
-
-function boxMean(integral, w, h, x, y, s) {
-  const x1 = Math.max(x - s, 0), x2 = Math.min(x + s, w - 1);
-  const y1 = Math.max(y - s, 0), y2 = Math.min(y + s, h - 1);
-  const count = (x2 - x1 + 1) * (y2 - y1 + 1);
-  const sum = integral[(y2 + 1) * (w + 1) + x2 + 1]
-            - integral[y1 * (w + 1) + x2 + 1]
-            - integral[(y2 + 1) * (w + 1) + x1]
-            + integral[y1 * (w + 1) + x1];
-  return sum / count;
-}
-
 function preprocessImage(canvas) {
-  const TARGET_HEIGHT = 2400;
-  let w = canvas.width, h = canvas.height;
-  if (h < TARGET_HEIGHT) {
-    const scale = TARGET_HEIGHT / h;
-    w = Math.round(w * scale);
-    h = TARGET_HEIGHT;
-    const scaled = document.createElement('canvas');
-    scaled.width = w;
-    scaled.height = h;
-    scaled.getContext('2d').drawImage(canvas, 0, 0, w, h);
-    canvas = scaled;
-  }
-
   const ctx = canvas.getContext('2d');
-  const imageData = ctx.getImageData(0, 0, w, h);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = imageData.data;
-  const len = w * h;
-  const gray = new Uint8Array(len);
-
-  // Grayscale + find percentiles for contrast stretch
-  for (let i = 0; i < len; i++) {
-    const off = i * 4;
-    gray[i] = Math.round(data[off] * 0.299 + data[off + 1] * 0.587 + data[off + 2] * 0.114);
+  for (let i = 0; i < data.length; i += 4) {
+    const gray = Math.round(data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+    data[i] = data[i + 1] = data[i + 2] = gray;
   }
-
-  // Contrast stretching (remove extreme tails)
-  const sorted = new Uint8Array(gray);
-  sorted.sort();
-  const p5 = sorted[Math.floor(len * 0.05)];
-  const p95 = sorted[Math.floor(len * 0.95)];
-  const range = p95 - p5;
-  if (range > 5) {
-    for (let i = 0; i < len; i++) {
-      let v = ((gray[i] - p5) / range) * 255;
-      gray[i] = Math.max(0, Math.min(255, Math.round(v)));
-    }
-  }
-
-  // Build integral image for adaptive thresholding
-  const integral = buildIntegral(gray, w, h);
-
-  // Block size proportional to image dimensions (handles both near and far shots)
-  const blockSize = Math.max(15, Math.round(Math.min(w, h) / 24));
-  const offset = 8;
-
-  // Apply adaptive threshold
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const idx = y * w + x;
-      const mean = boxMean(integral, w, h, x, y, blockSize);
-      const val = gray[idx] > (mean - offset) ? 255 : 0;
-      const off = idx * 4;
-      data[off] = data[off + 1] = data[off + 2] = val;
-    }
-  }
-
   ctx.putImageData(imageData, 0, 0);
   return canvas;
 }
@@ -294,7 +219,6 @@ export default function ScannerPage() {
   const processImage = async (canvas) => {
     setProcessing(true);
     setOcrProgress('');
-    setScanEngine('');
     setError('');
     try {
       setOcrProgress(t('scanner.readingOCR'));

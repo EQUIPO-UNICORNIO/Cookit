@@ -79,7 +79,9 @@
     "view": "View",
     "addToShopping": "Add to shopping list",
     "video": "Video",
-    "searching": "Searching..."
+    "searching": "Searching...",
+    "mealType": "Meal type",
+    "confirm": "Confirm"
   },
   "access": {
     "slogan": "LESS WASTE, MORE SAVINGS, MORE AWARENESS",
@@ -226,7 +228,8 @@
     "history": "History",
     "alreadyInHistory": "Already in your history",
     "addedToHistory": "Added to your history",
-    "addedToShopping": "Your ingredients have been added to shopping"
+    "addedToShopping": "Your ingredients have been added to shopping",
+    "shareCommunity": "Share to community"
   },
   "pantry": {
     "title": "Your Pantry",

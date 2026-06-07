@@ -86,6 +86,9 @@ export default function RecipesPage() {
   const [filterDifficulty, setFilterDifficulty] = useState('Todas');
   const [showIngredientPicker, setShowIngredientPicker] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(null);
+  const [mealPlanModal, setMealPlanModal] = useState(null);
+  const [mealPlanDay, setMealPlanDay] = useState('');
+  const [mealPlanType, setMealPlanType] = useState('comida');
   const [loadingVideo, setLoadingVideo] = useState(null);
   const [toast, setToast] = useState(null);
   const [history, setHistory] = useState(() => {
@@ -193,16 +196,25 @@ export default function RecipesPage() {
   };
 
   const addToMealPlan = async (recipe) => {
+    setMealPlanDay('');
+    setMealPlanType(recipe.category || 'comida');
+    setMealPlanModal(recipe);
+  };
+
+  const confirmAddToMealPlan = async () => {
+    const recipe = mealPlanModal;
+    if (!recipe) return;
     try {
       await api.addMeal({
         name: recipe.name,
-        day: '',
-        meal_type: recipe.category || 'comida',
+        day: mealPlanDay || '',
+        meal_type: mealPlanType,
         recipe: recipe.name,
         ingredients: recipe.ingredients,
         instructions: recipe.instructions,
         videoUrl: recipe.videoUrl || '',
       });
+      setMealPlanModal(null);
       showToast(t('common.addedToMealPlan'));
     } catch (e) {
       showToast(t('common.errorAdding') + e.message);
@@ -318,6 +330,22 @@ export default function RecipesPage() {
 
         <button onClick={() => markAsUsed(selectedRecipe)} className="neo-btn !bg-green-50 !text-green-700 !border-green-300 w-full mt-2">
           <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span> Usar receta
+        </button>
+
+        <button onClick={async () => {
+          try {
+            await api.createPost({
+              content: selectedRecipe.name,
+              photo: '',
+              ingredients: selectedRecipe.ingredients,
+              instructions: selectedRecipe.instructions,
+            });
+            showToast(t('community.postEdited'));
+          } catch (e) {
+            showToast(t('community.errorPublish'));
+          }
+        }} className="neo-btn !bg-purple-50 !text-purple-700 !border-purple-300 w-full mt-2">
+          <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span> {t('recipes.shareCommunity')}
         </button>
 
         {showVideoModal && (
@@ -583,19 +611,73 @@ export default function RecipesPage() {
                     <span className="material-symbols-outlined text-sm align-text-bottom">visibility</span> {t('recipes.viewRecipe')}
                   </button>
                   <button onClick={(e) => { e.stopPropagation(); addToMealPlan(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 flex-1 !border-primary-300 text-primary-600">
-                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span> {t('common.addToMealPlan')}
+                    <span className="material-symbols-outlined text-sm align-text-bottom">playlist_add</span>
                   </button>
                   <button onClick={(e) => { e.stopPropagation(); openVideo(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-red-50 !text-red-600 !border-red-300" disabled={loadingVideo === recipe.id}>
                       <span className="material-symbols-outlined text-sm align-text-bottom">play_circle</span>
                     </button>
-                  <button onClick={(e) => { e.stopPropagation(); markAsUsed(recipe); }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-green-50 !text-green-700 !border-green-300">
-                      <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span>
+                  <button onClick={async (e) => { e.stopPropagation(); try { await api.createPost({ content: recipe.name, photo: '', ingredients: recipe.ingredients, instructions: recipe.instructions }); showToast(t('community.postEdited')); } catch { showToast(t('community.errorPublish')); } }} className="text-xs font-bold neo-btn !py-1 !px-3 !bg-purple-50 !text-purple-700 !border-purple-300">
+                      <span className="material-symbols-outlined text-sm align-text-bottom">group_add</span>
                     </button>
                 </div>
               </div>
             ))}
           </div>
         </>
+      )}
+
+      {mealPlanModal && (
+        <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => setMealPlanModal(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary-600">playlist_add</span> {t('common.addToMealPlan')}
+              </h3>
+              <button onClick={() => setMealPlanModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.day')}</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d, i) => (
+                    <button key={d} onClick={() => setMealPlanDay(d)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                      mealPlanDay === d
+                        ? 'bg-primary-100 border-primary-500 text-primary-700'
+                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                    }`}>
+                      {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.mealType')}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { key: 'desayuno', label: 'Desayuno' },
+                    { key: 'almuerzo', label: 'Almuerzo' },
+                    { key: 'comida', label: 'Comida' },
+                    { key: 'merienda', label: 'Merienda' },
+                    { key: 'cena', label: 'Cena' },
+                  ].map(m => (
+                    <button key={m.key} onClick={() => setMealPlanType(m.key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                      mealPlanType === m.key
+                        ? 'bg-primary-100 border-primary-500 text-primary-700'
+                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                    }`}>
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button onClick={confirmAddToMealPlan} className="neo-btn-primary w-full">
+                <span className="material-symbols-outlined text-sm align-text-bottom">check</span> {t('common.confirm')}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {showVideoModal && (
