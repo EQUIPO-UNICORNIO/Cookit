@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 import { useTranslation } from 'react-i18next';
-import { createWorker } from 'tesseract.js';
+import { PaddleOcrService } from 'ppu-paddle-ocr/web';
 import { CATEGORIES, autoCategorize } from '../../utils/categories';
 
 const units = ['unidad', 'kg', 'g', 'L', 'ml', 'paquete', 'lata', 'botella', 'cucharada', 'taza'];
@@ -26,6 +26,15 @@ const IGNORE_WORDS = new Set([
 const IGNORE_STARTS = ['avda', 'calle', 'plaza', 'ctra', 'camino', 'paseo', 'ronda', 'carretera', 'c/', 'travesia'];
 
 const TICKET_METADATA_RE = /p\.v\.p|atendido\s+por|num\.?\s*ticket|artic\.?\s*vendidos|artic\.?\s*por|unidades\s*vendidas|balance\s*venta|ventas\s*del|documento|justificante|original|duplicado|ticket\s*num/i;
+
+let paddleOcrInstance = null;
+async function getPaddleOcr() {
+  if (!paddleOcrInstance) {
+    paddleOcrInstance = new PaddleOcrService({ processing: { engine: 'canvas-native' }, debugging: { verbose: false } });
+    await paddleOcrInstance.initialize();
+  }
+  return paddleOcrInstance;
+}
 
 function getSignificantWords(name) {
   return normalize(name).split(/\s+/).filter(w => w.length > 2);
@@ -222,20 +231,9 @@ export default function ScannerPage() {
     setError('');
     try {
       setOcrProgress(t('scanner.readingOCR'));
-      const processed = preprocessImage(canvas);
-      const worker = await createWorker('spa+eng', 1, {
-        logger: m => {
-          if (m.status) setOcrProgress(m.status + (m.progress ? ` ${Math.round(m.progress * 100)}%` : ''));
-        },
-      });
-      await worker.setParameters({
-        tessedit_pageseg_mode: '4',
-        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzáéíóúñüÁÉÍÓÚÑÜ0123456789.,/-%€$@&#:;()!?\'" ',
-        preserve_interword_spaces: '1',
-      });
-      const { data } = await worker.recognize(processed);
-      const text = data.text.trim();
-      worker.terminate();
+      const service = await getPaddleOcr();
+      const result = await service.recognize(canvas, { flatten: true });
+      const text = result.text.trim();
       setRawText(text);
 
       if (!text || text.length < 5) {
