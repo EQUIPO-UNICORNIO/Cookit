@@ -278,6 +278,7 @@ export default function ScannerPage() {
 
       if (uniq.length === 0) {
         setError(t('scanner.errorDetectProducts'));
+        setOcrProgress(text.slice(0, 500));
         setStep('initial');
         setProcessing(false);
         return;
@@ -366,6 +367,12 @@ export default function ScannerPage() {
       {error && (
         <div className="bg-red-50 border-2 border-red-400 rounded-xl p-3 mb-4 relative">
           <p className="text-red-700 text-sm font-bold">{error}</p>
+          {rawText && (
+            <details className="mt-2">
+              <summary className="text-xs text-red-500 cursor-pointer">Ver texto OCR crudo</summary>
+              <pre className="text-xs text-red-600 mt-1 whitespace-pre-wrap max-h-40 overflow-y-auto bg-red-100/50 p-2 rounded">{rawText}</pre>
+            </details>
+          )}
           <button onClick={() => setError('')} className="absolute top-2 right-2 text-red-400">
             <span className="material-symbols-outlined text-sm">close</span>
           </button>
