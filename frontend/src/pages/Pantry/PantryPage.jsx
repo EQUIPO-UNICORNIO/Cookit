@@ -51,7 +51,6 @@ export default function PantryPage() {
   const [form, setForm] = useState({ name: '', category: 'Otros', quantity: '1', unit: 'unidad', expiry_date: '', notes: '' });
   const [search, setSearch] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [sortByExpiry, setSortByExpiry] = useState(false);
   const [toast, setToast] = useState(null);
   const [showConvert, setShowConvert] = useState(null);
@@ -118,14 +117,10 @@ export default function PantryPage() {
       const local = getLocalPantry().filter(m => m.id !== id);
       saveLocalPantry(local);
       setItems(prev => prev.filter(m => m.id !== id));
-      setConfirmDeleteId(null);
       return;
     }
-    try { await api.deletePantryItem(id); loadItems(); setConfirmDeleteId(null); } catch (e) { alert(e.message); }
+    try { await api.deletePantryItem(id); loadItems(); } catch (e) { alert(e.message); }
   };
-
-  const confirmDelete = (id) => setConfirmDeleteId(id);
-  const cancelDelete = () => setConfirmDeleteId(null);
 
   const applyConvert = (item) => {
     const conv = unitConversions[item.unit];
@@ -240,7 +235,7 @@ export default function PantryPage() {
               <span className="material-symbols-outlined text-sm align-text-bottom">swap_horiz</span> {t('pantry.convert')}
             </button>
           )}
-          <button onClick={() => { confirmDelete(selectedItem.id); setSelectedItem(null); }} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 flex-1">{t('common.delete')}</button>
+          <button onClick={() => { handleDelete(selectedItem.id); setSelectedItem(null); }} className="neo-btn !bg-red-50 !text-red-600 !border-red-300 flex-1">{t('common.delete')}</button>
         </div>
       </div>
     );
@@ -362,7 +357,7 @@ export default function PantryPage() {
                 <button onClick={(e) => { e.stopPropagation(); api.addShoppingItem({ name: item.name, category: item.category, quantity: item.quantity, unit: item.unit }).then(() => showToast(t('pantry.addedToShopping'))).catch(() => {}); }} className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-500 flex-shrink-0" title={t('common.addToShopping')}>
                   <span className="material-symbols-outlined text-sm">shopping_cart</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); confirmDelete(item.id); }} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
+                <button onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 flex-shrink-0">
                   <span className="material-symbols-outlined text-sm">delete</span>
                 </button>
               </div>
@@ -376,19 +371,6 @@ export default function PantryPage() {
           <span className="material-symbols-outlined text-5xl text-gray-300">kitchen</span>
           <p className="text-gray-400 font-bold mt-2">{t('pantry.emptyPantry')}</p>
           <p className="text-gray-300 text-sm">{t('pantry.addFirstItems')}</p>
-        </div>
-      )}
-
-      {confirmDeleteId !== null && (
-        <div className="fixed inset-0 bg-black/40 z-[70] flex items-center justify-center p-4" onClick={cancelDelete}>
-          <div className="bg-white rounded-2xl p-5 max-w-xs w-full shadow-xl" onClick={e => e.stopPropagation()}>
-            <h3 className="font-extrabold text-base text-gray-900 text-center mb-1">{t('pantry.deleteItem')}</h3>
-            <p className="text-sm text-gray-500 text-center mb-5">{t('common.cannotUndo')}</p>
-            <div className="flex gap-2">
-              <button onClick={cancelDelete} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
-              <button onClick={() => handleDelete(confirmDeleteId)} className="neo-btn !bg-red-500 !text-white flex-1">{t('common.accept')}</button>
-            </div>
-          </div>
         </div>
       )}
 
