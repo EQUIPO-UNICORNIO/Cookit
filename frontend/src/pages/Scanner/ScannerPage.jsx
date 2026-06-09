@@ -146,6 +146,8 @@ function parseLineToProduct(line) {
   const clean = line.replace(/\s+/g, ' ').trim();
   const priceMatch = clean.match(/(\d{1,4}[.,]\d{2})\s*$/);
   let namePart = priceMatch ? clean.substring(0, clean.length - priceMatch[0].length).trim() : clean;
+  // Strip a unit price that precedes the total price (e.g., "0,63 1,26" → "1,26" matches priceMatch, leaving "2 AGUA MINERAL 0,63")
+  namePart = namePart.replace(/\s+\d{1,4}[.,]\d{2}\s*$/, '').trim();
   namePart = namePart.replace(/^\d+\s*[xX*]?\s*/, '').trim();
   const detected = detectQuantityUnit(namePart);
   if (detected) {
@@ -185,12 +187,23 @@ function fallbackParseLines(text) {
   return items.slice(0, 50);
 }
 
+function rejoinLines(text) {
+  return text.replace(/,(\s*)\n(\d{2})(?!\d)/g, ',$1$2');
+}
+
+function splitProductLines(text) {
+  text = text.replace(/(\d{1,4}[.,]\d{2})\s+(?=[A-ZÁÉÍÓÚÑ])/g, '$1\n');
+  text = text.replace(/\b(?=\d{1,2}\s+(?!(?:CIF|SUBTOTAL|TOTAL|EUR|IMPORTE|DESCUENTO|BANCARIA)\b)[A-ZÁÉÍÓÚÑ])/g, '\n');
+  return text.trimStart();
+}
+
 function preprocessImage(canvas) {
   const ctx = canvas.getContext('2d');
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
-    const gray = Math.round(data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+    let gray = Math.round(data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+    gray = gray < 128 ? Math.max(0, gray - 40) : Math.min(255, gray + 40);
     data[i] = data[i + 1] = data[i + 2] = gray;
   }
   ctx.putImageData(imageData, 0, 0);
@@ -208,6 +221,8 @@ export default function ScannerPage() {
   const [successCount, setSuccessCount] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [ocrProgress, setOcrProgress] = useState('');
+  const [progressPct, setProgressPct] = useState(0);
+  const progressTimerRef = useRef(null);
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -226,20 +241,29 @@ export default function ScannerPage() {
   };
 
   const processImage = async (canvas) => {
+    const done = () => {
+      clearInterval(progressTimerRef.current);
+      setProgressPct(100);
+      setTimeout(() => setProcessing(false), 300);
+    };
     setProcessing(true);
+    setProgressPct(0);
     setOcrProgress('');
     setError('');
+    progressTimerRef.current = setInterval(() => {
+      setProgressPct(p => Math.min(90, p + Math.random() * 8));
+    }, 300);
     try {
       setOcrProgress(t('scanner.readingOCR'));
+      canvas = preprocessImage(canvas);
       const service = await getPaddleOcr();
       const result = await service.recognize(canvas, { flatten: true });
-      const text = result.text.trim();
+      const text = splitProductLines(rejoinLines(result.text.trim()));
       setRawText(text);
 
       if (!text || text.length < 5) {
         setError(t('scanner.errorReadTicket'));
         setStep('initial');
-        setProcessing(false);
         return;
       }
 
@@ -280,7 +304,6 @@ export default function ScannerPage() {
         setError(t('scanner.errorDetectProducts'));
         setOcrProgress(text.slice(0, 500));
         setStep('initial');
-        setProcessing(false);
         return;
       }
 
@@ -289,8 +312,9 @@ export default function ScannerPage() {
     } catch (e) {
       setError(t('scanner.errorProcessImage') + e.message);
       setStep('initial');
+    } finally {
+      done();
     }
-    setProcessing(false);
   };
 
   const handleFileUpload = (e) => {
@@ -412,7 +436,11 @@ export default function ScannerPage() {
             <span className="material-symbols-outlined text-5xl text-primary-500 animate-spin">scan</span>
           </div>
           <p className="text-primary-600 font-bold mb-1">{t('scanner.readingText')}</p>
-          <p className="text-gray-400 text-sm">{ocrProgress || t('scanner.processingOCR')}</p>
+          <p className="text-gray-400 text-sm mb-3">{ocrProgress || t('scanner.processingOCR')}</p>
+          <div className="w-48 mx-auto bg-gray-200 rounded-full h-2">
+            <div className="bg-primary-500 h-2 rounded-full transition-all duration-300" style={{ width: `${Math.round(progressPct)}%` }}></div>
+          </div>
+          <p className="text-xs text-gray-400 mt-1">{Math.round(progressPct)}%</p>
         </div>
       )}
 

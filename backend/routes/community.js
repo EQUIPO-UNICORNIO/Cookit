@@ -117,7 +117,7 @@ router.post('/:id/save', async (req, res) => {
     await create('meal_plans', {
       user_id: req.userId, name: post.content, day: today, meal_type: 'comida',
       recipe: post.content, ingredients: JSON.stringify(ingredients),
-      instructions: cleanInstr, photo: post.photo || '', videoUrl
+      instructions: cleanInstr, photo: post.photo || ''
     });
     res.json({ success: true, message: 'Receta guardada en tus menús' });
   } catch (e) { res.status(500).json({ error: e.message }); }

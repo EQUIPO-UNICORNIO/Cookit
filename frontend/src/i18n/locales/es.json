@@ -331,7 +331,7 @@
     "addToMealPlan": "Agregar al plan de comidas",
     "saveToShopping": "Guardar en compra ({count})",
     "preprocessing": "Preprocesando imagen...",
-    "readingOCR": "Leyendo texto con OCR...",
+    "readingOCR": "Leyendo ticket...",
     "addedToShopping": "Añadido a la compra",
     "productsOnList": "productos en la lista",
     "scanOther": "Escanear otro",
