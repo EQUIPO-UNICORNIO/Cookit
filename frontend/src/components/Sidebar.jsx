@@ -1,8 +1,41 @@
 import { NavLink, Link } from 'react-router-dom';
 import { getNavItems } from './navConfig';
+import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
+const fallbackColors = ['#006e2f', '#9d4300', '#735c00', '#4f46e5', '#0891b2', '#be185d', '#7c3aed', '#db2777'];
+
+function AvatarIcon({ user }) {
+  if (!user) return null;
+  const avatar = user.avatar;
+  if (avatar) {
+    try {
+      const parsed = JSON.parse(avatar);
+      if (parsed.emoji) {
+        return (
+          <div className="w-8 h-8 rounded-xl border-2 border-black flex items-center justify-center text-base shrink-0"
+            style={{ backgroundColor: parsed.bg || '#006e2f' }}>
+            {parsed.emoji}
+          </div>
+        );
+      }
+    } catch {}
+    return <img src={avatar} alt="" className="w-8 h-8 rounded-xl border-2 border-black object-cover shrink-0" />;
+  }
+  const initials = user.name?.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
+  let hash = 0;
+  for (let i = 0; i < (user.name || '').length; i++) hash = user.name.charCodeAt(i) + ((hash << 5) - hash);
+  const color = fallbackColors[Math.abs(hash) % fallbackColors.length];
+  return (
+    <div className="w-8 h-8 rounded-xl border-2 border-black flex items-center justify-center text-white text-xs font-bold shrink-0"
+      style={{ backgroundColor: color }}>
+      {initials}
+    </div>
+  );
+}
+
 export default function Sidebar() {
+  const { user } = useAuth();
   const { t } = useTranslation();
   const navItems = getNavItems();
   return (
@@ -31,6 +64,17 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      {user && (
+        <div className="border-t-2 border-black p-3 lg:p-4">
+          <Link to="/profile" className="flex items-center gap-3 justify-center lg:justify-start">
+            <AvatarIcon user={user} />
+            <div className="hidden lg:block min-w-0">
+              <p className="text-sm font-bold truncate">{user.name}</p>
+              <p className="text-xs text-gray-400 truncate">{user.email}</p>
+            </div>
+          </Link>
+        </div>
+      )}
     </aside>
   );
 }
