@@ -71,6 +71,9 @@ export default function CommunityPage() {
   const [toast, setToast] = useState(null);
   const [viewingPost, setViewingPost] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [mealPlanModal, setMealPlanModal] = useState(null);
+  const [mealPlanDay, setMealPlanDay] = useState('monday');
+  const [mealPlanType, setMealPlanType] = useState('comida');
   const [editingPost, setEditingPost] = useState(null);
   const [showCommunityVideo, setShowCommunityVideo] = useState(null);
   const [editContent, setEditContent] = useState('');
@@ -172,10 +175,19 @@ export default function CommunityPage() {
   };
 
   const handleSave = async (id) => {
+    setMealPlanDay('monday');
+    setMealPlanType('comida');
+    setMealPlanModal(id);
+  };
+
+  const confirmSave = async () => {
+    const id = mealPlanModal;
+    if (!id) return;
     setSaving(prev => ({ ...prev, [id]: true }));
     try {
-      await api.savePost(id);
+      await api.savePost(id, { day: mealPlanDay, meal_type: mealPlanType });
       showToast(t('community.savedToMealPlan'));
+      setMealPlanModal(null);
     } catch (e) { showToast(t('community.errorSave')); }
     setSaving(prev => ({ ...prev, [id]: false }));
   };
@@ -424,6 +436,53 @@ export default function CommunityPage() {
                 <button type="button" onClick={() => setEditingPost(null)} className="neo-btn !bg-gray-100 flex-1">{t('common.cancel')}</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {mealPlanModal && (
+        <div className="fixed inset-0 bg-black/70 z-[70] flex items-center justify-center p-4" onClick={() => setMealPlanModal(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm overflow-hidden border-2 border-gray-200 dark:border-gray-700" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary-600">bookmark_add</span> {t('common.addToMealPlan')}
+              </h3>
+              <button onClick={() => setMealPlanModal(null)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.day')}</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d) => (
+                    <button key={d} onClick={() => setMealPlanDay(d)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                      mealPlanDay === d
+                        ? 'bg-primary-100 border-primary-500 text-primary-700'
+                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                    }`}>
+                      {t('meals.dayAbbr.' + d)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.mealType')}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {['desayuno','almuerzo','comida','merienda','cena'].map(key => (
+                    <button key={key} onClick={() => setMealPlanType(key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                      mealPlanType === key
+                        ? 'bg-primary-100 border-primary-500 text-primary-700'
+                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                    }`}>
+                      {t('meals.types.' + key)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button onClick={confirmSave} className="neo-btn-primary w-full">
+                <span className="material-symbols-outlined text-sm align-text-bottom">check</span> {t('common.confirm')}
+              </button>
+            </div>
           </div>
         </div>
       )}

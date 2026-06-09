@@ -52,7 +52,7 @@ export const api = {
   createPost: (data) => request('/community', { method: 'POST', body: JSON.stringify(data) }),
   likePost: (id) => request(`/community/${id}/like`, { method: 'POST' }),
   addComment: (postId, content) => request(`/community/${postId}/comments`, { method: 'POST', body: JSON.stringify({ content }) }),
-  savePost: (id) => request(`/community/${id}/save`, { method: 'POST' }),
+  savePost: (id, data) => request(`/community/${id}/save`, { method: 'POST', body: JSON.stringify(data || {}) }),
   updatePost: (id, data) => request(`/community/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deletePost: (id) => request(`/community/${id}`, { method: 'DELETE' }),
 

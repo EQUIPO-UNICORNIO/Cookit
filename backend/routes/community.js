@@ -101,6 +101,8 @@ router.post('/:id/comments', async (req, res) => {
 
 router.post('/:id/save', async (req, res) => {
   try {
+    const { day, meal_type } = req.body;
+    if (!day || !meal_type) return res.status(400).json({ error: 'day y meal_type requeridos' });
     const { data: post } = await supabase
       .from('community_posts')
       .select('id, content, photo, ingredients, instructions')
@@ -110,12 +112,9 @@ router.post('/:id/save', async (req, res) => {
     const ingredients = JSON.parse(post.ingredients || '[]');
     const instr = post.instructions || '';
     const vidMatch = instr.match(/<!--video:(.*?)-->/);
-    const videoUrl = vidMatch ? vidMatch[1] : '';
     const cleanInstr = instr.replace(/<!--video:.*?-->/g, '').trim();
-    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-    const today = days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
     await create('meal_plans', {
-      user_id: req.userId, name: post.content, day: today, meal_type: 'comida',
+      user_id: req.userId, name: post.content, day, meal_type,
       recipe: post.content, ingredients: JSON.stringify(ingredients),
       instructions: cleanInstr, photo: post.photo || ''
     });
