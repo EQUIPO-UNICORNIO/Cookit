@@ -81,7 +81,9 @@
     "video": "Video",
     "searching": "Searching...",
     "mealType": "Meal type",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "or": "Or",
+    "day": "Day"
   },
   "access": {
     "slogan": "LESS WASTE, MORE SAVINGS, MORE AWARENESS",
@@ -119,7 +121,11 @@
     "passwordUpdated": "Password updated",
     "passwordUpdatedDesc": "Your password has been changed successfully.",
     "verifyingLink": "Verifying recovery link...",
-    "changePassword": "Change password"
+    "changePassword": "Change password",
+    "googleLoading": "Signing in with Google...",
+    "googleError": "Error signing in",
+    "googleErrorDesc": "Could not sign in with Google. Try again.",
+    "goBack": "Go back"
   },
   "profile": {
     "title": "My Profile",
@@ -144,7 +150,10 @@
     "deleteAccountDesc": "Delete all your data",
     "confirmDeleteTitle": "Delete account?",
     "confirmDeleteDesc": "All your data will be permanently deleted. This action cannot be undone.",
-    "updatePassword": "Update your password"
+    "updatePassword": "Update your password",
+    "user": "User",
+    "switchToEnglish": "Switch to English",
+    "switchToSpanish": "Switch to Spanish"
   },
   "meals": {
     "title": "My Meals",
@@ -175,6 +184,7 @@
     "completedMeal": "Meal completed!",
     "noCompleted": "No completed meals",
     "completed": "Completed!",
+    "fullPhoto": "Full photo",
     "videoNoFound": "No video found",
     "types": {
       "desayuno": "breakfast",
@@ -200,6 +210,15 @@
       "sábado": "Saturday",
       "sabado": "Saturday",
       "domingo": "Sunday"
+    },
+    "dayAbbr": {
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
     }
   },
   "recipes": {
@@ -233,7 +252,9 @@
     "alreadyInHistory": "Already in your history",
     "addedToHistory": "Added to your history",
     "addedToShopping": "Your ingredients have been added to shopping",
-    "shareCommunity": "Share to community"
+    "shareCommunity": "Share to community",
+    "useRecipe": "Use recipe",
+    "noHistory": "You haven't used any recipes yet"
   },
   "pantry": {
     "title": "Your Pantry",

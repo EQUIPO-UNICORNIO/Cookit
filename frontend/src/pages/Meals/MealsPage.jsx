@@ -8,6 +8,7 @@ import RECIPE_DB from '../../data/recipeDb';
 const mealTypes = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
 
 const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+const difficultyKey = (d) => d === 'Fácil' ? 'easy' : d === 'Media' ? 'medium' : d === 'Difícil' ? 'hard' : null;
 
 const LOCAL_KEY = 'cookit_meals';
 let localIdCounter = 0;
@@ -522,7 +523,7 @@ export default function MealsPage() {
                         meta.difficulty === 'Media' ? 'text-orange-600 bg-orange-50 border-orange-200' :
                         'text-red-600 bg-red-50 border-red-200'
                       }`}>
-                        <span className="material-symbols-outlined text-xs">fitness_center</span> {meta.difficulty}
+                  <span className="material-symbols-outlined text-xs">fitness_center</span> {t('recipes.' + (difficultyKey(meta.difficulty) || 'easy'))}
                       </span>
                     )}
                     {meta.time && (
@@ -665,7 +666,7 @@ export default function MealsPage() {
 
       {fullPhoto && (
         <div className="fixed inset-0 bg-black/80 z-[80] flex items-center justify-center" onClick={() => setFullPhoto(null)}>
-          <img src={fullPhoto} alt="Foto completa" className="relative max-w-[95vw] max-h-[95vh] object-contain" onClick={e => e.stopPropagation()} />
+          <img src={fullPhoto} alt={t('meals.fullPhoto')} className="relative max-w-[95vw] max-h-[95vh] object-contain" onClick={e => e.stopPropagation()} />
         </div>
       )}
 

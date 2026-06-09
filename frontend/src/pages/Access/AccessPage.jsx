@@ -283,7 +283,7 @@ export default function AccessPage() {
                 <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white dark:bg-gray-800 px-3 text-sm text-gray-400 dark:text-gray-500 font-medium">O</span>
+                <span className="bg-white dark:bg-gray-800 px-3 text-sm text-gray-400 dark:text-gray-500 font-medium">{t('common.or')}</span>
               </div>
             </div>
 

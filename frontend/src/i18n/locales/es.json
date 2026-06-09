@@ -66,6 +66,7 @@
     "errorAdding": "Error al añadir: ",
     "errorSaving": "Error al guardar: ",
     "savedToMealPlan": "Guardado en tus menús",
+    "or": "O",
     "done": "Hecho",
     "apply": "Aplicar",
     "finish": "Finalizar",
@@ -120,7 +121,11 @@
     "passwordUpdated": "Contraseña actualizada",
     "passwordUpdatedDesc": "Tu contraseña se ha cambiado correctamente.",
     "verifyingLink": "Verificando enlace de recuperación...",
-    "changePassword": "Cambiar contraseña"
+    "changePassword": "Cambiar contraseña",
+    "googleLoading": "Iniciando sesión con Google...",
+    "googleError": "Error al iniciar sesión",
+    "googleErrorDesc": "No se pudo iniciar sesión con Google. Intenta de nuevo.",
+    "goBack": "Volver al inicio"
   },
   "profile": {
     "title": "Mi Perfil",
@@ -145,7 +150,10 @@
     "deleteAccountDesc": "Borrar todos tus datos",
     "confirmDeleteTitle": "¿Eliminar cuenta?",
     "confirmDeleteDesc": "Todos tus datos se borrarán permanentemente. Esta acción no se puede deshacer.",
-    "updatePassword": "Actualiza tu contraseña"
+    "updatePassword": "Actualiza tu contraseña",
+    "user": "Usuario",
+    "switchToEnglish": "Cambiar a inglés",
+    "switchToSpanish": "Cambiar a español"
   },
   "meals": {
     "title": "Mis Menús",
@@ -176,6 +184,7 @@
     "completedMeal": "¡Menú completado!",
     "noCompleted": "No hay comidas completadas",
     "completed": "¡Completado!",
+    "fullPhoto": "Foto completa",
     "videoNoFound": "No se encontró vídeo",
     "types": {
       "desayuno": "desayuno",
@@ -201,6 +210,15 @@
       "sábado": "Sábado",
       "sabado": "Sábado",
       "domingo": "Domingo"
+    },
+    "dayAbbr": {
+      "monday": "Lun",
+      "tuesday": "Mar",
+      "wednesday": "Mié",
+      "thursday": "Jue",
+      "friday": "Vie",
+      "saturday": "Sáb",
+      "sunday": "Dom"
     }
   },
   "recipes": {
@@ -234,7 +252,9 @@
     "alreadyInHistory": "Ya está en tu historial",
     "addedToHistory": "Añadido a tu historial",
     "addedToShopping": "Tus ingredientes han sido añadidos a la compra",
-    "shareCommunity": "Compartir en comunidad"
+    "shareCommunity": "Compartir en comunidad",
+    "useRecipe": "Usar receta",
+    "noHistory": "No has usado ninguna receta aún"
   },
   "pantry": {
     "title": "Tu Despensa",

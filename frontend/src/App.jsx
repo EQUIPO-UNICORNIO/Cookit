@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import Layout from './components/Layout';
 import AccessPage from './pages/Access/AccessPage';
 import AuthCallbackPage from './pages/Access/AuthCallbackPage';
@@ -20,7 +21,8 @@ import ProfilePage from './pages/Profile/ProfilePage';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="flex items-center justify-center min-h-screen"><p className="text-lg font-bold">Cargando...</p></div>;
+  const { t } = useTranslation();
+  if (loading) return <div className="flex items-center justify-center min-h-screen"><p className="text-lg font-bold">{t('common.loading')}</p></div>;
   if (!user) return <Navigate to="/access" replace />;
   return children;
 }

@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { recipe_id, recipe_name, recipe_category, date } = req.body;
-    if (!recipe_id || !recipe_name) return res.status(400).json({ error: 'recipe_id y recipe_name requeridos' });
+    if (recipe_id === undefined || recipe_id === null || !recipe_name) return res.status(400).json({ error: 'recipe_id y recipe_name requeridos' });
     const existing = await getOne('recipe_history', { user_id: req.userId, recipe_id });
     if (existing) return res.status(200).json(existing);
     const entry = await create('recipe_history', {

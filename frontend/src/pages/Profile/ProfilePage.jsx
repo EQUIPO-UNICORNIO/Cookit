@@ -134,7 +134,7 @@ export default function ProfilePage() {
             />
           ) : (
             <h2 className="text-xl font-extrabold cursor-pointer hover:text-primary-600 transition-colors" onClick={() => { setEditingName(true); setNewName(user?.name || ''); }}>
-              {user?.name || 'Usuario'}
+              {user?.name || t('profile.user')}
               <span className="material-symbols-outlined text-base align-text-bottom ml-1 text-gray-400">edit</span>
             </h2>
           )}
@@ -182,7 +182,7 @@ export default function ProfilePage() {
             </div>
             <div className="flex-1">
               <p className="font-bold text-sm">{t('profile.language')}: {i18n.language === 'es' ? t('profile.spanish') : t('profile.english')}</p>
-              <p className="text-xs text-gray-500">{i18n.language === 'es' ? 'Cambiar a ' + t('profile.english') : 'Switch to ' + t('profile.spanish')}</p>
+              <p className="text-xs text-gray-500">{i18n.language === 'es' ? t('profile.switchToEnglish') : t('profile.switchToSpanish')}</p>
             </div>
             <span className="text-xs font-bold text-primary-600 bg-primary-50 px-2 py-1 rounded-lg border border-primary-200">
               {i18n.language === 'es' ? 'ES' : 'EN'}

@@ -46,6 +46,7 @@ const ingredientCategories = Object.fromEntries(
 
 const categories = ['Todas', 'desayuno', 'almuerzo', 'comida', 'cena'];
 const difficulties = ['Todas', 'Fácil', 'Media', 'Difícil'];
+const difficultyKey = (d) => d === 'Fácil' ? 'easy' : d === 'Media' ? 'medium' : d === 'Difícil' ? 'hard' : null;
 
 const normalize = (s) => s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
@@ -97,7 +98,19 @@ export default function RecipesPage() {
   const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
-    api.getHistory().then(data => { setHistory(data.map(h => ({ id: h.recipe_id, name: h.recipe_name, category: h.recipe_category, date: h.date }))); }).catch(() => {});
+    api.getHistory().then(data => {
+      const apiEntries = data.map(h => ({ id: h.recipe_id, name: h.recipe_name, category: h.recipe_category, date: h.date }));
+      const localEntries = JSON.parse(localStorage.getItem('cookit_history') || '[]');
+      const merged = [...apiEntries];
+      for (const local of localEntries) {
+        if (!merged.some(m => String(m.id) === String(local.id))) {
+          merged.push(local);
+          api.addHistory({ recipe_id: local.id, recipe_name: local.name, recipe_category: local.category, date: local.date }).catch(() => {});
+        }
+      }
+      setHistory(merged);
+      localStorage.setItem('cookit_history', JSON.stringify(merged));
+    }).catch(() => {});
   }, []);
   const videoIdCache = useRef({});
 
@@ -274,7 +287,7 @@ export default function RecipesPage() {
               <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white">{selectedRecipe.name}</h1>
               <div className="flex gap-2 mt-2 flex-wrap">
                 <span className="text-xs font-bold text-primary-600 uppercase bg-primary-50 px-2 py-0.5 rounded-lg border border-primary-200">
-                  {selectedRecipe.category || 'comida'}
+                  {t('meals.types.' + (selectedRecipe.category || 'comida'))}
                 </span>
                 {selectedRecipe.time && (
                   <span className="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center gap-1">
@@ -287,7 +300,7 @@ export default function RecipesPage() {
                     selectedRecipe.difficulty === 'Media' ? 'text-orange-600 bg-orange-50 border-orange-200' :
                     'text-red-600 bg-red-50 border-red-200'
                   }`}>
-                    <span className="material-symbols-outlined text-xs">fitness_center</span> {selectedRecipe.difficulty}
+                    <span className="material-symbols-outlined text-xs">fitness_center</span> {t('recipes.' + (difficultyKey(selectedRecipe.difficulty) || 'easy'))}
                   </span>
                 )}
               </div>
@@ -340,7 +353,7 @@ export default function RecipesPage() {
         </button>
 
         <button onClick={() => markAsUsed(selectedRecipe)} className="neo-btn !bg-green-50 !text-green-700 !border-green-300 w-full mt-2">
-          <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span> Usar receta
+          <span className="material-symbols-outlined text-sm align-text-bottom">check_circle</span> {t('recipes.useRecipe')}
         </button>
 
         {showVideoModal && (
@@ -398,14 +411,14 @@ export default function RecipesPage() {
         </div>
         {showHistory && (
           <div className="mt-3 space-y-2 border-t border-gray-100 pt-3">
-            {history.length === 0 && <p className="text-xs text-gray-400 text-center py-2">No has usado ninguna receta aún</p>}
+            {history.length === 0 && <p className="text-xs text-gray-400 text-center py-2">{t('recipes.noHistory')}</p>}
             {history.map((entry, i) => {
               const found = recipesWithIds.find(r => r.id === entry.id);
               return (
                 <div key={`${entry.id}-${i}`} className="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2 -mx-2 py-1.5" onClick={() => found && setSelectedRecipe(found)}>
                   <div>
                     <span className="font-medium">{entry.name}</span>
-                    {entry.category && <span className="text-xs text-gray-400 ml-2">{entry.category}</span>}
+                    {entry.category && <span className="text-xs text-gray-400 ml-2">{t('meals.types.' + entry.category) || entry.category}</span>}
                   </div>
                   <span className="text-xs text-gray-400">{entry.date}</span>
                 </div>
@@ -542,10 +555,10 @@ export default function RecipesPage() {
 
           <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
             <select className="neo-input !py-2 !text-xs !px-3" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-              {categories.map(c => <option key={c} value={c}>{c === 'Todas' ? t('recipes.allMeals') : c}</option>)}
+              {categories.map(c => <option key={c} value={c}>{c === 'Todas' ? t('recipes.allMeals') : t('meals.types.' + c)}</option>)}
             </select>
             <select className="neo-input !py-2 !text-xs !px-3" value={filterDifficulty} onChange={e => setFilterDifficulty(e.target.value)}>
-              {difficulties.map(d => <option key={d} value={d}>{d === 'Todas' ? t('recipes.allDifficulties') : d}</option>)}
+              {difficulties.map(d => <option key={d} value={d}>{d === 'Todas' ? t('recipes.allDifficulties') : d === 'Fácil' ? t('recipes.easy') : d === 'Media' ? t('recipes.medium') : t('recipes.hard')}</option>)}
             </select>
           </div>
 
@@ -576,8 +589,8 @@ export default function RecipesPage() {
                       {recipe.time && <span className="text-xs text-gray-400 flex items-center gap-0.5">
                         <span className="material-symbols-outlined text-xs">schedule</span> {recipe.time}
                       </span>}
-                      {recipe.difficulty && <span className="text-xs text-gray-400">{recipe.difficulty}</span>}
-                      <span className="text-xs text-gray-400 capitalize">{recipe.category || 'comida'}</span>
+                      {recipe.difficulty && <span className="text-xs text-gray-400">{t('recipes.' + (difficultyKey(recipe.difficulty) || 'easy'))}</span>}
+                      {recipe.category ? <span className="text-xs text-gray-400 capitalize">{t('meals.types.' + recipe.category)}</span> : null}
                     </div>
                   </div>
                 </div>
@@ -633,13 +646,13 @@ export default function RecipesPage() {
               <div>
                 <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.day')}</p>
                 <div className="grid grid-cols-4 gap-2">
-                  {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d, i) => (
+                  {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d) => (
                     <button key={d} onClick={() => setMealPlanDay(d)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
                       mealPlanDay === d
                         ? 'bg-primary-100 border-primary-500 text-primary-700'
                         : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
                     }`}>
-                      {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]}
+                      {t('meals.dayAbbr.' + d)}
                     </button>
                   ))}
                 </div>
@@ -647,19 +660,13 @@ export default function RecipesPage() {
               <div>
                 <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.mealType')}</p>
                 <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { key: 'desayuno', label: 'Desayuno' },
-                    { key: 'almuerzo', label: 'Almuerzo' },
-                    { key: 'comida', label: 'Comida' },
-                    { key: 'merienda', label: 'Merienda' },
-                    { key: 'cena', label: 'Cena' },
-                  ].map(m => (
-                    <button key={m.key} onClick={() => setMealPlanType(m.key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
-                      mealPlanType === m.key
+                  {['desayuno','almuerzo','comida','merienda','cena'].map(key => (
+                    <button key={key} onClick={() => setMealPlanType(key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                      mealPlanType === key
                         ? 'bg-primary-100 border-primary-500 text-primary-700'
                         : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
                     }`}>
-                      {m.label}
+                      {t('meals.types.' + key)}
                     </button>
                   ))}
                 </div>

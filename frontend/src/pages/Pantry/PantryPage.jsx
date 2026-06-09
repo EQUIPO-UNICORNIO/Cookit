@@ -444,11 +444,11 @@ export default function PantryPage() {
                   <div>
                     <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.day')}</p>
                     <div className="grid grid-cols-4 gap-2">
-                      {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d, i) => (
+                      {['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].map((d) => (
                         <button key={d} onClick={() => setSuggestionDay(d)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
                           suggestionDay === d ? 'bg-primary-100 border-primary-500 text-primary-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
                         }`}>
-                          {['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][i]}
+                          {t('meals.dayAbbr.' + d)}
                         </button>
                       ))}
                     </div>
@@ -456,11 +456,11 @@ export default function PantryPage() {
                   <div>
                     <p className="text-xs font-bold text-gray-600 uppercase mb-2">{t('common.mealType')}</p>
                     <div className="grid grid-cols-2 gap-2">
-                      {[{key:'desayuno',label:'Desayuno'},{key:'almuerzo',label:'Almuerzo'},{key:'comida',label:'Comida'},{key:'merienda',label:'Merienda'},{key:'cena',label:'Cena'}].map(m => (
-                        <button key={m.key} onClick={() => setSuggestionType(m.key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
-                          suggestionType === m.key ? 'bg-primary-100 border-primary-500 text-primary-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                      {['desayuno','almuerzo','comida','merienda','cena'].map(key => (
+                        <button key={key} onClick={() => setSuggestionType(key)} className={`text-xs font-bold py-2 px-3 rounded-xl border-2 transition-all ${
+                          suggestionType === key ? 'bg-primary-100 border-primary-500 text-primary-700' : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
                         }`}>
-                          {m.label}
+                          {t('meals.types.' + key)}
                         </button>
                       ))}
                     </div>
